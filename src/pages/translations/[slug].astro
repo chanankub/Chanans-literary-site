@@ -2,12 +2,12 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PoemParallel from "../../components/PoemParallel.astro";
-import { filterPublished, formatHebrewDate } from "../../lib/content";
+import { filterPublished, formatHebrewDate, entrySlug } from "../../lib/content";
 
 export async function getStaticPaths() {
   const poems = filterPublished(await getCollection("poems"));
   return poems.map((poem) => ({
-    params: { slug: poem.id },
+    params: { slug: entrySlug(poem.id) },
     props: { poem },
   }));
 }

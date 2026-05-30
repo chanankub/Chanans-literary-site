@@ -3,14 +3,15 @@ interface Props {
   current?: "home" | "translations" | "stories" | "notes";
 }
 
+import { withBase } from "../lib/content";
+
 const { current } = Astro.props;
-const base = import.meta.env.BASE_URL;
 
 const links = [
-  { href: `${base}`, label: "ראשי", id: "home" as const },
-  { href: `${base}translations/`, label: "תרגומים", id: "translations" as const },
-  { href: `${base}stories/`, label: "סיפורים", id: "stories" as const },
-  { href: `${base}notes/`, label: "הערות", id: "notes" as const },
+  { href: withBase(), label: "ראשי", id: "home" as const },
+  { href: withBase("translations/"), label: "תרגומים", id: "translations" as const },
+  { href: withBase("stories/"), label: "סיפורים", id: "stories" as const },
+  { href: withBase("notes/"), label: "הערות", id: "notes" as const },
 ];
 ---
 

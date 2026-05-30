@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { filterPublished, formatHebrewDate, sortByOrderThenTitle } from "../../lib/content";
+import { filterPublished, formatHebrewDate, sortByOrderThenTitle, withBase, entrySlug } from "../../lib/content";
 
 const stories = sortByOrderThenTitle(filterPublished(await getCollection("stories")));
 ---
@@ -17,7 +17,7 @@ const stories = sortByOrderThenTitle(filterPublished(await getCollection("storie
         <ul class="section-list">
           {stories.map((story) => (
             <li>
-              <a href={`${import.meta.env.BASE_URL}stories/${story.id}/`}>
+              <a href={withBase(`stories/${entrySlug(story.id)}/`)}>
                 {story.data.title}
               </a>
               {story.data.summary && (

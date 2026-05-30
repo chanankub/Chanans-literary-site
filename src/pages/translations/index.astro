@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { filterPublished, formatHebrewDate, sortByOrderThenTitle } from "../../lib/content";
+import { filterPublished, formatHebrewDate, sortByOrderThenTitle, withBase, entrySlug } from "../../lib/content";
 
 const poems = sortByOrderThenTitle(filterPublished(await getCollection("poems")));
 ---
@@ -17,7 +17,7 @@ const poems = sortByOrderThenTitle(filterPublished(await getCollection("poems"))
         <ul class="section-list">
           {poems.map((poem) => (
             <li>
-              <a href={`${import.meta.env.BASE_URL}translations/${poem.id}/`}>
+              <a href={withBase(`translations/${entrySlug(poem.id)}/`)}>
                 {poem.data.title}
               </a>
               <span class="item-meta">

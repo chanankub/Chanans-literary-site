@@ -25,6 +25,18 @@ export function formatHebrewDate(date: Date): string {
   });
 }
 
+/** Join site base with a path (safe whether BASE_URL ends with / or not). */
+export function withBase(path = ""): string {
+  const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+  if (!path || path === "/") return base;
+  return base + path.replace(/^\//, "");
+}
+
+/** Content entry id → URL slug (e.g. danse-russe.md → danse-russe). */
+export function entrySlug(id: string): string {
+  return id.replace(/\.md$/, "");
+}
+
 export type PoemEntry = CollectionEntry<"poems">;
 export type StoryEntry = CollectionEntry<"stories">;
 export type NoteEntry = CollectionEntry<"notes">;
