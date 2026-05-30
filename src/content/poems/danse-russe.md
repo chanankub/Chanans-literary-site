@@ -2,6 +2,9 @@
 title: "דאנס רוּס"
 originalTitle: "Danse Russe"
 author: "ויליאם קרלוס וויליאמס"
+authorEn: "William Carlos Williams"
+authorBirth: 1883
+authorDeath: 1963
 sourceLang: en
 date: 2026-05-28
 draft: false

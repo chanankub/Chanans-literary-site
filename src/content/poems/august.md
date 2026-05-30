@@ -2,6 +2,9 @@
 title: "אוגוסט"
 originalTitle: "August"
 author: "מרי אוליבר"
+authorEn: "Mary Oliver"
+authorBirth: 1935
+authorDeath: 2019
 sourceLang: en
 date: 2026-05-28
 draft: false

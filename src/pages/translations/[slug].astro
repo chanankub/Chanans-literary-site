@@ -2,7 +2,11 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PoemParallel from "../../components/PoemParallel.astro";
-import { filterPublished, formatHebrewDate, entrySlug } from "../../lib/content";
+import {
+  filterPublished,
+  entrySlug,
+  formatPoetEnglishCredit,
+} from "../../lib/content";
 
 export async function getStaticPaths() {
   const poems = filterPublished(await getCollection("poems"));
@@ -13,7 +17,11 @@ export async function getStaticPaths() {
 }
 
 const { poem } = Astro.props;
-const { title, originalTitle, author, date, pairs } = poem.data;
+const { title, originalTitle, author, authorEn, authorBirth, authorDeath, pairs } =
+  poem.data;
+const poetEnglish = authorEn
+  ? formatPoetEnglishCredit(authorEn, authorBirth, authorDeath)
+  : null;
 ---
 
 <BaseLayout title={title} current="translations">
@@ -23,8 +31,14 @@ const { title, originalTitle, author, date, pairs } = poem.data;
       <p class="poem-meta">
         {originalTitle && <span>{originalTitle} · </span>}
         {author}
-        {date && ` · ${formatHebrewDate(date)}`}
       </p>
+      {
+        poetEnglish && (
+          <p class="poem-meta poem-meta--en" dir="ltr" lang="en">
+            {poetEnglish}
+          </p>
+        )
+      }
     </header>
     <PoemParallel pairs={pairs} />
   </div>

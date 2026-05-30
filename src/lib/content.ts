@@ -17,14 +17,6 @@ export function filterPublished<T extends { data: { draft?: boolean } }>(
   return items.filter((item) => !item.data.draft);
 }
 
-export function formatHebrewDate(date: Date): string {
-  return date.toLocaleDateString("he-IL", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
-
 /** Join site base with a path (safe whether BASE_URL ends with / or not). */
 export function withBase(path = ""): string {
   const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
@@ -35,6 +27,24 @@ export function withBase(path = ""): string {
 /** Content entry id → URL slug (e.g. danse-russe.md → danse-russe). */
 export function entrySlug(id: string): string {
   return id.replace(/\.md$/, "");
+}
+
+/** e.g. Mary Oliver (1935–2019) */
+export function formatPoetEnglishCredit(
+  nameEn: string,
+  birth?: number,
+  death?: number,
+): string {
+  if (birth != null && death != null) {
+    return `${nameEn} (${birth}–${death})`;
+  }
+  if (birth != null) {
+    return `${nameEn} (${birth}–)`;
+  }
+  if (death != null) {
+    return `${nameEn} (–${death})`;
+  }
+  return nameEn;
 }
 
 export type PoemEntry = CollectionEntry<"poems">;

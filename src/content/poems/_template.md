@@ -2,6 +2,9 @@
 title: "כותרת התרגום בעברית"
 originalTitle: "Original English Title"
 author: "שם המחבר המקורי"
+authorEn: "Poet Name in English"
+authorBirth: 1900
+authorDeath: 2000
 sourceLang: en
 date: 2026-01-01
 draft: true

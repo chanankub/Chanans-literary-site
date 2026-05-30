@@ -1,7 +1,13 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { filterPublished, formatHebrewDate, sortByOrderThenTitle, withBase, entrySlug } from "../../lib/content";
+import {
+  filterPublished,
+  formatPoetEnglishCredit,
+  sortByOrderThenTitle,
+  withBase,
+  entrySlug,
+} from "../../lib/content";
 
 const poems = sortByOrderThenTitle(filterPublished(await getCollection("poems")));
 ---
@@ -22,7 +28,20 @@ const poems = sortByOrderThenTitle(filterPublished(await getCollection("poems"))
               </a>
               <span class="item-meta">
                 {poem.data.author}
-                {poem.data.date && ` · ${formatHebrewDate(poem.data.date)}`}
+                {
+                  poem.data.authorEn && (
+                    <>
+                      {" · "}
+                      <span dir="ltr" lang="en">
+                        {formatPoetEnglishCredit(
+                          poem.data.authorEn,
+                          poem.data.authorBirth,
+                          poem.data.authorDeath,
+                        )}
+                      </span>
+                    </>
+                  )
+                }
               </span>
             </li>
           ))}

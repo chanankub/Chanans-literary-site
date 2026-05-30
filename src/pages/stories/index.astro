@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { filterPublished, formatHebrewDate, sortByOrderThenTitle, withBase, entrySlug } from "../../lib/content";
+import { filterPublished, sortByOrderThenTitle, withBase, entrySlug } from "../../lib/content";
 
 const stories = sortByOrderThenTitle(filterPublished(await getCollection("stories")));
 ---
@@ -22,9 +22,6 @@ const stories = sortByOrderThenTitle(filterPublished(await getCollection("storie
               </a>
               {story.data.summary && (
                 <span class="item-summary">{story.data.summary}</span>
-              )}
-              {story.data.date && (
-                <span class="item-meta">{formatHebrewDate(story.data.date)}</span>
               )}
             </li>
           ))}

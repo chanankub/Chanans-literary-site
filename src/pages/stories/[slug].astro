@@ -13,9 +13,9 @@ export async function getStaticPaths() {
 
 const { story } = Astro.props;
 const { Content } = await render(story);
-const { title, summary, date } = story.data;
+const { title, summary } = story.data;
 ---
 
-<ProseLayout title={title} summary={summary} date={date} section="stories">
+<ProseLayout title={title} summary={summary} section="stories">
   <Content />
 </ProseLayout>
