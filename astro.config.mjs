@@ -4,4 +4,5 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
   site: 'https://chanankub.github.io',
   base: '/My_Website',
+  trailingSlash: 'always',
 });
