@@ -1,0 +1,41 @@
+---
+import Nav from "../components/Nav.astro";
+import "../styles/literary.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  current?: "home" | "translations" | "stories" | "notes";
+}
+
+const { title, description = "אתר ספרותי אישי", current } = Astro.props;
+const fullTitle = title === "בית" ? "בית" : `${title} | בית`;
+---
+
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Noto+Serif+Hebrew:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <title>{fullTitle}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <Nav current={current} />
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <p>© {new Date().getFullYear()}</p>
+    </footer>
+  </body>
+</html>

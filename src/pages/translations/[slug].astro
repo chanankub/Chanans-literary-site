@@ -1,0 +1,31 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PoemParallel from "../../components/PoemParallel.astro";
+import { filterPublished, formatHebrewDate } from "../../lib/content";
+
+export async function getStaticPaths() {
+  const poems = filterPublished(await getCollection("poems"));
+  return poems.map((poem) => ({
+    params: { slug: poem.id },
+    props: { poem },
+  }));
+}
+
+const { poem } = Astro.props;
+const { title, originalTitle, author, date, pairs } = poem.data;
+---
+
+<BaseLayout title={title} current="translations">
+  <div class="container container--wide">
+    <header class="poem-header">
+      <h1 class="page-title">{title}</h1>
+      <p class="poem-meta">
+        {originalTitle && <span>{originalTitle} · </span>}
+        {author}
+        {date && ` · ${formatHebrewDate(date)}`}
+      </p>
+    </header>
+    <PoemParallel pairs={pairs} />
+  </div>
+</BaseLayout>

@@ -1,0 +1,35 @@
+---
+export interface PoemPair {
+  original?: string;
+  translation?: string;
+  spacer?: boolean;
+}
+
+interface Props {
+  pairs: PoemPair[];
+}
+
+const { pairs } = Astro.props;
+---
+
+<div class="poem-parallel" role="group" aria-label="טקסט מקורי ותרגום בשורות מקבילות">
+  {
+    pairs.map((pair) => {
+      if (pair.spacer) {
+        return <div class="poem-row poem-row--spacer" aria-hidden="true" />;
+      }
+      return (
+        <div class="poem-row">
+          <p class="poem-cell poem-cell--la" dir="ltr" lang="en">
+            <span class="poem-label">מקור</span>
+            {pair.original}
+          </p>
+          <p class="poem-cell poem-cell--he" dir="rtl" lang="he">
+            <span class="poem-label">תרגום</span>
+            {pair.translation}
+          </p>
+        </div>
+      );
+    })
+  }
+</div>

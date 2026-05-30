@@ -1,0 +1,33 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { filterPublished, formatHebrewDate, sortByOrderThenTitle } from "../../lib/content";
+
+const poems = sortByOrderThenTitle(filterPublished(await getCollection("poems")));
+---
+
+<BaseLayout title="תרגומים" current="translations">
+  <div class="container">
+    <h1 class="page-title">תרגומים</h1>
+    <p class="page-intro">תרגומי שירה — המקור והתרגום זה לצד זה.</p>
+    {
+      poems.length === 0 ? (
+        <p class="item-meta">עדיין לא פורסמו תרגומים.</p>
+      ) : (
+        <ul class="section-list">
+          {poems.map((poem) => (
+            <li>
+              <a href={`${import.meta.env.BASE_URL}translations/${poem.id}/`}>
+                {poem.data.title}
+              </a>
+              <span class="item-meta">
+                {poem.data.author}
+                {poem.data.date && ` · ${formatHebrewDate(poem.data.date)}`}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</BaseLayout>

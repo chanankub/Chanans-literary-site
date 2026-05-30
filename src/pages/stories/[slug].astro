@@ -1,0 +1,21 @@
+---
+import { getCollection, render } from "astro:content";
+import ProseLayout from "../../layouts/ProseLayout.astro";
+import { filterPublished } from "../../lib/content";
+
+export async function getStaticPaths() {
+  const stories = filterPublished(await getCollection("stories"));
+  return stories.map((story) => ({
+    params: { slug: story.id },
+    props: { story },
+  }));
+}
+
+const { story } = Astro.props;
+const { Content } = await render(story);
+const { title, summary, date } = story.data;
+---
+
+<ProseLayout title={title} summary={summary} date={date} section="stories">
+  <Content />
+</ProseLayout>

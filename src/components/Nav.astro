@@ -1,0 +1,32 @@
+---
+interface Props {
+  current?: "home" | "translations" | "stories" | "notes";
+}
+
+const { current } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+const links = [
+  { href: `${base}`, label: "ראשי", id: "home" as const },
+  { href: `${base}translations/`, label: "תרגומים", id: "translations" as const },
+  { href: `${base}stories/`, label: "סיפורים", id: "stories" as const },
+  { href: `${base}notes/`, label: "הערות", id: "notes" as const },
+];
+---
+
+<nav aria-label="ניווט ראשי">
+  <ul class="site-nav">
+    {
+      links.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            aria-current={current === link.id ? "page" : undefined}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>

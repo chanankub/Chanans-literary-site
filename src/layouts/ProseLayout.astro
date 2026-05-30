@@ -1,0 +1,33 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+
+interface Props {
+  title: string;
+  summary?: string;
+  date?: Date;
+  section: "stories" | "notes";
+}
+
+const { title, summary, date, section } = Astro.props;
+const current = section === "stories" ? "stories" : "notes";
+
+const dateFormatted = date
+  ? date.toLocaleDateString("he-IL", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+  : null;
+---
+
+<BaseLayout title={title} description={summary ?? title} current={current}>
+  <article class="container prose">
+    <header>
+      <h1 class="page-title">{title}</h1>
+      {dateFormatted && <p class="item-meta">{dateFormatted}</p>}
+    </header>
+    <div class="prose-body">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>
