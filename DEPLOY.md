@@ -25,10 +25,11 @@ git push -u origin main
 
 ## הפעלת GitHub Pages
 
-1. ב-GitHub: **Settings → Pages**
-2. **Build and deployment → Source:** GitHub Actions
-3. לאחר דחיפה ל-`main`, בדוק ב-**Actions** שה-workflow `Deploy to GitHub Pages` עבר בהצלחה
-4. האתר: **https://chanankub.github.io/My_Website/**
+1. ב-GitHub: [Settings → Pages](https://github.com/chanankub/My_Website/settings/pages)
+2. תחת **Build and deployment → Source** בחר **GitHub Actions** (לא «Deploy from a branch»)
+3. שמור — אין צורך לבחור workflow נוסף; הקיים `.github/workflows/deploy.yml` ירוץ בדחיפה ל-`main`
+4. ב-**Actions** לחץ **Re-run all jobs** על הריצה האחרונה (או דחוף commit חדש)
+5. האתר: **https://chanankub.github.io/My_Website/**
 
 ## רשימת פרסום שוטפת
 
@@ -44,4 +45,4 @@ git push -u origin main
 | ----------------- | ---------------------------------------------------------------- |
 | תמונות לא נטענות  | ודא שנתיב ב-Markdown מתחיל ב-`/My_Website/images/...` אחרי ייבוא |
 | שיר לא מופיע      | `draft: false` ושם קובץ לא מתחיל ב-`_`                           |
-| 404 בדפים פנימיים | ודא ש-`base: '/My_Website'` ב-`astro.config.mjs` תואם לשם ה-repo |
+| 404 ב-deploy (`Failed to create deployment`) | הפעל Pages: Settings → Pages → Source → **GitHub Actions**, ואז הרץ מחדש את ה-workflow |
