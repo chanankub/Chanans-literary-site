@@ -1,7 +1,10 @@
 ---
 import { getCollection, render } from "astro:content";
+import BackToTop from "../../components/BackToTop.astro";
+import NotesToc from "../../components/NotesToc.astro";
 import ProseLayout from "../../layouts/ProseLayout.astro";
-import { filterPublished, entrySlug } from "../../lib/content";
+import { filterPublished, entrySlug, withBase } from "../../lib/content";
+import { HAKDAMA_SLUG, hakdamaToc } from "../../lib/notes-toc";
 
 export async function getStaticPaths() {
   const notes = filterPublished(await getCollection("notes"));
@@ -14,8 +17,23 @@ export async function getStaticPaths() {
 const { note } = Astro.props;
 const { Content } = await render(note);
 const { title, summary } = note.data;
+const slug = entrySlug(note.id);
+const showToc = slug === HAKDAMA_SLUG;
 ---
 
-<ProseLayout title={title} summary={summary} section="notes">
+<ProseLayout title={title} summary={summary} section="notes" wide={showToc}>
+  {showToc && <NotesToc noteSlug={slug} entries={hakdamaToc} />}
   <Content />
+  {
+    showToc && (
+      <>
+        <nav class="prose-footer-nav" aria-label="ניווט בעמוד">
+          <a href="#top">↑ לראש העמוד</a>
+          <span class="prose-footer-nav__sep" aria-hidden="true">·</span>
+          <a href={withBase("notes/")}>תוכן העניינים</a>
+        </nav>
+        <BackToTop />
+      </>
+    )
+  }
 </ProseLayout>

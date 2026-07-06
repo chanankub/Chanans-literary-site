@@ -4,12 +4,12 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import {
   filterPublished,
   formatPoetEnglishCredit,
-  sortByOrderThenTitle,
+  sortPoemsByAuthorBirth,
   withBase,
   entrySlug,
 } from "../../lib/content";
 
-const poems = sortByOrderThenTitle(filterPublished(await getCollection("poems")));
+const poems = sortPoemsByAuthorBirth(filterPublished(await getCollection("poems")));
 ---
 
 <BaseLayout title="תרגומים" current="translations">

@@ -1,0 +1,24 @@
+---
+import { withBase } from "../lib/content";
+import type { NotesTocEntry } from "../lib/notes-toc";
+
+interface Props {
+  noteSlug: string;
+  entries: NotesTocEntry[];
+}
+
+const { noteSlug, entries } = Astro.props;
+const base = withBase(`notes/${noteSlug}/`);
+---
+
+<nav class="notes-toc" aria-label="פרקים">
+  <ol class="notes-toc__list">
+    {
+      entries.map((entry) => (
+        <li class="notes-toc__item">
+          <a href={`${base}#${entry.id}`}>{entry.title}</a>
+        </li>
+      ))
+    }
+  </ol>
+</nav>

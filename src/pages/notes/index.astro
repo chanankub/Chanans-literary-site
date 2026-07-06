@@ -1,21 +1,27 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import NotesToc from "../../components/NotesToc.astro";
 import { filterPublished, sortByOrderThenTitle, withBase, entrySlug } from "../../lib/content";
+import { HAKDAMA_SLUG, hakdamaToc } from "../../lib/notes-toc";
 
 const notes = sortByOrderThenTitle(filterPublished(await getCollection("notes")));
+const otherNotes = notes.filter((n) => entrySlug(n.id) !== HAKDAMA_SLUG);
 ---
 
-<BaseLayout title="הערות" current="notes">
+<BaseLayout title="איך למדתי לאהוב שירה" current="notes">
   <div class="container">
-    <h1 class="page-title">הערות</h1>
-    <p class="page-intro">הערות אישיות וכתיבה.</p>
+    <h1 class="page-title">איך למדתי לאהוב שירה</h1>
+  </div>
+  <div class="container container--wide">
+    <NotesToc noteSlug={HAKDAMA_SLUG} entries={hakdamaToc} />
+    <p class="notes-toc__read">
+      <a href={withBase(`notes/${HAKDAMA_SLUG}/`)}>לקריאה מההתחלה →</a>
+    </p>
     {
-      notes.length === 0 ? (
-        <p class="item-meta">עדיין לא פורסמו הערות.</p>
-      ) : (
+      otherNotes.length > 0 && (
         <ul class="section-list">
-          {notes.map((note) => (
+          {otherNotes.map((note) => (
             <li>
               <a href={withBase(`notes/${entrySlug(note.id)}/`)}>
                 {note.data.title}

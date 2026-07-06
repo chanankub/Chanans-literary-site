@@ -11,6 +11,17 @@ export function sortByOrderThenTitle<
   });
 }
 
+export function sortPoemsByAuthorBirth<
+  T extends { data: { authorBirth?: number; title: string } },
+>(items: T[]): T[] {
+  return [...items].sort((a, b) => {
+    const birthA = a.data.authorBirth ?? Number.MAX_SAFE_INTEGER;
+    const birthB = b.data.authorBirth ?? Number.MAX_SAFE_INTEGER;
+    if (birthA !== birthB) return birthA - birthB;
+    return a.data.title.localeCompare(b.data.title, "he");
+  });
+}
+
 export function filterPublished<T extends { data: { draft?: boolean } }>(
   items: T[],
 ): T[] {

@@ -21,3 +21,7 @@ Thumbs.db
 # editor
 .vscode/
 !.vscode/extensions.json
+
+# Obsidian system folders
+.obsidian/
+.trash/

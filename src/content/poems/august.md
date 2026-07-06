@@ -56,7 +56,7 @@ pairs:
   - original: "think of the painting by van Gogh, the man in the chair."
     translation: "אֲנִי חוֹשֶׁבֶת עַל הַצִּיּוּר שֶׁל וַאן גוֹךְ, הָאִישׁ בַּכִּסֵּא."
   - original: "Everything wrong, and nowhere to go. His hands over"
-    translation: "דָּבָר אֵינוֹ כַּשּׁוּרָה, וְאֵין כָּל מוֹצָא. יָדָיו מֵלִיטוֹת אֶת"
+    translation: "דָּבָר אֵינוֹ כַּשּׁוּרָה, וְאֵין כָּל מוֹצָא. יָדָיו מֵלִיטוֹת "
   - original: "his eyes."
-    translation: "עֵינָיו."
+    translation: "אֶת עֵינָיו."
 ---

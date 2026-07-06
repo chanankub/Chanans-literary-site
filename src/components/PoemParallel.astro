@@ -1,25 +1,57 @@
 ---
 export interface PoemPair {
   original?: string;
+  english?: string;
   translation?: string;
   spacer?: boolean;
+  indent?: number;
 }
 
 interface Props {
   pairs: PoemPair[];
+  layout?: "bilingual" | "trilingual";
 }
 
-const { pairs } = Astro.props;
+const { pairs, layout = "bilingual" } = Astro.props;
+const isTrilingual = layout === "trilingual";
+const ariaLabel = isTrilingual
+  ? "Original, English, and Hebrew in parallel lines"
+  : "טקסט מקורי ותרגום בשורות מקבילות";
 ---
 
-<div class="poem-parallel" role="group" aria-label="טקסט מקורי ותרגום בשורות מקבילות">
+<div
+  class:list={["poem-parallel", isTrilingual && "poem-parallel--triple"]}
+  role="group"
+  aria-label={ariaLabel}
+>
   {
     pairs.map((pair) => {
       if (pair.spacer) {
         return <div class="poem-row poem-row--spacer" aria-hidden="true" />;
       }
+      if (isTrilingual) {
+        return (
+          <div
+            class="poem-row poem-row--triple"
+            data-indent={pair.indent ?? 0}
+          >
+            <p class="poem-cell poem-cell--la" dir="ltr" lang="sco">
+              <span class="poem-label">Original</span>
+              {pair.original}
+            </p>
+            <p class="poem-cell poem-cell--la" dir="ltr" lang="en">
+              <span class="poem-label">English</span>
+              {pair.english}
+            </p>
+            <p class="poem-cell poem-cell--he" dir="rtl" lang="he">
+              <span class="poem-label">Hebrew</span>
+              {pair.translation}
+            </p>
+          </div>
+        );
+      }
       return (
-        <div class="poem-row">
+        <div class="poem-row" data-indent={pair.indent ?? 0}>
           <p class="poem-cell poem-cell--la" dir="ltr" lang="en">
             <span class="poem-label">מקור</span>
             {pair.original}

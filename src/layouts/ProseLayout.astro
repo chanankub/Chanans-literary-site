@@ -5,15 +5,16 @@ interface Props {
   title: string;
   summary?: string;
   section: "stories" | "notes";
+  wide?: boolean;
 }
 
-const { title, summary, section } = Astro.props;
+const { title, summary, section, wide = false } = Astro.props;
 const current = section === "stories" ? "stories" : "notes";
 ---
 
 <BaseLayout title={title} description={summary ?? title} current={current}>
-  <article class="container prose">
-    <header>
+  <article class:list={["prose", wide ? "container container--wide" : "container"]}>
+    <header id="top">
       <h1 class="page-title">{title}</h1>
     </header>
     <div class="prose-body">

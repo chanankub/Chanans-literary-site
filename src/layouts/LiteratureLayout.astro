@@ -1,0 +1,36 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+  current?: "home" | "translations" | "stories" | "notes";
+  wide?: boolean;
+  prose?: boolean;
+}
+
+const {
+  title,
+  description,
+  current,
+  wide = false,
+  prose = false,
+} = Astro.props;
+---
+
+<BaseLayout title={title} description={description ?? title} current={current}>
+  <article
+    class:list={[
+      wide ? "container container--wide" : "container",
+      prose && "prose",
+    ]}
+  >
+    <header>
+      <h1 class="page-title">{title}</h1>
+      <slot name="meta" />
+    </header>
+    <div class="literature-body">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>

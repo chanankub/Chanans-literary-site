@@ -17,7 +17,7 @@ export async function getStaticPaths() {
 }
 
 const { poem } = Astro.props;
-const { title, originalTitle, author, authorEn, authorBirth, authorDeath, pairs } =
+const { title, originalTitle, author, authorEn, authorBirth, authorDeath, pairLayout, pairs } =
   poem.data;
 const poetEnglish = authorEn
   ? formatPoetEnglishCredit(authorEn, authorBirth, authorDeath)
@@ -40,6 +40,6 @@ const poetEnglish = authorEn
         )
       }
     </header>
-    <PoemParallel pairs={pairs} />
+    <PoemParallel pairs={pairs} layout={pairLayout} />
   </div>
 </BaseLayout>
