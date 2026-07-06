@@ -8,11 +8,23 @@ const pairSchema = z
     spacer: z.boolean().optional(),
     /** Visual indent level (0–3). Use instead of tabs in the YAML text. */
     indent: z.number().int().min(0).max(3).optional(),
+    /** Sub-poem title row (original + translation only). */
+    title: z.boolean().optional(),
   })
   .refine(
     (p) => p.spacer === true || p.original || p.english || p.translation,
     { message: "Each pair needs original/english/translation or spacer: true" },
   );
+
+const altPairSchema = z
+  .object({
+    translation: z.string().optional(),
+    spacer: z.boolean().optional(),
+    indent: z.number().int().min(0).max(3).optional(),
+  })
+  .refine((p) => p.spacer === true || p.translation, {
+    message: "Each alt pair needs translation or spacer: true",
+  });
 
 const poems = defineCollection({
   type: "content",
@@ -29,6 +41,9 @@ const poems = defineCollection({
     order: z.number().optional(),
     /** bilingual: original + Hebrew; trilingual: original + English + Hebrew */
     pairLayout: z.enum(["bilingual", "trilingual"]).default("bilingual"),
+    /** Optional second Hebrew block beneath the main pairs (no English). */
+    altTitle: z.string().optional(),
+    altPairs: z.array(altPairSchema).optional(),
     pairs: z.array(pairSchema).min(1),
   }),
 });

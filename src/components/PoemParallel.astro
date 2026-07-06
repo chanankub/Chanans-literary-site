@@ -5,15 +5,25 @@ export interface PoemPair {
   translation?: string;
   spacer?: boolean;
   indent?: number;
+  title?: boolean;
+}
+
+export interface AltPoemPair {
+  translation?: string;
+  spacer?: boolean;
+  indent?: number;
 }
 
 interface Props {
   pairs: PoemPair[];
   layout?: "bilingual" | "trilingual";
+  altTitle?: string;
+  altPairs?: AltPoemPair[];
 }
 
-const { pairs, layout = "bilingual" } = Astro.props;
+const { pairs, layout = "bilingual", altTitle, altPairs } = Astro.props;
 const isTrilingual = layout === "trilingual";
+const hasAltBlock = altTitle && altPairs && altPairs.length > 0;
 const ariaLabel = isTrilingual
   ? "Original, English, and Hebrew in parallel lines"
   : "טקסט מקורי ותרגום בשורות מקבילות";
@@ -29,6 +39,7 @@ const ariaLabel = isTrilingual
       if (pair.spacer) {
         return <div class="poem-row poem-row--spacer" aria-hidden="true" />;
       }
+      const rowClass = pair.title ? "poem-row poem-row--title" : "poem-row";
       if (isTrilingual) {
         return (
           <div
@@ -51,17 +62,44 @@ const ariaLabel = isTrilingual
         );
       }
       return (
-        <div class="poem-row" data-indent={pair.indent ?? 0}>
+        <div class={rowClass} data-indent={pair.indent ?? 0}>
           <p class="poem-cell poem-cell--la" dir="ltr" lang="en">
-            <span class="poem-label">מקור</span>
+            {!pair.title && <span class="poem-label">מקור</span>}
             {pair.original}
           </p>
           <p class="poem-cell poem-cell--he" dir="rtl" lang="he">
-            <span class="poem-label">תרגום</span>
+            {!pair.title && <span class="poem-label">תרגום</span>}
             {pair.translation}
           </p>
         </div>
       );
     })
+  }
+  {
+    hasAltBlock && (
+      <section class="poem-alt-block" aria-label={altTitle}>
+        <div class="poem-row poem-row--alt poem-row--alt-title">
+          <div class="poem-cell poem-cell--la" aria-hidden="true" />
+          <h2 class="poem-cell poem-cell--he poem-alt-block__title">{altTitle}</h2>
+        </div>
+        {
+          altPairs.map((pair) => {
+            if (pair.spacer) {
+              return (
+                <div class="poem-row poem-row--spacer" aria-hidden="true" />
+              );
+            }
+            return (
+              <div class="poem-row poem-row--alt" data-indent={pair.indent ?? 0}>
+                <div class="poem-cell poem-cell--la" aria-hidden="true" />
+                <p class="poem-cell poem-cell--he" dir="rtl" lang="he">
+                  {pair.translation}
+                </p>
+              </div>
+            );
+          })
+        }
+      </section>
+    )
   }
 </div>

@@ -3,13 +3,13 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PoemParallel from "../../components/PoemParallel.astro";
 import {
-  filterPublished,
   entrySlug,
   formatPoetEnglishCredit,
+  publishedContentEntries,
 } from "../../lib/content";
 
 export async function getStaticPaths() {
-  const poems = filterPublished(await getCollection("poems"));
+  const poems = publishedContentEntries(await getCollection("poems"));
   return poems.map((poem) => ({
     params: { slug: entrySlug(poem.id) },
     props: { poem },
@@ -17,8 +17,18 @@ export async function getStaticPaths() {
 }
 
 const { poem } = Astro.props;
-const { title, originalTitle, author, authorEn, authorBirth, authorDeath, pairLayout, pairs } =
-  poem.data;
+const {
+  title,
+  originalTitle,
+  author,
+  authorEn,
+  authorBirth,
+  authorDeath,
+  pairLayout,
+  altTitle,
+  altPairs,
+  pairs,
+} = poem.data;
 const poetEnglish = authorEn
   ? formatPoetEnglishCredit(authorEn, authorBirth, authorDeath)
   : null;
@@ -40,6 +50,11 @@ const poetEnglish = authorEn
         )
       }
     </header>
-    <PoemParallel pairs={pairs} layout={pairLayout} />
+    <PoemParallel
+      pairs={pairs}
+      layout={pairLayout}
+      altTitle={altTitle}
+      altPairs={altPairs}
+    />
   </div>
 </BaseLayout>

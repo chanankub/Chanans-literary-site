@@ -1,0 +1,53 @@
+---
+title: "מכתב מס' 41 [מקוטע]"
+originalTitle: "Letter # 41 [broken off]"
+author: "צ'ארלס אולסון"
+authorEn: "Charles Olson"
+authorBirth: 1910
+authorDeath: 1970
+sourceLang: en
+draft: false
+pairs:
+  - original: "With a leap (she said it was an arabesque"
+    translation: "תּוֹךְ זִנּוּק (הִיא אָמְרָה שֶׁהָיְתָה זוֹ עָרַבֶּסְקָה"
+  - original: "I made, off the porch, the night of the"
+    translation: "שֶׁעָשִׂיתִי, מִן הַמִּרְפֶּסֶת, בְּלֵיל הַסְּעָרָה"
+  - original: "St. Valentine Day's storm, into the snow."
+    translation: "שֶׁל יוֹם וָלֶנְטַיְן הַקָּדוֹשׁ, אֶל תּוֹךְ הַשֶּׁלֶג."
+  - original: "Nor did she fail of course to make the point"
+    translation: "כַּמּוּבָן שֶׁהִיא לֹא שָׁכְחָה לְצַיֵּן"
+  - original: "what a sight I was the size I am all over the storm"
+    translation: "אֵיזֶה מַרְאֶה זֶה הָיָה בְּהִתְחַשֵּׁב בְּגָדְלִי  בְּכָל הַסְּעָרָה הַזֹּאת"
+  - original: "trying to be graceful Or was it? She hadn't seen me"
+    translation: "מְנַסֶּה לִהְיוֹת חִנָּנִי אוֹ שֶׁמָּא הָיָה זֶה כָּךְ? הִיא לֹא רָאֲתָה אוֹתִי"
+  - original: "in 19 years"
+    translation: "19 שָׁנָה"
+  - spacer: true
+  - original: "Like, right off the Orontes? The Jews"
+    translation: "כְּאִילוּ, לְצַד הָאוֹרוֹנְטֶס ? הַיְּהוּדִים"
+  - original: "are unique because they settled astride"
+    translation: "יִחוּדָם בְּכָךְ שֶׂהִתְיַשְּׂבוּ בִּשְׁנֵי צִדֵּי"
+  - original: "the East African Rift. Nobody else will grant,"
+    translation: "הַשֶּׁבֶר הַסּוּרִי-אַפְרִיקָאִי. אַף אֶחָד אָחֵר לֹא יְתָאֵר,"
+  - original: "like he said, the volcano anyone of us does"
+    translation: "כְּפִי שֶׁהוּא אָמַר, הַר הַגַּעַשׁ שֶׁאֵלֶה מֵאִתָּנוּ"
+  - original: "sit upon, in quite such a tangible fashion."
+    translation: "יוֹשְׁבִים עָלָיו, בְּצוּרָה כֹּה מוּחָשִׁית."
+  - original: "Thus surprise, when Yellowstone kicks up"
+    translation: "לָכֵן הַפְתָּעָה, כַּאֲשֶׁר יֶלוֹסְטוֹן פּוֹתַחַת"
+  - original: "a fuss"
+    translation: "בִּמְהוּמָה"
+  - spacer: true
+  - original: "And it says, excessively, rough moraine."
+    translation: "וְכָתוּב שָׁם, בְּהַגְזָמָה, מוֹרֶנָה  גָּסָה."
+  - original: "I count such shapes this evening in the universe."
+    translation: "בְּעֵינָי הָעֶרֶב אֵלֶה תְּצוּרוֹת בַּיְּקוּם."
+  - original: "I run back home out of the new moon"
+    translation: "אֲנִי רָץ הַבָּיְתָה מִמּוֹלַד הַיָּרֵחַ"
+  - original: "makes fun of me in each puddle in the road."
+    translation: "שֶׁצּוֹחֵק עָלַי בְּכֹל שְׁלוּלִית שֶׁבַּדֶּרֶךְ."
+  - original: "The war of Africa against Eurasia"
+    translation: "מִלְחַמְתָּהּ שֶׁל אַפְרִיקָה נֶגֶד אֵירוֹאַסְיָה"
+  - original: "has just begun again. Gondwana!"
+    translation: "רַק הֵחֵלָה שׁוּב. גּוֹנְדּוּוָנָה !"
+---

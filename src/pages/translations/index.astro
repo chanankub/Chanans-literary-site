@@ -2,14 +2,16 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import {
-  filterPublished,
   formatPoetEnglishCredit,
+  publishedContentEntries,
   sortPoemsByAuthorBirth,
   withBase,
   entrySlug,
 } from "../../lib/content";
 
-const poems = sortPoemsByAuthorBirth(filterPublished(await getCollection("poems")));
+const poems = sortPoemsByAuthorBirth(
+  publishedContentEntries(await getCollection("poems")),
+);
 ---
 
 <BaseLayout title="תרגומים" current="translations">

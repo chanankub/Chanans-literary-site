@@ -8,6 +8,9 @@ authorDeath: 1962
 sourceLang: en
 draft: false
 pairs:
+  - original: "EMILY ..."
+    translation: "אמילי..."
+    title: true
   - original: "Emily white witch of Amherst"
     translation: "אֶמִילִי, מְכַשֵּׁפָה לְבָנָה מֵאַמְהֶרְסְט"
   - original: "The shy white witch of Amherst"
@@ -29,6 +32,9 @@ pairs:
     translation: "אוֹ אוּלַי עֲדִיפָה אוֹתָהּ יוֹנָה אֲפֹרָה רַכָּה."
     indent: 1
   - spacer: true
+  - original: "WHO WILL SLAP..."
+    translation: "מי יִטְפַּח..."
+    title: true
   - original: "Who will slap"
     translation: "מִי יִטְפַּח"
   - original: "my backside"
@@ -39,6 +45,7 @@ pairs:
   - original: "again"
     translation: "שׁוּב"
     indent: 1
+  - spacer: true
   - original: "Who will close my eyes"
     translation: "מִי יַעְצֹם אֶת עֵינָי"
   - original: "when"
@@ -50,6 +57,9 @@ pairs:
     translation: "תִּרְאֶינָה"
     indent: 1
   - spacer: true
+  - original: "THE LADY ..."
+    translation: "הגברת..."
+    title: true
   - original: "The Lady is a humble thing"
     translation: "הַגְּבֶרֶת הִיא דָּבָר צָנוּעַ"
   - original: "Made of death and water"
@@ -59,6 +69,9 @@ pairs:
   - original: "And use the mind for border"
     translation: "וּבַדִּמְיוֹן יוֹצְרִים שׁוּלַיִם"
   - spacer: true
+  - original: "EMILY ..."
+    translation: "אמילי..."
+    title: true
   - original: "Emily,"
     translation: "אֶמִילִי,"
   - original: "Come summer"

@@ -175,6 +175,25 @@ main {
   font-family: var(--font-latin);
 }
 
+.poem-alt-block {
+  margin-top: var(--space-lg);
+}
+
+.poem-alt-block__title {
+  margin: 0;
+  font-family: var(--font-hebrew);
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.poem-row--alt-title {
+  margin-bottom: var(--space-xs);
+}
+
+.poem-row--alt .poem-cell--la {
+  visibility: hidden;
+}
+
 .poem-parallel {
   direction: ltr;
   display: flex;
@@ -207,6 +226,27 @@ main {
   min-height: var(--space-md);
   border: none;
   padding: 0;
+}
+
+.poem-row--title {
+  margin-top: var(--space-sm);
+}
+
+.poem-row--title:first-child {
+  margin-top: 0;
+}
+
+.poem-row--title .poem-cell {
+  font-weight: 500;
+  margin-inline-start: 0 !important;
+}
+
+.poem-row--title .poem-cell--he {
+  font-size: 1.2rem;
+}
+
+.poem-row--title .poem-cell--la {
+  font-size: 1.125rem;
 }
 
 .poem-cell {

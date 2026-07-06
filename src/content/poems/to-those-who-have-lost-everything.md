@@ -1,0 +1,81 @@
+---
+title: "לכבוד אלה שאיבדו הכל"
+originalTitle: "To Those Who Have Lost Everything"
+author: "פרנציסקו ז. אלרקון"
+authorEn: "Francisco X. Alarcón"
+authorBirth: 1954
+authorDeath: 2016
+sourceLang: en
+draft: false
+pairs:
+  - original: "crossed"
+    translation: "חוֹצִים"
+  - original: "in despair"
+    translation: "בִּיסוּרִים"
+  - original: "many deserts"
+    translation: "מִדְבָּרִיוֹת אֵינְסְפוֹר"
+  - original: "full of hope"
+    translation: "מְלֵאֵי תִּקְוָה"
+  - spacer: true
+  - original: "carrying"
+    translation: "נוֹשְׂאִים"
+  - original: "their empty"
+    translation: "אֶגְרוֹפִים רֵיקִים"
+  - original: "fists of sorrow"
+    translation: "שֶׁל צַעַר"
+  - original: "everywhere"
+    translation: "לְכָל מָקוֹם"
+  - spacer: true
+  - original: "mouthing"
+    translation: "מְבַטְאִים"
+  - original: "a bitter night"
+    translation: "לַיְלָה מַר"
+  - original: "of shovels"
+    translation: "שֶׁל אִתִּים"
+  - original: "and nails"
+    translation: "וּמַסְמֵרִים"
+  - spacer: true
+  - original: "\"you're nothing"
+    translation: "\"אַתֶּם כְּלוּם"
+  - original: "you're shit"
+    translation: "אַתֶּם חָרָא"
+  - original: "your home's"
+    translation: "אֵין לָכֶם בַּיִת"
+  - original: "nowhere\"—"
+    translation: "בְּשׁוּם מָקוֹם\"–"
+  - spacer: true
+  - original: "mountains"
+    translation: "הָרִים"
+  - original: "will speak"
+    translation: "יְדַבְּרוּ"
+  - original: "for you"
+    translation: "בְּשִׁמְכֶם"
+  - spacer: true
+  - original: "rain"
+    translation: "גֶּשֶׁם"
+  - original: "will flesh"
+    translation: "יְחַיֶּה"
+  - original: "your bones"
+    translation: "אֶת עַצְמוֹתֵיכֶם"
+  - spacer: true
+  - original: "green again"
+    translation: "מוֹרִיקִים שׁוֹב"
+  - original: "among ashes"
+    translation: "מִתּוֹךְ הָרֶמֶץ"
+  - original: "after a long fire"
+    translation: "אַחֲרֵי בְּעֵירָה אֲרֻכָּה"
+  - spacer: true
+  - original: "started in"
+    translation: "שֶׁהֵחֵלָה"
+  - original: "a fantasy island"
+    translation: "בְּאִי חֲלוֹמוֹת"
+  - original: "some time ago"
+    translation: "לִפְנֵי זְמָן"
+  - spacer: true
+  - original: "turning"
+    translation: "וְהָפְכָה"
+  - original: "Natives"
+    translation: "יְלִידִים"
+  - original: "into aliens"
+    translation: "לְנָכְרִים"
+---

@@ -28,6 +28,13 @@ export function filterPublished<T extends { data: { draft?: boolean } }>(
   return items.filter((item) => !item.data.draft);
 }
 
+/** Published content entries, excluding underscore drafts like _template.md. */
+export function publishedContentEntries<
+  T extends { id: string; data: { draft?: boolean } },
+>(items: T[]): T[] {
+  return filterPublished(items).filter((item) => !item.id.startsWith("_"));
+}
+
 /** Join site base with a path (safe whether BASE_URL ends with / or not). */
 export function withBase(path = ""): string {
   const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
