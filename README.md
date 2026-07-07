@@ -2,7 +2,7 @@
 
 אתר סטטי בעברית (RTL) לתרגומי שירה, סיפורים קצרים והערות אישיות.
 
-**מחסנית:** [Astro](https://astro.build) · **אירוח:** [GitHub Pages](https://chanankub.github.io/My_Website/)
+**מחסנית:** [Astro](https://astro.build) · **אירוח:** [GitHub Pages](https://chanankub.github.io/Chanans-literary-site/)
 
 ## התחלה מהירה
 
@@ -38,7 +38,7 @@ public/images/       תמונות מייבוא Word
 
 1. ב־GitHub: **Settings → Pages → Build and deployment → GitHub Actions**
 2. דחיפה ל־`main` מפעילה את `.github/workflows/deploy.yml`
-3. האתר יהיה זמין ב־`https://chanankub.github.io/My_Website/`
+3. האתר יהיה זמין ב־`https://chanankub.github.io/Chanans-literary-site/`
 
 ## רישיון
 

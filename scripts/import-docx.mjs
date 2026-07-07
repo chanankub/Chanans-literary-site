@@ -118,7 +118,7 @@ Examples:
         const imagePath = path.join(imagesDir, imageName);
         const buffer = await image.read();
         await fs.writeFile(imagePath, buffer);
-        const webPath = `/My_Website/images/${slug}/${imageName}`;
+        const webPath = `/Chanans-literary-site/images/${slug}/${imageName}`;
         return { src: webPath };
       }),
     },
@@ -133,7 +133,7 @@ Examples:
 
   let body = htmlToMarkdown(result.value);
   body = body.replace(
-    /!\[\]\((\/My_Website\/images\/[^)]+)\)/g,
+    /!\[\]\((\/Chanans-literary-site\/images\/[^)]+)\)/g,
     "![]($1)",
   );
 

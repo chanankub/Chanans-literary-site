@@ -1,9 +1,9 @@
 import { defineConfig } from 'astro/config';
 
-// https://chanankub.github.io/My_Website/
+// https://chanankub.github.io/Chanans-literary-site/
 export default defineConfig({
   site: 'https://chanankub.github.io',
-  base: '/My_Website',
+  base: '/Chanans-literary-site',
   trailingSlash: 'always',
   redirects: {
     '/translations/i-carry-your-heart-f': '/translations/i-carry-your-heart',

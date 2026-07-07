@@ -17,7 +17,7 @@ order: 10
 תמונות: שים קבצים ב־`public/images/<slug>/` והצג ב־Markdown:
 
 ```markdown
-![תיאור](/My_Website/images/<slug>/photo.jpg)
+![תיאור](/Chanans-literary-site/images/<slug>/photo.jpg)
 ```
 
 ---

@@ -60,7 +60,7 @@ npm install
 npm run dev
 ```
 
-פתח את הכתובת שמופיעה בטרמינל (בדרך כלל `http://localhost:4321/My_Website/`).
+פתח את הכתובת שמופיעה בטרמינל (בדרך כלל `http://localhost:4321/Chanans-literary-site/`).
 
 ## פרסום
 
@@ -72,4 +72,4 @@ git push
 
 GitHub Actions בונה ומפרסם ל־Pages אוטומטית (אחרי הפעלת Pages ב־repo).
 
-**כתובת האתר:** https://chanankub.github.io/My_Website/
+**כתובת האתר:** https://chanankub.github.io/Chanans-literary-site/
