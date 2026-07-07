@@ -45,4 +45,5 @@ git push -u origin main
 | ----------------- | ---------------------------------------------------------------- |
 | תמונות לא נטענות  | ודא שנתיב ב-Markdown מתחיל ב-`/Chanans-literary-site/images/...` אחרי ייבוא |
 | שיר לא מופיע      | `draft: false` ושם קובץ לא מתחיל ב-`_`                           |
-| 404 ב-deploy (`Failed to create deployment`) | הפעל Pages: Settings → Pages → Source → **GitHub Actions**, ואז הרץ מחדש את ה-workflow |
+| 404 ב-deploy (`Failed to create deployment`) | הפעל Pages ידנית: [Settings → Pages](https://github.com/chanankub/Chanans-literary-site/settings/pages) → Source → **GitHub Actions**, ואז הרץ מחדש את ה-workflow |
+| שגיאת `configure-pages` / `Get Pages site failed` | Pages עדיין לא מופעל — אותו תיקון כמו בשורה למעלה |
