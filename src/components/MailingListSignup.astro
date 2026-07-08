@@ -1,0 +1,60 @@
+---
+import {
+  contactEmail,
+  isMailingListConfigured,
+  mailingList,
+} from "../config/contact";
+---
+
+<section class="contact-block" aria-labelledby="mailing-heading">
+  <h2 id="mailing-heading" class="contact-block__title">רשימת תפוצה</h2>
+  <p class="contact-block__intro">
+    עדכון מדי פעם על שירים וטקסטים חדשים באתר. בלי ספאם.
+  </p>
+  {
+    isMailingListConfigured() ? (
+      <form
+        class="mailing-form"
+        action={`https://buttondown.com/api/emails/embed-subscribe/${mailingList.buttondownUser}`}
+        method="post"
+      >
+        <label class="mailing-form__label" for="bd-email">דוא״ל</label>
+        <div class="mailing-form__row">
+          <input
+            class="mailing-form__input"
+            type="email"
+            name="email"
+            id="bd-email"
+            required
+            autocomplete="email"
+            dir="ltr"
+          />
+          <button class="mailing-form__submit" type="submit">
+            הרשמה
+          </button>
+        </div>
+      </form>
+    ) : contactEmail ? (
+      <p class="contact-block__intro">
+        <a href={`mailto:${contactEmail}`} dir="ltr">
+          {contactEmail}
+        </a>
+        — כתבו לי ואוסיף אתכם לרשימה ידנית, או הגדירו <code dir="ltr"
+          >PUBLIC_BUTTONDOWN_USER</code
+        > (חינם ב־<a href="https://buttondown.com" dir="ltr" lang="en"
+          >buttondown.com</a
+        >).
+      </p>
+    ) : (
+      <p class="contact-setup-note">
+        להפעלת רשימת תפוצה: פתחו חשבון ב־<a
+          href="https://buttondown.com"
+          dir="ltr"
+          lang="en">buttondown.com</a
+        > והגדירו <code dir="ltr">PUBLIC_BUTTONDOWN_USER</code> בקובץ <code
+          dir="ltr">.env</code
+        >, או ציינו <code dir="ltr">PUBLIC_CONTACT_EMAIL</code> ליצירת קשר.
+      </p>
+    )
+  }
+</section>

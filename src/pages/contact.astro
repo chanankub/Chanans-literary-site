@@ -1,0 +1,24 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Comments from "../components/Comments.astro";
+import MailingListSignup from "../components/MailingListSignup.astro";
+---
+
+<BaseLayout
+  title="יצירת קשר"
+  description="תגובות ורשימת תפוצה — יצירת קשר עם קוראי האתר"
+  current="contact"
+>
+  <div class="container container--narrow">
+    <header class="contact-header">
+      <h1 class="page-title">יצירת קשר</h1>
+      <p class="page-intro">
+        שמח לשמוע מקוראים. אפשר להשאיר תגובה ציבורית, או להירשם לעדכונים על
+        תוכן חדש.
+      </p>
+    </header>
+
+    <Comments />
+    <MailingListSignup />
+  </div>
+</BaseLayout>

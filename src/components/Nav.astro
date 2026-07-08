@@ -1,6 +1,6 @@
 ---
 interface Props {
-  current?: "home" | "translations" | "stories" | "notes";
+  current?: "home" | "translations" | "stories" | "notes" | "contact";
 }
 
 import { withBase } from "../lib/content";
@@ -12,6 +12,7 @@ const links = [
   { href: withBase("translations/"), label: "תרגומים", id: "translations" as const },
   { href: withBase("stories/"), label: "סיפורים", id: "stories" as const },
   { href: withBase("notes/"), label: "איך למדתי לאהוב שירה", id: "notes" as const },
+  { href: withBase("contact/"), label: "יצירת קשר", id: "contact" as const },
 ];
 ---
 

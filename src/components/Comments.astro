@@ -1,0 +1,40 @@
+---
+import { contactPageUrl, cusdis, isCommentsConfigured } from "../config/contact";
+
+const pageUrl = contactPageUrl();
+---
+
+<section class="contact-block" aria-labelledby="comments-heading">
+  <h2 id="comments-heading" class="contact-block__title">תגובות</h2>
+  <p class="contact-block__intro">
+    השאירו מילה, שאלה או הערה — בלי הרשמה, רק שם וכתובת דוא״ל. תגובות חדשות
+    מופיעות בראש הרשימה. תגובות עוברות אישור לפני פרסום.
+  </p>
+  {
+    isCommentsConfigured() ? (
+      <>
+        <div
+          class="comments-wrapper"
+          id="cusdis_thread"
+          data-host={cusdis.host}
+          data-app-id={cusdis.appId}
+          data-page-id="contact"
+          data-page-title="יצירת קשר"
+          data-page-url={pageUrl}
+          data-theme="light"
+        />
+        <script src={`${cusdis.host}/js/cusdis.es.js`} async defer />
+      </>
+    ) : (
+      <p class="contact-setup-note">
+        אזור התגובות יופעל לאחר הגדרת Cusdis. הירשמו בחינם ב־<a
+          href="https://cusdis.com/dashboard"
+          dir="ltr"
+          lang="en">cusdis.com</a
+        >, צרו אתר (Website), העתיקו את <code dir="ltr">app_id</code> לקובץ <code
+          dir="ltr">.env</code
+        > (ראו <code dir="ltr">.env.example</code>).
+      </p>
+    )
+  }
+</section>
