@@ -14,7 +14,7 @@
   --he-line-height: 1.85;
   --la-line-height: 1.75;
   --poem-line-height-he: 1.5;
-  --poem-line-height-la: 1.45;
+  --poem-line-height-la: 1.5;
   --space-xs: 0.5rem;
   --space-sm: 1rem;
   --space-md: 1.5rem;
@@ -175,6 +175,13 @@ main {
   font-family: var(--font-latin);
 }
 
+.poem-footnote {
+  margin: var(--space-lg) 0 0;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  line-height: 1.5;
+}
+
 .poem-alt-block {
   margin-top: var(--space-lg);
 }
@@ -206,7 +213,7 @@ main {
   grid-template-columns: 1fr 1fr;
   gap: var(--space-md);
   padding: 0;
-  align-items: baseline;
+  align-items: start;
   border-bottom: none;
 }
 
@@ -252,6 +259,8 @@ main {
 .poem-cell {
   margin: 0;
   unicode-bidi: plaintext;
+  /* Keep intentional runs of spaces (e.g. Berryman spacing) */
+  white-space: pre-wrap;
 }
 
 .poem-cell--he {
@@ -260,6 +269,9 @@ main {
   line-height: var(--poem-line-height-he);
   direction: rtl;
   text-align: right;
+  /* Wrapped lines sit inward (mirror of English hanging indent) */
+  padding-inline-start: 1.25em;
+  text-indent: -1.25em;
 }
 
 .poem-cell--la {
@@ -268,6 +280,9 @@ main {
   line-height: var(--poem-line-height-la);
   direction: ltr;
   text-align: left;
+  /* Wrapped lines sit to the right of the first line */
+  padding-inline-start: 1.25em;
+  text-indent: -1.25em;
 }
 
 .poem-label {

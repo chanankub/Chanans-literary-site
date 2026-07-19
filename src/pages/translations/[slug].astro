@@ -28,16 +28,22 @@ const {
   altTitle,
   altPairs,
   pairs,
+  footnote,
+  footnoteOn,
 } = poem.data;
 const poetEnglish = authorEn
-  ? formatPoetEnglishCredit(authorEn, authorBirth, authorDeath)
+  ? formatPoetEnglishCredit(authorEn, authorBirth, authorDeath, {
+      deathAsterisk: Boolean(footnote) && footnoteOn === "death",
+    })
   : null;
+const displayTitle =
+  footnote && footnoteOn === "title" ? `${title}*` : title;
 ---
 
 <BaseLayout title={title} current="translations">
   <div class="container container--wide">
     <header class="poem-header">
-      <h1 class="page-title">{title}</h1>
+      <h1 class="page-title">{displayTitle}</h1>
       <p class="poem-meta">
         {originalTitle && <span>{originalTitle} · </span>}
         {author}
@@ -56,5 +62,10 @@ const poetEnglish = authorEn
       altTitle={altTitle}
       altPairs={altPairs}
     />
+    {
+      footnote && (
+        <p class="poem-footnote">*{footnote}</p>
+      )
+    }
   </div>
 </BaseLayout>

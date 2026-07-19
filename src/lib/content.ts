@@ -47,20 +47,22 @@ export function entrySlug(id: string): string {
   return id.replace(/\.md$/, "");
 }
 
-/** e.g. Mary Oliver (1935–2019) */
+/** e.g. Mary Oliver (1935–2019) or John Berryman (1914–1972*) */
 export function formatPoetEnglishCredit(
   nameEn: string,
   birth?: number,
   death?: number,
+  options?: { deathAsterisk?: boolean },
 ): string {
+  const star = options?.deathAsterisk && death != null ? "*" : "";
   if (birth != null && death != null) {
-    return `${nameEn} (${birth}–${death})`;
+    return `${nameEn} (${birth}–${death}${star})`;
   }
   if (birth != null) {
     return `${nameEn} (${birth}–)`;
   }
   if (death != null) {
-    return `${nameEn} (–${death})`;
+    return `${nameEn} (–${death}${star})`;
   }
   return nameEn;
 }
