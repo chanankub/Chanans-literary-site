@@ -20,7 +20,7 @@ npm run dev
 | `npm run preview` | תצוגה מקדימה של הבנייה |
 | `npm run import:docx -- <file> --type story\|note` | ייבוא מ־Word |
 
-פרטים מלאים: [AUTHORING.md](./AUTHORING.md)
+פרטים מלאים: [AUTHORING.md](./AUTHORING.md) · [OBSIDIAN.md](./OBSIDIAN.md)
 
 ## מבנה
 

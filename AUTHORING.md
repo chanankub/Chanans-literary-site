@@ -1,5 +1,7 @@
 # מדריך כתיבה ופרסום
 
+לעבודה מתוך Obsidian: [OBSIDIAN.md](./OBSIDIAN.md)
+
 ## תרגומי שירה
 
 1. העתק את `src/content/poems/_template.md` לקובץ חדש (שם באנגלית או עברית transliterated, למשל `my-poem.md`).
