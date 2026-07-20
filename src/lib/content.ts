@@ -52,19 +52,20 @@ export function formatPoetEnglishCredit(
   nameEn: string,
   birth?: number,
   death?: number,
-  options?: { deathAsterisk?: boolean },
+  options?: { deathAsterisk?: boolean; nameAsterisk?: boolean },
 ): string {
+  const name = options?.nameAsterisk ? `${nameEn}*` : nameEn;
   const star = options?.deathAsterisk && death != null ? "*" : "";
   if (birth != null && death != null) {
-    return `${nameEn} (${birth}–${death}${star})`;
+    return `${name} (${birth}–${death}${star})`;
   }
   if (birth != null) {
-    return `${nameEn} (${birth}–)`;
+    return `${name} (${birth}–)`;
   }
   if (death != null) {
-    return `${nameEn} (–${death}${star})`;
+    return `${name} (–${death}${star})`;
   }
-  return nameEn;
+  return name;
 }
 
 export type PoemEntry = CollectionEntry<"poems">;

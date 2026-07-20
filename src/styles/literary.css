@@ -217,6 +217,12 @@ main {
   border-bottom: none;
 }
 
+.poem-parallel--solo .poem-row {
+  grid-template-columns: 1fr;
+  max-width: var(--measure);
+  margin-inline: auto;
+}
+
 .poem-row[data-indent="1"] .poem-cell {
   margin-inline-start: 2.5em;
 }

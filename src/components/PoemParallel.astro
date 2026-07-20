@@ -19,18 +19,37 @@ interface Props {
   layout?: "bilingual" | "trilingual";
   altTitle?: string;
   altPairs?: AltPoemPair[];
+  /** BCP 47 tag for the original-language column (default en). */
+  sourceLang?: string;
 }
 
-const { pairs, layout = "bilingual", altTitle, altPairs } = Astro.props;
+const {
+  pairs,
+  layout = "bilingual",
+  altTitle,
+  altPairs,
+  sourceLang = "en",
+} = Astro.props;
 const isTrilingual = layout === "trilingual";
 const hasAltBlock = altTitle && altPairs && altPairs.length > 0;
+const hebrewOnly =
+  !isTrilingual &&
+  (sourceLang === "he" ||
+    pairs.every((p) => p.spacer || (!p.original && !p.english && p.translation)));
 const ariaLabel = isTrilingual
   ? "Original, English, and Hebrew in parallel lines"
-  : "טקסט מקורי ותרגום בשורות מקבילות";
+  : hebrewOnly
+    ? "שיר בעברית"
+    : "טקסט מקורי ותרגום בשורות מקבילות";
+const originalIsHebrew = sourceLang === "he";
 ---
 
 <div
-  class:list={["poem-parallel", isTrilingual && "poem-parallel--triple"]}
+  class:list={[
+    "poem-parallel",
+    isTrilingual && "poem-parallel--triple",
+    hebrewOnly && "poem-parallel--solo",
+  ]}
   role="group"
   aria-label={ariaLabel}
 >
@@ -61,9 +80,25 @@ const ariaLabel = isTrilingual
           </div>
         );
       }
+      if (hebrewOnly) {
+        return (
+          <div class={rowClass} data-indent={pair.indent ?? 0}>
+            <p class="poem-cell poem-cell--he" dir="rtl" lang="he">
+              {pair.translation ?? pair.original}
+            </p>
+          </div>
+        );
+      }
       return (
         <div class={rowClass} data-indent={pair.indent ?? 0}>
-          <p class="poem-cell poem-cell--la" dir="ltr" lang="en">
+          <p
+            class:list={[
+              "poem-cell",
+              originalIsHebrew ? "poem-cell--he" : "poem-cell--la",
+            ]}
+            dir={originalIsHebrew ? "rtl" : "ltr"}
+            lang={sourceLang}
+          >
             {!pair.title && <span class="poem-label">מקור</span>}
             {pair.original}
           </p>

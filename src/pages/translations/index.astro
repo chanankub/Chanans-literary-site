@@ -45,6 +45,9 @@ const poems = sortPoemsByAuthorBirth(
                             deathAsterisk:
                               Boolean(poem.data.footnote) &&
                               poem.data.footnoteOn === "death",
+                            nameAsterisk:
+                              Boolean(poem.data.footnote) &&
+                              poem.data.footnoteOn === "author",
                           },
                         )}
                       </span>

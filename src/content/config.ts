@@ -42,7 +42,7 @@ const poems = defineCollection({
     /** Short note under the poem (e.g. death circumstance or abridgment). */
     footnote: z.string().optional(),
     /** Where to show the * that points to footnote. Default: death year. */
-    footnoteOn: z.enum(["death", "title"]).default("death"),
+    footnoteOn: z.enum(["death", "title", "author"]).default("death"),
     /** bilingual: original + Hebrew; trilingual: original + English + Hebrew */
     pairLayout: z.enum(["bilingual", "trilingual"]).default("bilingual"),
     /** Optional second Hebrew block beneath the main pairs (no English). */

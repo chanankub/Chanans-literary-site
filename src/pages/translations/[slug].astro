@@ -30,10 +30,12 @@ const {
   pairs,
   footnote,
   footnoteOn,
+  sourceLang,
 } = poem.data;
 const poetEnglish = authorEn
   ? formatPoetEnglishCredit(authorEn, authorBirth, authorDeath, {
       deathAsterisk: Boolean(footnote) && footnoteOn === "death",
+      nameAsterisk: Boolean(footnote) && footnoteOn === "author",
     })
   : null;
 const displayTitle =
@@ -61,6 +63,7 @@ const displayTitle =
       layout={pairLayout}
       altTitle={altTitle}
       altPairs={altPairs}
+      sourceLang={sourceLang}
     />
     {
       footnote && (
