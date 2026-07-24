@@ -1,0 +1,71 @@
+---
+title: "אהבה ב־20¢ לרבע המייל הראשון"
+originalTitle: "Love 20¢ The First Quarter Mile"
+author: "קנת פירינג"
+authorEn: "Kenneth Fearing"
+authorBirth: 1902
+authorDeath: 1961
+sourceLang: en
+date: 2026-07-24
+draft: false
+order: 64
+pairs:
+  - original: "All right. I may have lied to you and about you, and made a few"
+    translation: "טוֹב. אַז אוּלַי שִׁקַּרְתִּי לָךְ וְאוֹדוֹתָיִךְ, וְאוּלַי הִפְרַחְתִּי כָּמָה"
+  - original: "pronouncements a bit too sweeping, perhaps, and possibly forgotten"
+    translation: "הַצְהָרוֹת מְעַט גּוֹרְפוֹת מִדַּי, וְאוּלַי שָׁכַחְתִּי"
+  - original: "to tag the bases here or there,"
+    translation: "לִסְגּוֹר עִנְיָנִים פֹּה וָשָׁם,"
+  - original: "And damned your extravagence, and maligned your tastes, and libeled"
+    translation: "וְקִלַּלְתִּי אֶת הַפַּזְרָנוּת שֶׁלָּךְ וְזִלְזַלְתִּי בַּטַּעַם שֶׁלָּךְ וְהִשְׁמַצְתִּי"
+  - original: "your relatives, and slandered a few of your friends,"
+    translation: "אֶת בְּנֵי מִשְׁפַּחְתֵּךְ וְהִכְפַּשְׁתִּי כָּמָה מֵחֲבֵרָיִךְ,"
+  - original: "O.K.,"
+    translation: "אוֹקֵיי,"
+  - original: "Nevertheless, come back."
+    translation: "בְּכָל זֹאת, חִזְרִי אֵלַי."
+  - spacer: true
+  - original: "Come home. I will agree to forget the statements that you issued so"
+    translation: "בּוֹאִי הַבַּיְתָּה. אַסְכִּים לִשְׁכּוֹחַ אֶת הַהַצְהָרוֹת שֶׁהֵפַצְתְּ"
+  - original: "copiously to the neighbors and the press,"
+    translation: "בְּכָזֶה שֶׁפַע לַשְּׁכֵנִים וְלָעִתּוֹנוּת,"
+  - original: "And you will forget that figment of your imagination, the blonde from Detroit;"
+    translation: "וְאַת תִּשְׁכְּחִי אֶת יְצִיר הַדִּמְיוֹן שֶׁלָּךְ, אֶת הַבְּלוֹנְדִּינִית מִדֶּטְרוֹיְט;"
+  - original: "I will agree that your lady friend who lives above us is not crazy, bats,"
+    translation: "אֲנִי אַסְכִּים שֶׁהַחֲבֵרָה שֶׁלָךְ שֶׁגָּרָה מֵעָלֵינוּ אֵינֶנָּה מְטֹרֶפֶת, תִּמְהוֹנִית,"
+  - original: "nutty as they come, but on the contrary rather bright,"
+    translation: "מְשֻׁגַּעַת עַל כֹּל הָרֹאשׁ, אֵלָא לְהֵפֶךְ, דֵּי פִּקְחִית,"
+  - original: "And you will concede that poor old Steinberg is neither a drunk, nor"
+    translation: "וְאַת תּוֹדִי בְּכָךְ שֶׁשְּׁטַיְנְבֶּרְג הַמִּסְכֵּן אֵינוֹ שִׁכּוֹר וְלֹא"
+  - original: "a swindler, but simply a guy, on the eccentric side, trying to get along."
+    translation: "תַּחְמָן, אֵלָא פְָשׁוּט בָּחוּר הַנּוֹטֶה לְאֶקְסְצֶנְטְרִיוּת, וּמִשְׁתַּדֵּל לְהִסְתַּדֵּר."
+  - original: "(Are you listening, you bitch, and have you got this straight?)"
+    translation: "(אַת מַקְשִׁיבָה, נְבֵלָה, הֵבַנְתְּ אוֹתִי עַד הַסּוֹף?)"
+  - spacer: true
+  - original: "Because I forgive you, yes, for everything."
+    translation: "כִּי אֲנִי סוֹלֵחַ לָךְ, כֵּן, עַל הַכֹּל."
+  - original: "I forgive you for being beautiful and generous and wise,"
+    translation: "אֲנִי סוֹלֵחַ לָךְ עַל הַיּוֹפִי שֶׁלָּךְ, עַל הַנְּדִיבוּת וְעַל הַחָכְמָה שֶׁלָּךְ,"
+  - original: "I forgive you, to put it simply, for being alive, and pardon you, in short, for being you."
+    translation: "אֲנִי סוֹלֵחַ לָךְ, בְּפַשְׁטוּת, עַל שֶׁאַת חָיָה, וּמוֹחֵל לָךְ, בְּקִצּוּר, עַל שֶׁאַת מִי שֶׁאַת."
+  - spacer: true
+  - original: "Because tonight you are in my hair and eyes,"
+    translation: "כִּי הַלַּיְלָה הַזֶּה אַת בְּתוֹךְ שַׂעֲרוֹתַי וּבְעֵינַי,"
+  - original: "And every street light that our taxi passes shows me you again, still you,"
+    translation: "וְכָל פָּנַס רְחוֹב שֶׁהַמּוֹנִית שֶׁלָּנוּ עוֹבֶרֶת מַרְאֶה לִי אוֹתָךְ שׁוּב, עֲדַיִן אַת,"
+  - original: "And because tonight all other nights are black, all other hours are cold"
+    translation: "וּבִגְלָל שֶׁבַּלַּיְלָה הַזֶּה כֹּל הַלֵּילוֹת הָאֲחֵרִים שְׁחוֹרִים, כֹּל הַשָּׁעוֹת הָאֲחֵרוֹת קָרוֹת"
+  - original: "and far away, and now, this minute, the stars are very near and bright"
+    translation: "וּרְחוֹקוֹת, וְעַכְשָׁיו, בְּדָקָה זֹאת, הַכּוֹכָבִים מְאֹד קְרוֹבִים וּבְהִירִים"
+  - spacer: true
+  - original: "Come back. We will have a celebration to end all celebrations."
+    translation: "חִזְרִי אֵלַי. אֲנַחְנוּ נַחְגֹג אֶת תֹּם כֹּל הַחֲגִיגוֹת."
+  - original: "We will invite the undertaker who lives beneath us, and a couple of"
+    translation: "נַזְמִין אֶת הַקַּבְרָן שֶׁגָּר מִתַּחְתֵּנוּ, וְכָמָה"
+  - original: "boys from the office, and some other friends."
+    translation: "בָּחוּרִים מֵהַמִּשְׂרָד, וְעוֹד כָּמָה חֲבֵרִים."
+  - original: "And Steinberg, who is off the wagon, and that insane woman who lives"
+    translation: "וּשְׁטַיְנְבֶּרְג, שֶׁחָזַר לִשְׁתּוֹת, וְאוֹתָהּ אִשָּׁה מֻטְרֶפֶת שֶׁגָּרָה"
+  - original: "upstairs, and a few reporters, if anything should break."
+    translation: "לְמַעְלָה, וְכָמָה עִתּוֹנָאִים לְמִקְרֶה שֶׁיִּהְיֶה עַל מָה לְדַוֵּחַ."
+---
