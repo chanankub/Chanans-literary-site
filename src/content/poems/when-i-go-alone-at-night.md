@@ -9,7 +9,7 @@ sourceLang: en
 date: 2026-07-19
 draft: false
 order: 42
-footnote: "מן התרגום האנגלי: חנן קוביצקי"
+footnote: "מן התרגום האנגלי"
 footnoteOn: title
 pairs:
   - original: "WHEN I go alone at night to my love-tryst, birds do not sing, the wind does not stir, the houses on both sides of the street stand silent."

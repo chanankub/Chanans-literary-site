@@ -1,4 +1,6 @@
 ---
+import { withBase } from "../lib/content";
+
 export interface PoemPair {
   original?: string;
   english?: string;
@@ -6,6 +8,8 @@ export interface PoemPair {
   spacer?: boolean;
   indent?: number;
   title?: boolean;
+  image?: string;
+  imageAlt?: string;
 }
 
 export interface AltPoemPair {
@@ -35,7 +39,12 @@ const hasAltBlock = altTitle && altPairs && altPairs.length > 0;
 const hebrewOnly =
   !isTrilingual &&
   (sourceLang === "he" ||
-    pairs.every((p) => p.spacer || (!p.original && !p.english && p.translation)));
+    pairs.every(
+      (p) =>
+        p.spacer ||
+        p.image ||
+        (!p.original && !p.english && p.translation),
+    ));
 const needsViewToggle = !hebrewOnly;
 const ariaLabel = isTrilingual
   ? "Original, English, and Hebrew in parallel lines"
@@ -97,6 +106,17 @@ const defaultView = "translation";
     pairs.map((pair) => {
       if (pair.spacer) {
         return <div class="poem-row poem-row--spacer" aria-hidden="true" />;
+      }
+      if (pair.image) {
+        return (
+          <figure class="poem-figure">
+            <img
+              src={withBase(pair.image.replace(/^\//, ""))}
+              alt={pair.imageAlt ?? ""}
+              loading="lazy"
+            />
+          </figure>
+        );
       }
       const rowClass = pair.title ? "poem-row poem-row--title" : "poem-row";
       if (isTrilingual) {

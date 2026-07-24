@@ -180,6 +180,59 @@ main {
   font-size: 0.85rem;
   color: var(--color-muted);
   line-height: 1.5;
+  white-space: pre-line;
+}
+
+.poem-epigraph {
+  margin: 0 0 var(--space-lg);
+  padding: 0;
+  border: none;
+}
+
+.poem-epigraph__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  align-items: start;
+}
+
+.poem-epigraph .poem-cell {
+  font-size: 0.95em;
+  font-style: italic;
+  color: var(--color-muted);
+}
+
+.poem-epigraph__attr {
+  margin-top: var(--space-xs);
+}
+
+.poem-epigraph__attr .poem-cell {
+  font-style: normal;
+  font-size: 0.85em;
+}
+
+@media (max-width: 640px) {
+  .poem-epigraph__row {
+    grid-template-columns: 1fr;
+    gap: var(--space-xs);
+  }
+}
+
+.poem-footnotes {
+  margin: var(--space-md) 0 0;
+  padding-inline-start: 1.5rem;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  line-height: 1.55;
+  font-family: var(--font-hebrew);
+}
+
+.poem-footnotes li + li {
+  margin-top: 0.35rem;
+}
+
+.poem-footnote + .poem-footnotes {
+  margin-top: var(--space-sm);
 }
 
 .poem-alt-block {
@@ -239,6 +292,20 @@ main {
   min-height: var(--space-md);
   border: none;
   padding: 0;
+}
+
+.poem-figure {
+  display: flex;
+  justify-content: center;
+  margin: var(--space-md) 0;
+  padding: 0;
+}
+
+.poem-figure img {
+  width: auto;
+  max-width: min(100%, 26rem);
+  height: auto;
+  border: 1px solid var(--color-border);
 }
 
 .poem-row--title {

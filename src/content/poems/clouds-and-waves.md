@@ -9,7 +9,7 @@ sourceLang: en
 date: 2026-07-19
 draft: false
 order: 43
-footnote: "מן התרגום האנגלי: חנן קוביצקי"
+footnote: "מן התרגום האנגלי"
 footnoteOn: title
 pairs:
   - original: "Mother, the folk who live up in the clouds call out to me —"

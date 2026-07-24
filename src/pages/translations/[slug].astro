@@ -30,6 +30,8 @@ const {
   pairs,
   footnote,
   footnoteOn,
+  footnotes,
+  epigraph,
   sourceLang,
 } = poem.data;
 const poetEnglish = authorEn
@@ -48,7 +50,16 @@ const displayTitle =
       <h1 class="page-title">{displayTitle}</h1>
       <p class="poem-meta">
         {originalTitle && <span>{originalTitle} · </span>}
-        {author}
+        {
+          footnote && footnoteOn === "author" ? (
+            <span>
+              {author}
+              <span aria-hidden="true">*</span>
+            </span>
+          ) : (
+            author
+          )
+        }
       </p>
       {
         poetEnglish && (
@@ -58,6 +69,30 @@ const displayTitle =
         )
       }
     </header>
+    {
+      epigraph && (
+        <blockquote class="poem-epigraph">
+          <div class="poem-epigraph__row">
+            <p class="poem-cell poem-cell--la" dir="ltr" lang="en">
+              {epigraph.original}
+            </p>
+            <p class="poem-cell poem-cell--he" dir="rtl" lang="he">
+              {epigraph.translation}
+            </p>
+          </div>
+          {(epigraph.attribution || epigraph.attributionHe) && (
+            <div class="poem-epigraph__row poem-epigraph__attr">
+              <p class="poem-cell poem-cell--la" dir="ltr" lang="en">
+                {epigraph.attribution && `—${epigraph.attribution}`}
+              </p>
+              <p class="poem-cell poem-cell--he" dir="rtl" lang="he">
+                {epigraph.attributionHe && `–${epigraph.attributionHe}`}
+              </p>
+            </div>
+          )}
+        </blockquote>
+      )
+    }
     <PoemParallel
       pairs={pairs}
       layout={pairLayout}
@@ -68,6 +103,15 @@ const displayTitle =
     {
       footnote && (
         <p class="poem-footnote">*{footnote}</p>
+      )
+    }
+    {
+      footnotes && footnotes.length > 0 && (
+        <ol class="poem-footnotes">
+          {footnotes.map((note) => (
+            <li>{note}</li>
+          ))}
+        </ol>
       )
     }
   </div>

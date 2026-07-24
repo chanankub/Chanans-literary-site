@@ -1,5 +1,5 @@
 ---
-title: "נוֹסטוֹס*"
+title: "נוֹסטוֹס"
 originalTitle: "Nostos"
 author: "לואיז גליק"
 authorEn: "Louise Glück"

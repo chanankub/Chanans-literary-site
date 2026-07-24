@@ -10,10 +10,21 @@ const pairSchema = z
     indent: z.number().int().min(0).max(3).optional(),
     /** Sub-poem title row (original + translation only). */
     title: z.boolean().optional(),
+    /** Optional illustration shown full-width between lines (path under public/). */
+    image: z.string().optional(),
+    imageAlt: z.string().optional(),
   })
   .refine(
-    (p) => p.spacer === true || p.original || p.english || p.translation,
-    { message: "Each pair needs original/english/translation or spacer: true" },
+    (p) =>
+      p.spacer === true ||
+      p.image ||
+      p.original ||
+      p.english ||
+      p.translation,
+    {
+      message:
+        "Each pair needs original/english/translation, image, or spacer: true",
+    },
   );
 
 const altPairSchema = z
@@ -43,6 +54,17 @@ const poems = defineCollection({
     footnote: z.string().optional(),
     /** Where to show the * that points to footnote. Default: death year. */
     footnoteOn: z.enum(["death", "title", "author"]).default("death"),
+    /** Numbered notes (¹ ² ³…) referenced inside the poem lines. */
+    footnotes: z.array(z.string()).optional(),
+    /** Optional bilingual epigraph above the poem. */
+    epigraph: z
+      .object({
+        original: z.string(),
+        translation: z.string(),
+        attribution: z.string().optional(),
+        attributionHe: z.string().optional(),
+      })
+      .optional(),
     /** bilingual: original + Hebrew; trilingual: original + English + Hebrew */
     pairLayout: z.enum(["bilingual", "trilingual"]).default("bilingual"),
     /** Optional second Hebrew block beneath the main pairs (no English). */
