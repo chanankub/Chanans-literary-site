@@ -299,6 +299,49 @@ main {
   text-transform: none;
 }
 
+.poem-view-toggle {
+  display: none;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  gap: 0;
+  margin: 0 0 var(--space-md);
+  padding: var(--space-xs) 0;
+  background: color-mix(in srgb, var(--color-bg) 92%, transparent);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.poem-view-toggle__btn {
+  flex: 1;
+  margin: 0;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-muted);
+  font-family: var(--font-hebrew);
+  font-size: 0.95rem;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.poem-view-toggle__btn + .poem-view-toggle__btn {
+  border-inline-start: none;
+}
+
+.poem-view-toggle__btn[aria-pressed="true"] {
+  color: var(--color-text);
+  background: color-mix(in srgb, var(--color-accent) 12%, var(--color-bg));
+  border-color: color-mix(in srgb, var(--color-accent) 35%, var(--color-border));
+  font-weight: 500;
+}
+
+.poem-view-toggle__btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  z-index: 1;
+}
+
 .poem-row--triple {
   grid-template-columns: 1fr 1fr 1fr;
 }
@@ -309,40 +352,66 @@ main {
 }
 
 @media (max-width: 900px) {
-  .poem-row--triple {
+  .poem-parallel--triple.poem-parallel--toggleable > .poem-view-toggle {
+    display: flex;
+  }
+
+  .poem-parallel--triple.poem-parallel--toggleable .poem-row--triple {
     grid-template-columns: 1fr;
+    gap: 0;
   }
 
-  .poem-row--triple .poem-cell:nth-child(1) {
-    order: 1;
+  .poem-parallel--triple[data-view="original"] .poem-cell[data-role="english"],
+  .poem-parallel--triple[data-view="original"] .poem-cell[data-role="translation"],
+  .poem-parallel--triple[data-view="english"] .poem-cell[data-role="original"],
+  .poem-parallel--triple[data-view="english"] .poem-cell[data-role="translation"],
+  .poem-parallel--triple[data-view="translation"] .poem-cell[data-role="original"],
+  .poem-parallel--triple[data-view="translation"] .poem-cell[data-role="english"] {
+    display: none;
   }
 
-  .poem-row--triple .poem-cell:nth-child(2) {
-    order: 2;
-  }
-
-  .poem-row--triple .poem-cell:nth-child(3) {
-    order: 3;
+  .poem-parallel--triple.poem-parallel--toggleable .poem-label {
+    display: none;
   }
 }
 
 @media (max-width: 640px) {
-  .poem-row {
+  .poem-parallel--toggleable:not(.poem-parallel--triple) > .poem-view-toggle {
+    display: flex;
+  }
+
+  .poem-parallel--toggleable:not(.poem-parallel--triple) .poem-row {
     grid-template-columns: 1fr;
     gap: 0;
     padding: 0;
     border-bottom: none;
   }
 
-  .poem-cell--he {
-    order: 1;
+  .poem-parallel--toggleable[data-view="original"] .poem-cell[data-role="translation"],
+  .poem-parallel--toggleable[data-view="translation"] .poem-cell[data-role="original"] {
+    display: none;
   }
 
-  .poem-cell--la {
-    order: 2;
+  .poem-parallel--toggleable[data-view="original"] .poem-alt-block {
+    display: none;
   }
 
-  .poem-label {
+  .poem-parallel--toggleable[data-view="translation"] .poem-row--alt .poem-cell--la {
+    display: none;
+  }
+
+  .poem-parallel--toggleable:not(.poem-parallel--triple) .poem-label {
+    display: none;
+  }
+
+  .poem-parallel:not(.poem-parallel--toggleable) .poem-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding: 0;
+    border-bottom: none;
+  }
+
+  .poem-parallel:not(.poem-parallel--toggleable) .poem-label {
     display: block;
   }
 

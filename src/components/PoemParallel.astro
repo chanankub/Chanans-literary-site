@@ -36,12 +36,14 @@ const hebrewOnly =
   !isTrilingual &&
   (sourceLang === "he" ||
     pairs.every((p) => p.spacer || (!p.original && !p.english && p.translation)));
+const needsViewToggle = !hebrewOnly;
 const ariaLabel = isTrilingual
   ? "Original, English, and Hebrew in parallel lines"
   : hebrewOnly
     ? "שיר בעברית"
     : "טקסט מקורי ותרגום בשורות מקבילות";
 const originalIsHebrew = sourceLang === "he";
+const defaultView = "translation";
 ---
 
 <div
@@ -49,10 +51,48 @@ const originalIsHebrew = sourceLang === "he";
     "poem-parallel",
     isTrilingual && "poem-parallel--triple",
     hebrewOnly && "poem-parallel--solo",
+    needsViewToggle && "poem-parallel--toggleable",
   ]}
   role="group"
   aria-label={ariaLabel}
+  data-view={needsViewToggle ? defaultView : undefined}
 >
+  {
+    needsViewToggle && (
+      <div
+        class="poem-view-toggle"
+        role="group"
+        aria-label="בחירת גרסת קריאה"
+      >
+        <button
+          type="button"
+          class="poem-view-toggle__btn"
+          data-view="original"
+          aria-pressed="false"
+        >
+          מקור
+        </button>
+        {isTrilingual && (
+          <button
+            type="button"
+            class="poem-view-toggle__btn"
+            data-view="english"
+            aria-pressed="false"
+          >
+            English
+          </button>
+        )}
+        <button
+          type="button"
+          class="poem-view-toggle__btn"
+          data-view="translation"
+          aria-pressed="true"
+        >
+          תרגום
+        </button>
+      </div>
+    )
+  }
   {
     pairs.map((pair) => {
       if (pair.spacer) {
@@ -65,15 +105,30 @@ const originalIsHebrew = sourceLang === "he";
             class="poem-row poem-row--triple"
             data-indent={pair.indent ?? 0}
           >
-            <p class="poem-cell poem-cell--la" dir="ltr" lang="sco">
+            <p
+              class="poem-cell poem-cell--la"
+              data-role="original"
+              dir="ltr"
+              lang="sco"
+            >
               <span class="poem-label">Original</span>
               {pair.original}
             </p>
-            <p class="poem-cell poem-cell--la" dir="ltr" lang="en">
+            <p
+              class="poem-cell poem-cell--la"
+              data-role="english"
+              dir="ltr"
+              lang="en"
+            >
               <span class="poem-label">English</span>
               {pair.english}
             </p>
-            <p class="poem-cell poem-cell--he" dir="rtl" lang="he">
+            <p
+              class="poem-cell poem-cell--he"
+              data-role="translation"
+              dir="rtl"
+              lang="he"
+            >
               <span class="poem-label">Hebrew</span>
               {pair.translation}
             </p>
@@ -96,13 +151,19 @@ const originalIsHebrew = sourceLang === "he";
               "poem-cell",
               originalIsHebrew ? "poem-cell--he" : "poem-cell--la",
             ]}
+            data-role="original"
             dir={originalIsHebrew ? "rtl" : "ltr"}
             lang={sourceLang}
           >
             {!pair.title && <span class="poem-label">מקור</span>}
             {pair.original}
           </p>
-          <p class="poem-cell poem-cell--he" dir="rtl" lang="he">
+          <p
+            class="poem-cell poem-cell--he"
+            data-role="translation"
+            dir="rtl"
+            lang="he"
+          >
             {!pair.title && <span class="poem-label">תרגום</span>}
             {pair.translation}
           </p>
@@ -138,3 +199,29 @@ const originalIsHebrew = sourceLang === "he";
     )
   }
 </div>
+
+<script>
+  function initPoemViewToggles() {
+    document.querySelectorAll(".poem-parallel--toggleable").forEach((root) => {
+      if (!(root instanceof HTMLElement)) return;
+      if (root.dataset.toggleBound === "true") return;
+      root.dataset.toggleBound = "true";
+
+      const buttons = root.querySelectorAll(".poem-view-toggle__btn");
+      buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          if (!(btn instanceof HTMLButtonElement)) return;
+          const view = btn.dataset.view;
+          if (!view) return;
+          root.dataset.view = view;
+          buttons.forEach((other) => {
+            other.setAttribute("aria-pressed", String(other === btn));
+          });
+        });
+      });
+    });
+  }
+
+  initPoemViewToggles();
+  document.addEventListener("astro:page-load", initPoemViewToggles);
+</script>
