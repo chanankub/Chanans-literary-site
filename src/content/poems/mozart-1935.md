@@ -1,0 +1,76 @@
+---
+title: "מוצרט, 1935"
+originalTitle: "Mozart, 1935"
+author: "וולאס סטיבנס"
+authorEn: "Wallace Stevens"
+authorBirth: 1879
+authorDeath: 1955
+sourceLang: en
+date: 2026-07-25
+draft: false
+order: 74
+pairs:
+  - original: "Poet, be seated at the piano."
+    translation: "מְשׁוֹרֵר, שֵׁב נָא לְיָד הַפְּסַנְתֵּר."
+  - original: "Play the present, its hoo-hoo-hoo,"
+    translation: "נַגֵּן אֶת הַהוֹוֶה, אֶת הַ-הוּ-הוּ-הוּ שֶׁלּוֹ,"
+  - original: "Its shoo-shoo-shoo, its ric-a-nic,"
+    translation: "אֶת הַ-שׁוּ-שׁוּ-שׁוּ שֶׁלּוֹ, אֶת הַ-רִיק-אַ-נִיק שֶׁלּוֹ."
+  - original: "Its envious cachinnation."
+    translation: "אֶת צְחוֹקוֹ הַפָּרוּעַ שֶׁיֵּשׁ לְקַנֵּא בּוֹ."
+  - spacer: true
+  - original: "If they throw stones upon the roof"
+    translation: "אִם זוֹרְקִים אֲבָנִים אֶל הַגַּג"
+  - original: "While you practice arpeggios,"
+    translation: "בִּזְמָן שֶׁאַתָּה מְתַרְגֵּל סֻלָּמוֹת,"
+  - original: "It is because they carry down the stairs"
+    translation: "זֶה מִשּׁוּם שֶׁהֵם סוֹחֲבִים בְּמוֹרָד הַמַּדְרֵגוֹת"
+  - original: "A body in rags."
+    translation: "גּוּפָה בִּסְמַרְטוּטִים."
+  - original: "Be seated at the piano."
+    translation: "שֵׁב נָא לְיָד הַפְּסַנְתֵּר."
+  - spacer: true
+  - original: "That lucid souvenir of the past,"
+    translation: "אוֹתָה מַזְכֶּרֶת צְלוּלָה מִן הֶעָבָר,"
+  - original: "The divertimento;"
+    translation: "אוֹתוֹ דִּיבֶרְטִימֶנְטוֹ;"
+  - original: "That airy dream of the future,"
+    translation: "אוֹתוֹ חֲלוֹם אַוְרִירִי עַל הֶעָתִיד,"
+  - original: "The unclouded concerto . . ."
+    translation: "הַקּוֹנְצֶ'רְטוֹ הַנָּקִי . . ."
+  - original: "The snow is falling."
+    translation: "הַשֶּׁלֶג יוֹרֵד."
+  - original: "Strike the piercing chord."
+    translation: "פְּרוֹט אֶת הָאָקוֹרְד הַנּוֹקֵב."
+  - spacer: true
+  - original: "Be thou the voice,"
+    translation: "הֱוֵה קוֹל,"
+  - original: "Not you. Be thou, be thou"
+    translation: "לֹא הֱיוֹתְךָ אַתָּה. הֱוֵה, הֱוֵה"
+  - original: "The voice of angry fear,"
+    translation: "קוֹלָהּ שֶׁל אֵימָה זוֹעֶמֶת,"
+  - original: "The voice of this besieging pain."
+    translation: "קוֹלוֹ שֶׁל הַכְּאֵב הַמֵּעִיק."
+  - spacer: true
+  - original: "Be thou that wintry sound"
+    translation: "הֱוֵה אוֹתוֹ צְלִיל חָרְפִּי"
+  - original: "As of a great wind howling,"
+    translation: "כְּמוֹ יִלְלַת רוּחַ חֲזָקָה,"
+  - original: "By which sorrow is released,"
+    translation: "בָּהּ מֻתָּר הַצַּעַר,"
+  - original: "Dismissed, absolved"
+    translation: "מְסֻלַּק, נִמְחַל"
+  - original: "In a starry placating."
+    translation: "בְּפִיּוּס שֶׁל כּוֹכָבִים."
+  - spacer: true
+  - original: "We may return to Mozart."
+    translation: "נוּכַל לַחֲזוֹר אֶל מוֹצַרְט."
+  - original: "He was young, and we, we are old."
+    translation: "הוּא הָיָה צָעִיר, וַאֲנַחְנוּ, אָנוּ זְקֵנִים."
+  - original: "The snow is falling"
+    translation: "הַשֶּׁלֶג יוֹרֵד"
+  - original: "And the streets are full of cries."
+    translation: "וְהָרְחוֹבוֹת מְלֵאִים זְעָקוֹת."
+  - original: "Be seated, thou."
+    translation: "אַתָּה, שֵׁב נָא."
+---

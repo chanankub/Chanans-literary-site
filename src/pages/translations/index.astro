@@ -26,9 +26,7 @@ const poems = sortPoemsByAuthorBirth(
           {poems.map((poem) => (
             <li>
               <a href={withBase(`translations/${entrySlug(poem.id)}/`)}>
-                {poem.data.footnote && poem.data.footnoteOn === "title"
-                  ? `${poem.data.title}*`
-                  : poem.data.title}
+                {poem.data.title}
               </a>
               <span class="item-meta">
                 {poem.data.author}
@@ -41,14 +39,6 @@ const poems = sortPoemsByAuthorBirth(
                           poem.data.authorEn,
                           poem.data.authorBirth,
                           poem.data.authorDeath,
-                          {
-                            deathAsterisk:
-                              Boolean(poem.data.footnote) &&
-                              poem.data.footnoteOn === "death",
-                            nameAsterisk:
-                              Boolean(poem.data.footnote) &&
-                              poem.data.footnoteOn === "author",
-                          },
                         )}
                       </span>
                     </>
