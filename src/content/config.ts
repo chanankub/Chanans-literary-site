@@ -80,6 +80,10 @@ const proseSchema = z.object({
   date: z.coerce.date().optional(),
   draft: z.boolean().default(false),
   order: z.number().optional(),
+  /** Content language: he (default, RTL) or en (LTR). */
+  lang: z.enum(["he", "en"]).default("he"),
+  /** Optional line under the title (e.g. English story subtitle). */
+  subtitle: z.string().optional(),
 });
 
 const stories = defineCollection({

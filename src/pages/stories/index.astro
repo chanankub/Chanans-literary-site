@@ -9,7 +9,7 @@ const stories = sortByOrderThenTitle(filterPublished(await getCollection("storie
 <BaseLayout title="סיפורים" current="stories">
   <div class="container">
     <h1 class="page-title">סיפורים</h1>
-    <p class="page-intro">סיפורים קצרים בעברית.</p>
+    <p class="page-intro">סיפורים קצרים בעברית ובאנגלית.</p>
     {
       stories.length === 0 ? (
         <p class="item-meta">עדיין לא פורסמו סיפורים.</p>

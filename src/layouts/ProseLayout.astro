@@ -6,16 +6,35 @@ interface Props {
   summary?: string;
   section: "stories" | "notes";
   wide?: boolean;
+  lang?: "he" | "en";
+  subtitle?: string;
 }
 
-const { title, summary, section, wide = false } = Astro.props;
+const { title, summary, section, wide = false, lang = "he", subtitle } =
+  Astro.props;
 const current = section === "stories" ? "stories" : "notes";
+const isEnglish = lang === "en";
 ---
 
 <BaseLayout title={title} description={summary ?? title} current={current}>
-  <article class:list={["prose", wide ? "container container--wide" : "container"]}>
+  <article
+    class:list={[
+      "prose",
+      wide ? "container container--wide" : "container",
+      isEnglish && "prose--en",
+    ]}
+    dir={isEnglish ? "ltr" : "rtl"}
+    lang={lang}
+  >
     <header id="top">
-      <h1 class="page-title">{title}</h1>
+      <h1 class="page-title">
+        {title}
+        {
+          subtitle && (
+            <span class="prose-subtitle">{subtitle}</span>
+          )
+        }
+      </h1>
     </header>
     <div class="prose-body">
       <slot />
