@@ -676,6 +676,12 @@ main {
   height: auto;
 }
 
+.prose img.prose-img--small {
+  width: 42%;
+  max-width: 14rem;
+  height: auto;
+}
+
 .prose figcaption,
 .prose .caption {
   font-size: 0.875rem;

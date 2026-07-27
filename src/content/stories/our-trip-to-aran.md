@@ -34,7 +34,7 @@ We could relate to the epithet that the Vilner Jews awarded the Araners: *di Ara
 
 Danny explains that the Lithuanian is typically introverted in nature, a slow but deep thinker, who could also be quite stubborn. Add to that a unique, subtle, refined sense of humor and you get a perfect characterization of our father and, perhaps, his. Well, maybe not always refined.
 
-We go to the stream that flows through Varėna, the Merkys River. The water is very clear, showing a strong, steady flow, water plants swaying with the current. I am reminded of the times Grandpa took me to Norumbega pond to feed the ducks’ pipicks with breadcrumbs. Alas, there are neither ducks nor pipicks in the Merkys.
+We go to the stream that flows through Varėna, the Merkys River. The water is very clear, showing a strong, steady flow, water plants swaying with the current. I am reminded of the times Grandpa took me to Norumbega pond, west of Boston, to feed the ducks’ pipicks with breadcrumbs. Alas, there are neither ducks nor pipicks in the Merkys.
 
 ![On the bridge over the Merkys River in Varėna](/Chanans-literary-site/images/our-trip-to-aran/merkys-bridge.jpg)
 
