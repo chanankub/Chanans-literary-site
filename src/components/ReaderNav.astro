@@ -1,0 +1,26 @@
+---
+import { isReaderLoginConfigured } from "../config/reader";
+import { withBase } from "../lib/content";
+
+const configured = isReaderLoginConfigured();
+---
+
+<ul
+  class="reader-nav"
+  id="reader-nav"
+  aria-label="חשבון"
+  data-login-href={withBase("login/")}
+  data-seen-href={withBase("seen/")}
+  data-inbox-href={withBase("inbox/")}
+>
+  <li><a href={withBase("login/")}>כניסה</a></li>
+</ul>
+{
+  configured && (
+    <script>
+      import { mountReaderNav } from "../lib/reader-nav";
+      const nav = document.getElementById("reader-nav");
+      if (nav) void mountReaderNav(nav);
+    </script>
+  )
+}

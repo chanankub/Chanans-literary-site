@@ -1,12 +1,13 @@
 ---
 import Nav from "../components/Nav.astro";
+import ReaderNav from "../components/ReaderNav.astro";
 import { withBase } from "../lib/content";
 import "../styles/literary.css";
 
 interface Props {
   title: string;
   description?: string;
-  current?: "home" | "translations" | "stories" | "notes" | "contact";
+  current?: "home" | "translations" | "stories" | "notes";
 }
 
 const { title, description = "אתר ספרותי אישי", current } = Astro.props;
@@ -31,9 +32,30 @@ const fullTitle = title === "בית" ? "בית" : `${title} | בית`;
   <body>
     <header class="site-header">
       <Nav current={current} />
+      <ReaderNav />
     </header>
     <main>
       <slot />
     </main>
+    <script>
+      import { isReaderLoginConfigured } from "../config/reader";
+
+      const gated = document.querySelector(
+        "[data-piece-body], [data-piece-gate], [data-piece-summary]",
+      );
+      if (gated) {
+        if (!isReaderLoginConfigured()) {
+          document
+            .querySelectorAll<HTMLElement>("[data-piece-gate]")
+            .forEach((gate) => {
+              gate.hidden = false;
+            });
+        } else {
+          void import("../lib/piece-gate").then(({ openPieceIfSignedIn }) =>
+            openPieceIfSignedIn(),
+          );
+        }
+      }
+    </script>
   </body>
 </html>

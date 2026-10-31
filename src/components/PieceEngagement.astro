@@ -1,0 +1,88 @@
+---
+import { isReaderLoginConfigured } from "../config/reader";
+import { withBase } from "../lib/content";
+import { pieceHref, type PieceKind } from "../lib/reader";
+
+interface Props {
+  kind: PieceKind;
+  slug: string;
+  title: string;
+  contained?: boolean;
+}
+
+const { kind, slug, title, contained = false } = Astro.props;
+const configured = isReaderLoginConfigured();
+const loginHref = `${withBase("login/")}?next=${encodeURIComponent(pieceHref(kind, slug))}`;
+const fieldId = `comment-${kind}-${slug}`;
+---
+
+<section
+  class:list={["piece-engagement", contained && "container"]}
+  aria-labelledby="piece-engagement-heading"
+  data-piece-engagement={configured ? "1" : undefined}
+  data-kind={kind}
+  data-slug={slug}
+  data-title={title}
+>
+  {
+    configured ? (
+      <div data-panel hidden>
+        <h2 id="piece-engagement-heading" class="piece-engagement__title">
+          תגובה
+        </h2>
+        <p data-invite hidden>
+          <a href={loginHref}>היכנסו</a> כדי שהביקור יישמר ותוכלו להגיב.
+        </p>
+        <ul class="reader-comments" data-public />
+        <div data-private-wrap hidden>
+          <h3 class="piece-engagement__private">הערות פרטיות</h3>
+          <ul class="reader-comments" data-private />
+        </div>
+        <form class="reader-form" data-form hidden>
+          <label class="reader-label" for={fieldId}>
+            הטקסט
+          </label>
+          <textarea id={fieldId} name="body" maxlength="2000" required rows="4" />
+          <fieldset class="reader-choice">
+            <legend>למי</legend>
+            <label>
+              <input type="radio" name="visibility" value="public" checked />
+              לכולם
+            </label>
+            <label>
+              <input type="radio" name="visibility" value="private" />
+              הערה פרטית
+            </label>
+          </fieldset>
+          <button class="mailing-form__submit" type="submit">
+            שמירה
+          </button>
+        </form>
+        <p class="reader-message" data-message hidden />
+      </div>
+    ) : (
+      <>
+        <h2 id="piece-engagement-heading" class="piece-engagement__title">
+          תגובה
+        </h2>
+        <p class="contact-setup-note">
+          תגובות ורשימת קריאה יופעלו לאחר הגדרת Supabase. ראו{" "}
+          <code dir="ltr">.env.example</code>.
+        </p>
+      </>
+    )
+  }
+</section>
+
+<script>
+  import { isReaderLoginConfigured } from "../config/reader";
+
+  if (isReaderLoginConfigured()) {
+    void import("../lib/piece-engagement").then(({ mountPieceEngagement }) => {
+      const root = document.querySelector<HTMLElement>(
+        "[data-piece-engagement]",
+      );
+      if (root) void mountPieceEngagement(root);
+    });
+  }
+</script>

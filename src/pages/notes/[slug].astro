@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import BackToTop from "../../components/BackToTop.astro";
+import PieceEngagement from "../../components/PieceEngagement.astro";
 import NotesToc from "../../components/NotesToc.astro";
 import ProseLayout from "../../layouts/ProseLayout.astro";
 import { filterPublished, entrySlug, withBase } from "../../lib/content";
@@ -36,4 +37,5 @@ const showToc = slug === HAKDAMA_SLUG;
       </>
     )
   }
+  <PieceEngagement slot="after" kind="note" slug={slug} title={title} contained />
 </ProseLayout>

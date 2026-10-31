@@ -2,11 +2,11 @@
 
 Add email login on the existing static site so a reader picks a nickname, opens poems, stories, and notes, keeps a list of what they opened, and comments either privately (reader and you) or publicly for other logged-in readers, who see those comments when hovering a title.
 
-This is the plan. It is not built yet.
+The site code for this plan is in the repository. Login stays off until a Supabase project exists and `supabase/schema.sql` has been run. Setup steps are in [DEPLOY.md](../DEPLOY.md).
 
 The library stays as it is: title lists are public, and choosing a title opens that piece for the reader (`src/pages/translations/[slug].astro`, `src/pages/stories/[slug].astro`, `src/pages/notes/[slug].astro`). GitHub Pages already sends those pages to anyone with the link, so login will not hide the text. It will remember the visit and attach comments.
 
-Accounts, the seen list, and comments live in [Supabase](https://supabase.com) (hosted Postgres + email login). The Astro site stays static. The contact-page Cusdis widget stays for general messages.
+Accounts, the seen list, and comments live in [Supabase](https://supabase.com) (hosted Postgres + email login). The Astro site stays static.
 
 ```mermaid
 flowchart LR
@@ -50,7 +50,7 @@ The index page loads one query for that section (`poem`, `story`, or `note`) aft
 
 ## Site code
 
-Add `@supabase/supabase-js`. Browser-only client in `src/lib/supabase.ts` using `PUBLIC_SUPABASE_URL` and `PUBLIC_SUPABASE_ANON_KEY`. If those are missing, the new UI shows a short setup note and the rest of the site still builds (same pattern as Cusdis in `src/config/contact.ts`).
+Add `@supabase/supabase-js`. Browser-only client in `src/lib/supabase.ts` using `PUBLIC_SUPABASE_URL` and `PUBLIC_SUPABASE_ANON_KEY`. If those are missing, the new UI shows a short setup note and the rest of the site still builds.
 
 - `src/components/Nav.astro` and `src/layouts/BaseLayout.astro`: כניסה, or the nickname, יציאה, and מה ראיתי. Your extra link appears only after `is_owner()` is true.
 - `src/pages/login.astro`: request the link; on return, if they have no nickname yet, ask for one before sending them back to the page they came from.
@@ -66,7 +66,7 @@ Build-time catalog is not required: the seen row stores the title at the moment 
 
 - Create a Supabase project, enable email login, and add redirect URLs for `http://127.0.0.1:4321/Chanans-literary-site/login/` and `https://chanankub.github.io/Chanans-literary-site/login/`.
 - Run the schema with your email as owner.
-- Put the URL and anon key in `.env` (see `.env.example`) and in GitHub Actions secrets. Pass them in `.github/workflows/deploy.yml` the same way Cusdis is passed today. The anon key is public by design; the service-role key is never used and never committed.
+- Put the URL and anon key in `.env` (see `.env.example`) and in GitHub Actions secrets. Pass them in `.github/workflows/deploy.yml`. The anon key is public by design; the service-role key is never used and never committed.
 - Short setup notes in `DEPLOY.md`.
 
 ## Check after it is built

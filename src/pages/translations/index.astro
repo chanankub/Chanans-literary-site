@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import CommentHover from "../../components/CommentHover.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import {
   formatPoetEnglishCredit,
@@ -25,7 +26,12 @@ const poems = sortPoemsByAuthorBirth(
         <ul class="section-list">
           {poems.map((poem) => (
             <li>
-              <a href={withBase(`translations/${entrySlug(poem.id)}/`)}>
+              <a
+                href={withBase(`translations/${entrySlug(poem.id)}/`)}
+                data-comment-title
+                data-kind="poem"
+                data-slug={entrySlug(poem.id)}
+              >
                 {poem.data.title}
               </a>
               <span class="item-meta">
@@ -50,5 +56,6 @@ const poems = sortPoemsByAuthorBirth(
         </ul>
       )
     }
+    <CommentHover kind="poem" />
   </div>
 </BaseLayout>

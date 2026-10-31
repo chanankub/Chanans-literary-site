@@ -1,0 +1,24 @@
+---
+interface Props {
+  kind: "poem" | "story" | "note";
+}
+
+const { kind } = Astro.props;
+---
+
+<div data-comment-hover={kind} hidden></div>
+<script>
+  import { isReaderLoginConfigured } from "../config/reader";
+  import type { PieceKind } from "../lib/reader";
+
+  if (isReaderLoginConfigured()) {
+    const root = document.querySelector<HTMLElement>("[data-comment-hover]");
+    const kind = root?.dataset.commentHover;
+    if (kind === "poem" || kind === "story" || kind === "note") {
+      const pieceKind: PieceKind = kind;
+      void import("../lib/comment-hover").then(({ mountCommentHover }) => {
+        void mountCommentHover(pieceKind);
+      });
+    }
+  }
+</script>

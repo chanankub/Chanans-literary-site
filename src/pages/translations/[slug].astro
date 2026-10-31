@@ -1,5 +1,7 @@
 ---
 import { getCollection } from "astro:content";
+import PieceEngagement from "../../components/PieceEngagement.astro";
+import PieceGate from "../../components/PieceGate.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PoemParallel from "../../components/PoemParallel.astro";
 import {
@@ -17,6 +19,7 @@ export async function getStaticPaths() {
 }
 
 const { poem } = Astro.props;
+const slug = entrySlug(poem.id);
 const {
   title,
   originalTitle,
@@ -69,6 +72,8 @@ const displayTitle =
         )
       }
     </header>
+    <PieceGate />
+    <div data-piece-body hidden>
     {
       epigraph && (
         <blockquote class="poem-epigraph">
@@ -114,5 +119,7 @@ const displayTitle =
         </ol>
       )
     }
+    </div>
+    <PieceEngagement kind="poem" slug={slug} title={title} />
   </div>
 </BaseLayout>

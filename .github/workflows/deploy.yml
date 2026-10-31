@@ -26,9 +26,8 @@ jobs:
       - run: npm ci
       - run: npm run build
         env:
-          PUBLIC_CUSDIS_APP_ID: ${{ secrets.PUBLIC_CUSDIS_APP_ID }}
-          PUBLIC_BUTTONDOWN_USER: ${{ secrets.PUBLIC_BUTTONDOWN_USER }}
-          PUBLIC_CONTACT_EMAIL: ${{ secrets.PUBLIC_CONTACT_EMAIL }}
+          PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
+          PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY }}
       - run: touch dist/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:

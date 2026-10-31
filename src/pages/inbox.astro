@@ -1,0 +1,43 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { isReaderLoginConfigured } from "../config/reader";
+import { withBase } from "../lib/content";
+
+const configured = isReaderLoginConfigured();
+---
+
+<BaseLayout title="הערות פרטיות" description="הערות פרטיות של קוראים">
+  <div
+    class="container"
+    data-inbox-root={configured ? "1" : undefined}
+    data-login-href={withBase("login/")}
+  >
+    <h1 class="page-title">הערות פרטיות</h1>
+    {
+      configured ? (
+        <>
+          <p class="page-intro" data-state>
+            רגע.
+          </p>
+          <ul class="reader-comments reader-comments--inbox" data-list hidden />
+        </>
+      ) : (
+        <p class="contact-setup-note">
+          ההערות הפרטיות יופעלו לאחר הגדרת Supabase. ראו{" "}
+          <code dir="ltr">.env.example</code>.
+        </p>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<script>
+  import { isReaderLoginConfigured } from "../config/reader";
+
+  if (isReaderLoginConfigured()) {
+    void import("../lib/inbox-page").then(({ mountInbox }) => {
+      const root = document.querySelector<HTMLElement>("[data-inbox-root]");
+      if (root) void mountInbox(root);
+    });
+  }
+</script>

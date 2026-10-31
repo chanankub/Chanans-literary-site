@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import CommentHover from "../../components/CommentHover.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import NotesToc from "../../components/NotesToc.astro";
 import { filterPublished, sortByOrderThenTitle, withBase, entrySlug } from "../../lib/content";
@@ -16,23 +17,38 @@ const otherNotes = notes.filter((n) => entrySlug(n.id) !== HAKDAMA_SLUG);
   <div class="container container--wide">
     <NotesToc noteSlug={HAKDAMA_SLUG} entries={hakdamaToc} />
     <p class="notes-toc__read">
-      <a href={withBase(`notes/${HAKDAMA_SLUG}/`)}>לקריאה מההתחלה →</a>
+      <a
+        href={withBase(`notes/${HAKDAMA_SLUG}/`)}
+        data-comment-title
+        data-kind="note"
+        data-slug={HAKDAMA_SLUG}
+      >
+        לקריאה מההתחלה →
+      </a>
     </p>
     {
       otherNotes.length > 0 && (
         <ul class="section-list">
           {otherNotes.map((note) => (
             <li>
-              <a href={withBase(`notes/${entrySlug(note.id)}/`)}>
+              <a
+                href={withBase(`notes/${entrySlug(note.id)}/`)}
+                data-comment-title
+                data-kind="note"
+                data-slug={entrySlug(note.id)}
+              >
                 {note.data.title}
               </a>
               {note.data.summary && (
-                <span class="item-summary">{note.data.summary}</span>
+                <span class="item-summary" data-piece-summary hidden>
+                  {note.data.summary}
+                </span>
               )}
             </li>
           ))}
         </ul>
       )
     }
+    <CommentHover kind="note" />
   </div>
 </BaseLayout>

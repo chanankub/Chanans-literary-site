@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import CommentHover from "../../components/CommentHover.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { filterPublished, sortByOrderThenTitle, withBase, entrySlug } from "../../lib/content";
 
@@ -17,16 +18,24 @@ const stories = sortByOrderThenTitle(filterPublished(await getCollection("storie
         <ul class="section-list">
           {stories.map((story) => (
             <li>
-              <a href={withBase(`stories/${entrySlug(story.id)}/`)}>
+              <a
+                href={withBase(`stories/${entrySlug(story.id)}/`)}
+                data-comment-title
+                data-kind="story"
+                data-slug={entrySlug(story.id)}
+              >
                 {story.data.title}
               </a>
               {story.data.summary && (
-                <span class="item-summary">{story.data.summary}</span>
+                <span class="item-summary" data-piece-summary hidden>
+                  {story.data.summary}
+                </span>
               )}
             </li>
           ))}
         </ul>
       )
     }
+    <CommentHover kind="story" />
   </div>
 </BaseLayout>

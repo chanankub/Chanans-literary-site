@@ -1,0 +1,43 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { isReaderLoginConfigured } from "../config/reader";
+import { withBase } from "../lib/content";
+
+const configured = isReaderLoginConfigured();
+---
+
+<BaseLayout title="מה ראיתי" description="יצירות שפתחתם">
+  <div
+    class="container"
+    data-seen-root={configured ? "1" : undefined}
+    data-login-href={withBase("login/")}
+  >
+    <h1 class="page-title">מה ראיתי</h1>
+    {
+      configured ? (
+        <>
+          <p class="page-intro" data-state>
+            רגע.
+          </p>
+          <ul class="section-list" data-list hidden />
+        </>
+      ) : (
+        <p class="contact-setup-note">
+          הרשימה תופעל לאחר הגדרת Supabase. ראו{" "}
+          <code dir="ltr">.env.example</code>.
+        </p>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<script>
+  import { isReaderLoginConfigured } from "../config/reader";
+
+  if (isReaderLoginConfigured()) {
+    void import("../lib/seen-page").then(({ mountSeen }) => {
+      const root = document.querySelector<HTMLElement>("[data-seen-root]");
+      if (root) void mountSeen(root);
+    });
+  }
+</script>

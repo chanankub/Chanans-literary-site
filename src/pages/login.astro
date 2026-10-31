@@ -1,0 +1,88 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { isReaderLoginConfigured } from "../config/reader";
+import { withBase } from "../lib/content";
+
+const configured = isReaderLoginConfigured();
+---
+
+<BaseLayout title="כניסה" description="כניסה בקישור חד-פעמי לדוא״ל">
+  <div
+    class="container container--narrow"
+    data-login-root={configured ? "1" : undefined}
+  >
+    <h1 class="page-title" data-login-title>כניסה</h1>
+    {
+      configured ? (
+        <>
+          <p class="page-intro" data-status hidden></p>
+          <form class="reader-form" data-signin-form hidden>
+            <label class="reader-label" for="reader-email">
+              דוא״ל
+            </label>
+            <input
+              id="reader-email"
+              class="reader-input reader-input--latin"
+              name="email"
+              type="email"
+              autocomplete="email"
+              required
+              dir="ltr"
+            />
+            <button class="mailing-form__submit" type="submit">
+              כניסה
+            </button>
+            <div data-signin-offer hidden>
+              <p class="item-meta">
+                נשלח קישור חד-פעמי אל הדוא״ל שנרשמתם איתו. בלי סיסמה.
+              </p>
+              <button class="mailing-form__submit" type="button" data-send-link>
+                שלחו לי קישור
+              </button>
+            </div>
+          </form>
+          <form class="reader-form" data-nickname-form hidden>
+            <label class="reader-label" for="reader-nickname">
+              כינוי
+            </label>
+            <input
+              id="reader-nickname"
+              class="reader-input"
+              name="nickname"
+              type="text"
+              maxlength="40"
+              autocomplete="nickname"
+              required
+            />
+            <p class="item-meta">
+              הכינוי הוא מה שקוראים אחרים יראו על תגובה לכולם. כתובת הדוא״ל לא
+              מוצגת.
+            </p>
+            <button class="mailing-form__submit" type="submit">
+              שמירה
+            </button>
+          </form>
+        </>
+      ) : (
+        <p class="contact-setup-note">
+          כניסת קוראים תופעל לאחר הגדרת Supabase. צרו פרויקט, הריצו את{" "}
+          <code dir="ltr">supabase/schema.sql</code>, והעתיקו את כתובת הפרויקט
+          ואת מפתח ה־anon לקובץ <code dir="ltr">.env</code> (ראו{" "}
+          <code dir="ltr">.env.example</code>
+          ). אפשר גם לחזור אל <a href={withBase()}>דף הבית</a>.
+        </p>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<script>
+  import { isReaderLoginConfigured } from "../config/reader";
+
+  if (isReaderLoginConfigured()) {
+    void import("../lib/login-page").then(({ mountLogin }) => {
+      const root = document.querySelector<HTMLElement>("[data-login-root]");
+      if (root) void mountLogin(root);
+    });
+  }
+</script>
