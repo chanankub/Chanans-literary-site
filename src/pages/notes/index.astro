@@ -16,16 +16,6 @@ const otherNotes = notes.filter((n) => entrySlug(n.id) !== HAKDAMA_SLUG);
   </div>
   <div class="container container--wide">
     <NotesToc noteSlug={HAKDAMA_SLUG} entries={hakdamaToc} />
-    <p class="notes-toc__read">
-      <a
-        href={withBase(`notes/${HAKDAMA_SLUG}/`)}
-        data-comment-title
-        data-kind="note"
-        data-slug={HAKDAMA_SLUG}
-      >
-        לקריאה מההתחלה →
-      </a>
-    </p>
     {
       otherNotes.length > 0 && (
         <ul class="section-list">

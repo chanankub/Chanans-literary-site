@@ -9,6 +9,12 @@ export function isPieceKind(value: string): value is PieceKind {
 export function pieceHref(kind: PieceKind, slug: string): string {
   const section =
     kind === "poem" ? "translations" : kind === "story" ? "stories" : "notes";
+  const sectionMark = kind === "note" ? slug.indexOf("--") : -1;
+  if (sectionMark > 0) {
+    const note = slug.slice(0, sectionMark);
+    const heading = slug.slice(sectionMark + 2);
+    return `${withBase(`${section}/${note}/`)}#${heading}`;
+  }
   return withBase(`${section}/${slug}/`);
 }
 

@@ -127,6 +127,30 @@ main {
   max-width: 32rem;
 }
 
+.welcome {
+  margin: 0 0 var(--space-lg);
+  max-width: 32rem;
+  color: var(--color-muted);
+}
+
+.welcome p {
+  margin: 0;
+}
+
+.welcome p + p {
+  margin-top: var(--space-sm);
+}
+
+.welcome a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.welcome a:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
 .story-group {
   margin: 0 0 var(--space-md);
   padding: var(--space-sm) var(--space-md) 0;
@@ -578,11 +602,6 @@ main {
 .notes-toc__item a:hover {
   color: var(--color-accent);
   text-decoration: underline;
-}
-
-.notes-toc__read {
-  margin: 0 0 var(--space-xl);
-  font-size: 0.95rem;
 }
 
 .prose-footer-nav {

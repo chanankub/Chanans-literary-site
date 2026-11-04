@@ -29,18 +29,13 @@ const configured = isReaderLoginConfigured();
               required
               dir="ltr"
             />
-            <button class="mailing-form__submit" type="submit">
-              כניסה
+            <p class="item-meta">
+              רק בפעם הראשונה בדפדפן הזה נשלח קישור חד-פעמי. בלי סיסמה. אחר כך
+              הדפדפן זוכר את הכניסה.
+            </p>
+            <button class="mailing-form__submit" type="submit" data-send-link>
+              שלחו לי קישור
             </button>
-            <div data-signin-offer hidden>
-              <p class="item-meta">
-                הקישור עוד לא נשלח. לחצו על הכפתור כדי לשלוח קישור חד-פעמי אל
-                הדוא״ל. בלי סיסמה.
-              </p>
-              <button class="mailing-form__submit" type="button" data-send-link>
-                שלחו לי קישור
-              </button>
-            </div>
           </form>
           <form class="reader-form" data-nickname-form hidden>
             <label class="reader-label" for="reader-nickname">

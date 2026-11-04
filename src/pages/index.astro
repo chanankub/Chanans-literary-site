@@ -5,23 +5,24 @@ import { withBase } from "../lib/content";
 
 <BaseLayout title="בית" current="home">
   <div class="container">
-    <h1 class="page-title">ברוכים הבאים</h1>
-    <p class="page-intro">
-      אתר זה מוקדש ליצירה ספרותית: תרגומי שירה, סיפורים קצרים ואיך למדתי לאהוב שירה.
-    </p>
+    <h1 class="page-title">ברוכים הבאים לקוראים סקרנים</h1>
+    <div class="welcome">
+      <p>
+        <a href={withBase("login/")}>הכניסה</a> היא הזמנה לגלות תרגומים, סיפורים,
+        וחווית הכתיבה שלי
+      </p>
+      <p>אשמח לקרוא הארות ותובנות.</p>
+    </div>
     <nav aria-label="מדורים">
       <ul class="section-list">
         <li>
-          <a href={withBase("translations/")}>תרגומים</a>
-          <span class="item-summary">שירה מקורית לצד תרגום עברי, שורה מול שורה</span>
+          <a href={withBase("translations/")}>תרגומי שירה</a>
         </li>
         <li>
-          <a href={withBase("stories/")}>סיפורים</a>
-          <span class="item-summary">סיפורים קצרים בעברית</span>
+          <a href={withBase("stories/")}>סיפורים קצרים</a>
         </li>
         <li>
           <a href={withBase("notes/")}>איך למדתי לאהוב שירה</a>
-          <span class="item-summary">מסות וכתיבה על שירה, תרגום וקריאה</span>
         </li>
       </ul>
     </nav>

@@ -2,18 +2,22 @@ import { withBase } from "./content";
 import { loginRedirectUrl, safeNextPath } from "./reader";
 import { getSupabase } from "./supabase";
 
+const rememberedEmailKey = "reader-email";
+
 export async function mountLogin(root: HTMLElement): Promise<void> {
   const supabase = getSupabase();
   if (!supabase) return;
 
   const signinForm = root.querySelector<HTMLFormElement>("[data-signin-form]");
-  const offer = root.querySelector<HTMLElement>("[data-signin-offer]");
   const nicknameForm = root.querySelector<HTMLFormElement>(
     "[data-nickname-form]",
   );
   const status = root.querySelector<HTMLElement>("[data-status]");
   const title = root.querySelector<HTMLElement>("[data-login-title]");
-  if (!signinForm || !offer || !nicknameForm || !status) return;
+  const emailInput = signinForm?.querySelector<HTMLInputElement>(
+    'input[name="email"]',
+  );
+  if (!signinForm || !nicknameForm || !status || !emailInput) return;
 
   const showStatus = (message: string) => {
     status.hidden = message.length === 0;
@@ -22,9 +26,18 @@ export async function mountLogin(root: HTMLElement): Promise<void> {
 
   const showSignin = () => {
     if (title) title.textContent = "כניסה";
+    const remembered = localStorage.getItem(rememberedEmailKey);
+    if (remembered && !emailInput.value) emailInput.value = remembered;
     signinForm.hidden = false;
     nicknameForm.hidden = true;
-    signinForm.querySelector("input")?.focus();
+    emailInput.focus();
+  };
+
+  const showNickname = () => {
+    if (title) title.textContent = "בחירת כינוי";
+    signinForm.hidden = true;
+    nicknameForm.hidden = false;
+    showStatus("");
   };
 
   const requested = safeNextPath(
@@ -47,74 +60,16 @@ export async function mountLogin(root: HTMLElement): Promise<void> {
     return profile?.nickname ?? "";
   };
 
-  const { data: sessionData } = await supabase.auth.getSession();
-  const session = sessionData.session;
-  if (session && (await nicknameFor(session.user.id))) {
-    goNext();
-    return;
-  }
-  if (session) {
-    if (title) title.textContent = "בחירת כינוי";
-    signinForm.hidden = true;
-    nicknameForm.hidden = false;
-    showStatus("");
-  } else {
-    showSignin();
-    showStatus("");
-  }
-
-  const sendLink = async () => {
-    const email = new FormData(signinForm).get("email");
-    if (typeof email !== "string" || !email.trim()) return;
-    const button = signinForm.querySelector<HTMLButtonElement>("[data-send-link]");
-    if (button) button.disabled = true;
-    const { error } = await supabase.auth.signInWithOtp({
-      email: email.trim(),
-      options: { emailRedirectTo: loginRedirectUrl() },
-    });
-    if (button) button.disabled = false;
-    if (error) {
-      const limited =
-        error.code === "over_email_send_rate_limit" || error.status === 429;
-      showStatus(
-        limited
-          ? "נשלחו כבר שני קישורי כניסה בשעה האחרונה. חכו כשעה, בקשו קישור אחד, ופתחו אותו באותו דפדפן."
-          : "לא הצלחנו לשלוח את הקישור. נסו שוב.",
-      );
+  let left = false;
+  const enter = async (userId: string) => {
+    if (left) return;
+    if (await nicknameFor(userId)) {
+      left = true;
+      goNext();
       return;
     }
-    signinForm.hidden = true;
-    showStatus("הקישור נשלח. פתחו אותו בדפדפן הזה.");
+    showNickname();
   };
-
-  signinForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    offer.hidden = true;
-    showStatus("");
-    const raw = new FormData(signinForm).get("email");
-    const email = typeof raw === "string" ? raw.trim().toLowerCase() : "";
-    if (!email) return;
-    const { data: currentData } = await supabase.auth.getSession();
-    const current = currentData.session;
-    const same = current?.user.email?.toLowerCase() === email;
-    if (current && same) {
-      if (await nicknameFor(current.user.id)) {
-        goNext();
-        return;
-      }
-      if (title) title.textContent = "בחירת כינוי";
-      signinForm.hidden = true;
-      nicknameForm.hidden = false;
-      return;
-    }
-    offer.hidden = false;
-  });
-
-  signinForm
-    .querySelector("[data-send-link]")
-    ?.addEventListener("click", () => {
-      void sendLink();
-    });
 
   nicknameForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -122,8 +77,6 @@ export async function mountLogin(root: HTMLElement): Promise<void> {
     const current = currentData.session;
     if (!current) {
       showStatus("הכניסה פגה. בקשו קישור חדש.");
-      nicknameForm.hidden = true;
-      offer.hidden = false;
       showSignin();
       return;
     }
@@ -144,6 +97,60 @@ export async function mountLogin(root: HTMLElement): Promise<void> {
       showStatus("לא הצלחנו לשמור את הכינוי. נסו שוב.");
       return;
     }
+    left = true;
     goNext();
   });
+
+  const { data: sessionData } = await supabase.auth.getSession();
+  if (sessionData.session) {
+    await enter(sessionData.session.user.id);
+    return;
+  }
+
+  showSignin();
+  showStatus("");
+
+  const { data: authListener } = supabase.auth.onAuthStateChange(
+    (event, next) => {
+      if (event === "SIGNED_IN" && next) void enter(next.user.id);
+    },
+  );
+
+  const sendLink = async () => {
+    const { data: currentData } = await supabase.auth.getSession();
+    if (currentData.session) {
+      await enter(currentData.session.user.id);
+      return;
+    }
+    const email = emailInput.value.trim();
+    if (!email) return;
+    const button = signinForm.querySelector<HTMLButtonElement>("[data-send-link]");
+    if (button) button.disabled = true;
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: { emailRedirectTo: loginRedirectUrl() },
+    });
+    if (button) button.disabled = false;
+    if (error) {
+      const limited =
+        error.code === "over_email_send_rate_limit" || error.status === 429;
+      showStatus(
+        limited
+          ? "נשלחו כבר שני קישורי כניסה בשעה האחרונה. חכו כשעה, בקשו קישור אחד, ופתחו אותו באותו דפדפן."
+          : "לא הצלחנו לשלוח את הקישור. נסו שוב.",
+      );
+      return;
+    }
+    localStorage.setItem(rememberedEmailKey, email);
+    signinForm.hidden = true;
+    showStatus("הקישור נשלח. פתחו אותו בדפדפן הזה, והכניסה תישמר בו.");
+  };
+
+  signinForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    showStatus("");
+    void sendLink();
+  });
+
+  window.addEventListener("pagehide", () => authListener.subscription.unsubscribe());
 }

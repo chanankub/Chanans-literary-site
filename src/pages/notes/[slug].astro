@@ -27,7 +27,51 @@ const showToc = slug === HAKDAMA_SLUG;
   <Content />
   {
     showToc && (
+      <div class="section-comments">
+        {
+          hakdamaToc.map((entry, index) => (
+            <PieceEngagement
+              kind="note"
+              slug={`${slug}--${entry.id}`}
+              title={entry.title}
+              readSlug={index === 0 ? slug : undefined}
+              readTitle={index === 0 ? title : undefined}
+              skipRead={index > 0}
+            />
+          ))
+        }
+      </div>
+    )
+  }
+  {
+    showToc && (
       <>
+        <script is:inline>
+          const essay = document.querySelector("[data-piece-body]");
+          const holding = essay?.querySelector(".section-comments");
+          if (essay && holding) {
+            const forms = [...holding.querySelectorAll(":scope > .piece-engagement")];
+            const headings = [...essay.querySelectorAll("h2[id]")].filter(
+              (heading) => !heading.closest(".section-comments"),
+            );
+            headings.forEach((heading, index) => {
+              const form = forms[index];
+              if (!form) return;
+              let last = heading;
+              let next = heading.nextElementSibling;
+              while (
+                next &&
+                next !== holding &&
+                !(next.tagName === "H2" && next.id && !next.closest(".piece-engagement"))
+              ) {
+                last = next;
+                next = next.nextElementSibling;
+              }
+              last.after(form);
+            });
+            holding.remove();
+          }
+        </script>
         <nav class="prose-footer-nav" aria-label="ניווט בעמוד">
           <a href="#top">↑ לראש העמוד</a>
           <span class="prose-footer-nav__sep" aria-hidden="true">·</span>
@@ -37,5 +81,7 @@ const showToc = slug === HAKDAMA_SLUG;
       </>
     )
   }
-  <PieceEngagement slot="after" kind="note" slug={slug} title={title} contained />
+  {!showToc && (
+    <PieceEngagement slot="after" kind="note" slug={slug} title={title} contained />
+  )}
 </ProseLayout>

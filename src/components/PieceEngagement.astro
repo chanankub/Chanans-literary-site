@@ -8,26 +8,41 @@ interface Props {
   slug: string;
   title: string;
   contained?: boolean;
+  readSlug?: string;
+  readTitle?: string;
+  skipRead?: boolean;
 }
 
-const { kind, slug, title, contained = false } = Astro.props;
+const {
+  kind,
+  slug,
+  title,
+  contained = false,
+  readSlug,
+  readTitle,
+  skipRead = false,
+} = Astro.props;
 const configured = isReaderLoginConfigured();
 const loginHref = `${withBase("login/")}?next=${encodeURIComponent(pieceHref(kind, slug))}`;
 const fieldId = `comment-${kind}-${slug}`;
+const headingId = `piece-engagement-${kind}-${slug}`;
 ---
 
 <section
   class:list={["piece-engagement", contained && "container"]}
-  aria-labelledby="piece-engagement-heading"
+  aria-labelledby={headingId}
   data-piece-engagement={configured ? "1" : undefined}
   data-kind={kind}
   data-slug={slug}
   data-title={title}
+  data-read-slug={readSlug}
+  data-read-title={readTitle}
+  data-skip-read={skipRead ? "1" : undefined}
 >
   {
     configured ? (
       <div data-panel hidden>
-        <h2 id="piece-engagement-heading" class="piece-engagement__title">
+        <h2 id={headingId} class="piece-engagement__title">
           תגובה
         </h2>
         <p data-invite hidden>
@@ -62,7 +77,7 @@ const fieldId = `comment-${kind}-${slug}`;
       </div>
     ) : (
       <>
-        <h2 id="piece-engagement-heading" class="piece-engagement__title">
+        <h2 id={headingId} class="piece-engagement__title">
           תגובה
         </h2>
         <p class="contact-setup-note">
@@ -79,10 +94,11 @@ const fieldId = `comment-${kind}-${slug}`;
 
   if (isReaderLoginConfigured()) {
     void import("../lib/piece-engagement").then(({ mountPieceEngagement }) => {
-      const root = document.querySelector<HTMLElement>(
-        "[data-piece-engagement]",
-      );
-      if (root) void mountPieceEngagement(root);
+      document
+        .querySelectorAll<HTMLElement>("[data-piece-engagement]")
+        .forEach((root) => {
+          void mountPieceEngagement(root);
+        });
     });
   }
 </script>

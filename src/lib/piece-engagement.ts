@@ -69,19 +69,21 @@ export async function mountPieceEngagement(root: HTMLElement): Promise<void> {
   invite.hidden = true;
   form.hidden = false;
 
-  const { error: visitError } = await supabase.from("reads").upsert(
-    {
-      user_id: userId,
-      kind,
-      slug,
-      title,
-      last_seen: new Date().toISOString(),
-    },
-    { onConflict: "user_id,kind,slug" },
-  );
-  if (visitError) {
-    message.hidden = false;
-    message.textContent = "הביקור לא נשמר.";
+  if (root.dataset.skipRead !== "1") {
+    const { error: visitError } = await supabase.from("reads").upsert(
+      {
+        user_id: userId,
+        kind,
+        slug: root.dataset.readSlug || slug,
+        title: root.dataset.readTitle || title,
+        last_seen: new Date().toISOString(),
+      },
+      { onConflict: "user_id,kind,slug" },
+    );
+    if (visitError) {
+      message.hidden = false;
+      message.textContent = "הביקור לא נשמר.";
+    }
   }
 
   const load = () =>
