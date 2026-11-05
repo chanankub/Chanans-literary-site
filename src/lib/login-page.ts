@@ -1,5 +1,9 @@
 import { withBase } from "./content";
 import { loginRedirectUrl, safeNextPath } from "./reader";
+import {
+  hasRememberedSession,
+  restoreRememberedSession,
+} from "./reader-session";
 import { getSupabase } from "./supabase";
 
 const rememberedEmailKey = "reader-email";
@@ -103,12 +107,21 @@ export async function mountLogin(root: HTMLElement): Promise<void> {
 
   const { data: sessionData } = await supabase.auth.getSession();
   if (sessionData.session) {
+    showStatus("נכנסים…");
     await enter(sessionData.session.user.id);
     return;
   }
 
+  const hadStay = hasRememberedSession();
+  if (hadStay) showStatus("נכנסים…");
+  const restored = hadStay ? await restoreRememberedSession(supabase) : null;
+  if (restored) {
+    await enter(restored.user.id);
+    return;
+  }
+
   showSignin();
-  showStatus("");
+  showStatus(hadStay ? "הכניסה השמורה פגה. אפשר לבקש קישור אחד חדש." : "");
 
   const { data: authListener } = supabase.auth.onAuthStateChange(
     (event, next) => {

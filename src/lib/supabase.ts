@@ -1,4 +1,5 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { rememberSession } from "./reader-session";
 
 let client: SupabaseClient | null = null;
 
@@ -19,6 +20,9 @@ export function getSupabase(): SupabaseClient | null {
         },
       },
     );
+    client.auth.onAuthStateChange((_event, session) => {
+      rememberSession(session);
+    });
   }
   return client;
 }
