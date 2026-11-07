@@ -6,6 +6,7 @@
   --color-border: #e8e6e2;
   --font-hebrew: "Noto Serif Hebrew", "David Libre", "Times New Roman", serif;
   --font-latin: "Lora", "Source Serif 4", Georgia, serif;
+  --font-sans: "Heebo", "Arial Hebrew", Arial, sans-serif;
   --font-body: var(--font-hebrew);
   --measure: 38rem;
   --measure-wide: 52rem;
@@ -73,7 +74,8 @@ a:hover {
   list-style: none;
   margin: 0;
   padding: 0;
-  font-size: 0.95rem;
+  font-family: var(--font-sans);
+  font-size: calc(0.95rem + 1pt);
 }
 
 .site-nav a {
@@ -101,6 +103,7 @@ main {
 }
 
 .page-title {
+  font-family: var(--font-sans);
   font-size: 1.75rem;
   font-weight: 400;
   margin: 0 0 var(--space-md);
@@ -118,7 +121,7 @@ main {
 }
 
 .prose--en .page-title .prose-subtitle {
-  font-family: var(--font-latin);
+  font-family: var(--font-sans);
 }
 
 .page-intro {
@@ -159,6 +162,7 @@ main {
 }
 
 .section-subhead {
+  font-family: var(--font-sans);
   font-size: 1.05rem;
   font-weight: 500;
   margin: 0 0 var(--space-xs);
@@ -191,6 +195,7 @@ main {
 .section-list a {
   color: var(--color-text);
   text-decoration: none;
+  font-family: var(--font-sans);
   font-size: 1.15rem;
 }
 
@@ -202,6 +207,7 @@ main {
 .item-meta {
   display: block;
   margin-top: var(--space-xs);
+  font-family: var(--font-sans);
   font-size: 0.875rem;
   color: var(--color-muted);
 }
@@ -226,13 +232,14 @@ main {
 
 .poem-meta {
   color: var(--color-muted);
+  font-family: var(--font-sans);
   font-size: 0.9rem;
   margin: 0;
 }
 
 .poem-meta--en {
   margin-top: var(--space-xs);
-  font-family: var(--font-latin);
+  font-family: var(--font-sans);
 }
 
 .poem-footnote {
@@ -301,7 +308,7 @@ main {
 
 .poem-alt-block__title {
   margin: 0;
-  font-family: var(--font-hebrew);
+  font-family: var(--font-sans);
   font-size: 1.2rem;
   font-weight: 500;
 }
@@ -377,6 +384,7 @@ main {
 }
 
 .poem-row--title .poem-cell {
+  font-family: var(--font-sans);
   font-weight: 500;
   margin-inline-start: 0 !important;
 }
@@ -418,8 +426,13 @@ main {
   text-indent: -1.25em;
 }
 
+.poem-cell.poem-alt-block__title {
+  font-family: var(--font-sans);
+}
+
 .poem-label {
   display: none;
+  font-family: var(--font-sans);
   font-size: 0.75rem;
   color: var(--color-muted);
   margin-bottom: 0.25rem;
@@ -448,7 +461,7 @@ main {
   border-radius: 999px;
   background: var(--color-bg);
   color: var(--color-muted);
-  font-family: var(--font-hebrew);
+  font-family: var(--font-sans);
   font-size: 0.92rem;
   line-height: 1.3;
   cursor: pointer;
@@ -557,10 +570,11 @@ main {
 }
 
 .prose--en .page-title {
-  font-family: var(--font-latin);
+  font-family: var(--font-sans);
 }
 
 .prose h2 {
+  font-family: var(--font-sans);
   font-size: 1.25rem;
   font-weight: 400;
   margin: var(--space-lg) 0 var(--space-sm);
@@ -568,6 +582,7 @@ main {
 }
 
 .prose h3 {
+  font-family: var(--font-sans);
   font-size: 1.1rem;
   font-weight: 400;
   margin: var(--space-md) 0 var(--space-sm);
@@ -579,6 +594,7 @@ main {
   padding: var(--space-md);
   border: 1px solid var(--color-border);
   border-radius: 2px;
+  font-family: var(--font-sans);
 }
 
 .notes-toc__list {
@@ -631,6 +647,7 @@ main {
   bottom: var(--space-md);
   left: var(--space-md);
   padding: 0.35rem 0.9rem;
+  font-family: var(--font-sans);
   font-size: 0.875rem;
   color: var(--color-text);
   text-decoration: none;
@@ -723,6 +740,7 @@ main {
 
 .prose figcaption,
 .prose .caption {
+  font-family: var(--font-sans);
   font-size: 0.875rem;
   color: var(--color-muted);
   text-align: center;
@@ -784,6 +802,7 @@ main {
   list-style: none;
   margin: var(--space-sm) 0 0;
   padding: 0;
+  font-family: var(--font-sans);
   font-size: 0.85rem;
 }
 
@@ -828,6 +847,7 @@ main {
 
 .piece-engagement__title,
 .piece-engagement__private {
+  font-family: var(--font-sans);
   font-size: 1.25rem;
   font-weight: 500;
   margin: 0 0 var(--space-sm);
@@ -845,6 +865,7 @@ main {
 }
 
 .reader-label {
+  font-family: var(--font-sans);
   font-size: 0.9rem;
 }
 
@@ -887,6 +908,7 @@ main {
   padding: 0;
   margin-inline-end: 0.25rem;
   color: var(--color-muted);
+  font-family: var(--font-sans);
   font-size: 0.9rem;
 }
 
