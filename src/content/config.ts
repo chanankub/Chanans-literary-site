@@ -96,4 +96,12 @@ const notes = defineCollection({
   schema: proseSchema,
 });
 
-export const collections = { poems, stories, notes };
+const about = defineCollection({
+  type: "content",
+  schema: z.object({
+    title: z.string().default("אודות"),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { poems, stories, notes, about };

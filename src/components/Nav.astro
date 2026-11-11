@@ -1,6 +1,6 @@
 ---
 interface Props {
-  current?: "home" | "translations" | "stories" | "notes";
+  current?: "home" | "about" | "translations" | "stories" | "notes";
 }
 
 import { withBase } from "../lib/content";
@@ -9,6 +9,7 @@ const { current } = Astro.props;
 
 const links = [
   { href: withBase(), label: "ראשי", id: "home" as const },
+  { href: withBase("about/"), label: "אודות", id: "about" as const },
   { href: withBase("translations/"), label: "תרגומי שירה", id: "translations" as const },
   { href: withBase("stories/"), label: "סיפורים קצרים", id: "stories" as const },
   { href: withBase("notes/"), label: "איך למדתי לאהוב שירה", id: "notes" as const },

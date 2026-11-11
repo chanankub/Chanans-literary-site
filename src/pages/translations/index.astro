@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 import CommentHover from "../../components/CommentHover.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import {
@@ -10,9 +10,115 @@ import {
   entrySlug,
 } from "../../lib/content";
 
+type Poem = CollectionEntry<"poems">;
+
 const poems = sortPoemsByAuthorBirth(
   publishedContentEntries(await getCollection("poems")),
 );
+
+/** Listed first, and not again under the poet. */
+const memorialOrder = ["germania-gmar-cheshbon", "prida"];
+
+function poetKey(poem: Poem): string {
+  return poem.data.authorEn || poem.data.author;
+}
+
+function majorityAuthor(group: Poem[]): string {
+  const counts = new Map<string, number>();
+  for (const poem of group) {
+    counts.set(poem.data.author, (counts.get(poem.data.author) ?? 0) + 1);
+  }
+  return [...counts.entries()].sort((a, b) => b[1] - a[1])[0][0];
+}
+
+function yearSpan(group: Poem[]): string | null {
+  const dated = group.find(
+    (poem) => poem.data.authorBirth != null || poem.data.authorDeath != null,
+  );
+  if (!dated) return null;
+  const { authorBirth: birth, authorDeath: death } = dated.data;
+  if (birth != null && death != null) return `${birth}–${death}`;
+  if (birth != null) return `${birth}–`;
+  if (death != null) return `–${death}`;
+  return null;
+}
+
+function englishCredit(group: Poem[]): string | null {
+  const named = group.find((poem) => poem.data.authorEn);
+  if (!named?.data.authorEn) return null;
+  const dated =
+    group.find(
+      (poem) => poem.data.authorBirth != null || poem.data.authorDeath != null,
+    ) ?? named;
+  return formatPoetEnglishCredit(
+    named.data.authorEn,
+    dated.data.authorBirth,
+    dated.data.authorDeath,
+  );
+}
+
+type Block =
+  | { type: "poems"; poems: Poem[] }
+  | {
+      type: "group";
+      name: string;
+      dates: string | null;
+      english: string | null;
+      poems: Poem[];
+    };
+
+const memorial = memorialOrder.flatMap((slug) => {
+  const poem = poems.find((item) => entrySlug(item.id) === slug);
+  return poem ? [poem] : [];
+});
+const rest = poems.filter((poem) => !memorialOrder.includes(entrySlug(poem.id)));
+
+const byPoet = new Map<string, Poem[]>();
+for (const poem of rest) {
+  const key = poetKey(poem);
+  const list = byPoet.get(key) ?? [];
+  list.push(poem);
+  byPoet.set(key, list);
+}
+
+const blocks: Block[] = [];
+if (memorial.length > 0) {
+  blocks.push({
+    type: "group",
+    name: "לזכרן",
+    dates: null,
+    english: null,
+    poems: memorial,
+  });
+}
+
+const emitted = new Set<string>();
+let loose: Poem[] = [];
+function flushLoose() {
+  if (loose.length === 0) return;
+  blocks.push({ type: "poems", poems: loose });
+  loose = [];
+}
+
+for (const poem of rest) {
+  const key = poetKey(poem);
+  const group = byPoet.get(key) ?? [];
+  if (group.length >= 2) {
+    if (emitted.has(key)) continue;
+    flushLoose();
+    emitted.add(key);
+    blocks.push({
+      type: "group",
+      name: majorityAuthor(group),
+      dates: yearSpan(group),
+      english: englishCredit(group),
+      poems: group,
+    });
+  } else {
+    loose.push(poem);
+  }
+}
+flushLoose();
 ---
 
 <BaseLayout title="תרגומי שירה" current="translations">
@@ -22,37 +128,66 @@ const poems = sortPoemsByAuthorBirth(
       poems.length === 0 ? (
         <p class="item-meta">עדיין לא פורסמו תרגומים.</p>
       ) : (
-        <ul class="section-list">
-          {poems.map((poem) => (
-            <li>
-              <a
-                href={withBase(`translations/${entrySlug(poem.id)}/`)}
-                data-comment-title
-                data-kind="poem"
-                data-slug={entrySlug(poem.id)}
-              >
-                {poem.data.title}
-              </a>
-              <span class="item-meta">
-                {poem.data.author}
-                {
-                  poem.data.authorEn && (
-                    <>
-                      {" · "}
-                      <span dir="ltr" lang="en">
-                        {formatPoetEnglishCredit(
-                          poem.data.authorEn,
-                          poem.data.authorBirth,
-                          poem.data.authorDeath,
-                        )}
-                      </span>
-                    </>
-                  )
-                }
-              </span>
-            </li>
-          ))}
-        </ul>
+        blocks.map((block) =>
+          block.type === "group" ? (
+            <section class="story-group">
+              <h2 class="section-subhead">
+                {block.name}{block.english ? (
+                  <>
+                    {" · "}
+                    <span dir="ltr" lang="en">{block.english}</span>
+                  </>
+                ) : (
+                  block.dates && <span dir="ltr"> ({block.dates})</span>
+                )}
+              </h2>
+              <ul class="section-list">
+                {block.poems.map((poem) => (
+                  <li>
+                    <a
+                      href={withBase(`translations/${entrySlug(poem.id)}/`)}
+                      data-comment-title
+                      data-kind="poem"
+                      data-slug={entrySlug(poem.id)}
+                    >
+                      {poem.data.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : (
+            <ul class="section-list">
+              {block.poems.map((poem) => (
+                <li>
+                  <a
+                    href={withBase(`translations/${entrySlug(poem.id)}/`)}
+                    data-comment-title
+                    data-kind="poem"
+                    data-slug={entrySlug(poem.id)}
+                  >
+                    {poem.data.title}
+                  </a>
+                  <span class="item-meta">
+                    {poem.data.author}
+                    {poem.data.authorEn && (
+                      <>
+                        {" · "}
+                        <span dir="ltr" lang="en">
+                          {formatPoetEnglishCredit(
+                            poem.data.authorEn,
+                            poem.data.authorBirth,
+                            poem.data.authorDeath,
+                          )}
+                        </span>
+                      </>
+                    )}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ),
+        )
       )
     }
     <CommentHover kind="poem" />

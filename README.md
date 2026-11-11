@@ -29,6 +29,7 @@ src/
   content/poems/     תרגומים (שורות מקבילות ב-frontmatter)
   content/stories/   סיפורים
   content/notes/     הערות
+  content/about/     אודות (about.md)
   components/        PoemParallel, Nav
   pages/             דפי האתר
 public/images/       תמונות מייבוא Word

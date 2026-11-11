@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import CommentHover from "../../components/CommentHover.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { filterPublished, sortByOrderThenTitle, withBase, entrySlug } from "../../lib/content";
+import { formatWhen } from "../../lib/reader";
 
 const stories = sortByOrderThenTitle(filterPublished(await getCollection("stories")));
 const groups = [
@@ -28,10 +29,12 @@ const essays = [
   {
     title: "ועכשיו: מלחמת אזרחים",
     href: "https://www.zman.co.il/609321/",
+    date: "2025-07-24",
   },
   {
     title: "איה קרני?",
     href: "https://www.zman.co.il/731318/",
+    date: "2026-10-11",
   },
 ];
 ---
@@ -76,6 +79,9 @@ const essays = [
                   <a href={essay.href} target="_blank" rel="noopener noreferrer">
                     {essay.title}
                   </a>
+                  <time class="item-meta" datetime={essay.date}>
+                    {formatWhen(essay.date)}
+                  </time>
                 </li>
               ))}
             </ul>

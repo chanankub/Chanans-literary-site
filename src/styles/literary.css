@@ -6,7 +6,7 @@
   --color-border: #e8e6e2;
   --font-hebrew: "Noto Serif Hebrew", "David Libre", "Times New Roman", serif;
   --font-latin: "Lora", "Source Serif 4", Georgia, serif;
-  --font-sans: "Heebo", "Arial Hebrew", Arial, sans-serif;
+  --font-sans: "Google Sans", "Arial Hebrew", Arial, sans-serif;
   --font-body: var(--font-hebrew);
   --measure: 38rem;
   --measure-wide: 52rem;
@@ -130,43 +130,21 @@ main {
   max-width: 32rem;
 }
 
-.welcome {
-  margin: 0 0 var(--space-lg);
-  max-width: 32rem;
-  color: var(--color-muted);
-}
-
-.welcome p {
-  margin: 0;
-}
-
-.welcome p + p {
-  margin-top: var(--space-sm);
-}
-
-.welcome a {
-  color: var(--color-text);
-  text-decoration: none;
-}
-
-.welcome a:hover {
-  color: var(--color-accent);
-  text-decoration: underline;
-}
-
 .story-group {
   margin: 0 0 var(--space-md);
-  padding: var(--space-sm) var(--space-md) 0;
-  background: color-mix(in srgb, var(--color-accent) 8%, var(--color-bg));
-  border-inline-start: 3px solid var(--color-accent);
 }
 
 .section-subhead {
   font-family: var(--font-sans);
-  font-size: 1.05rem;
-  font-weight: 500;
+  font-size: calc(1.15rem - 1pt);
+  font-weight: 700;
   margin: 0 0 var(--space-xs);
-  color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.story-group .section-list {
+  border-inline-start: 3px solid var(--color-accent);
+  padding-inline-start: var(--space-md);
 }
 
 .section-list {

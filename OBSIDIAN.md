@@ -40,6 +40,7 @@
 | תרגום | `src/content/poems/` |
 | סיפור | `src/content/stories/` |
 | הערה | `src/content/notes/` |
+| אודות | `src/content/about/about.md` (עמוד אחד; כותבים ישירות בקובץ הזה) |
 
 ### שירים — מצב Source
 

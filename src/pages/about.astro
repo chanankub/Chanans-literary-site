@@ -1,0 +1,18 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { entrySlug, filterPublished } from "../lib/content";
+
+const about = filterPublished(await getCollection("about")).find(
+  (entry) => entrySlug(entry.id) === "about",
+);
+const Content = about ? (await render(about)).Content : null;
+const title = about?.data.title ?? "אודות";
+---
+
+<BaseLayout title={title} current="about">
+  <article class="prose container">
+    <h1 class="page-title">{title}</h1>
+    {Content && <Content />}
+  </article>
+</BaseLayout>

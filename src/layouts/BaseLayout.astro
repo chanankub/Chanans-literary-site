@@ -7,7 +7,7 @@ import "../styles/literary.css";
 interface Props {
   title: string;
   description?: string;
-  current?: "home" | "translations" | "stories" | "notes";
+  current?: "home" | "about" | "translations" | "stories" | "notes";
 }
 
 const { title, description = "אתר ספרותי אישי", current } = Astro.props;
@@ -24,7 +24,7 @@ const fullTitle = title === "בית" ? "בית" : `${title} | בית`;
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500&family=Lora:ital,wght@0,400;0,500;1,400&family=Noto+Serif+Hebrew:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400&family=Noto+Serif+Hebrew:wght@400;500&display=swap"
       rel="stylesheet"
     />
     <title>{fullTitle}</title>
