@@ -14,13 +14,12 @@ export async function getStaticPaths() {
 
 const { story } = Astro.props;
 const { Content } = await render(story);
-const { title, summary, lang, subtitle } = story.data;
+const { title, lang, subtitle } = story.data;
 const slug = entrySlug(story.id);
 ---
 
 <ProseLayout
   title={title}
-  summary={summary}
   section="stories"
   lang={lang}
   subtitle={subtitle}

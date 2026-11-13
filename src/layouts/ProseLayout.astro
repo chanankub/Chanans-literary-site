@@ -32,7 +32,9 @@ const isEnglish = lang === "en";
         {title}
         {
           subtitle && (
-            <span class="prose-subtitle">{subtitle}</span>
+            <span class="prose-subtitle" data-piece-summary hidden>
+              {subtitle}
+            </span>
           )
         }
       </h1>

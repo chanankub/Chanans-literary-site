@@ -5,16 +5,18 @@ import { withBase } from "../lib/content";
 
 <BaseLayout title="בית" current="home">
   <div class="container">
-    <header class="home-author">
-      <img
-        src={withBase("images/chanan.png")}
-        alt=""
-        width="152"
-        height="152"
-      />
-      <p class="home-author__name">חנן קוביצקי</p>
-    </header>
-    <h1 class="page-title">ברוכים הבאים לקוראים סקרנים</h1>
+    <div class="home-intro">
+      <h1 class="page-title">ברוכים הבאים לקוראים סקרנים</h1>
+      <header class="home-author">
+        <img
+          src={withBase("images/chanan.png")}
+          alt=""
+          width="152"
+          height="152"
+        />
+        <p class="home-author__name">שלכם, חנן קוביצקי</p>
+      </header>
+    </div>
     <nav aria-label="מדורים">
       <ul class="section-list">
         <li>
