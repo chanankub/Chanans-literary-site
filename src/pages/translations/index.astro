@@ -19,6 +19,15 @@ const poems = sortPoemsByAuthorBirth(
 /** Listed first, and not again under the poet. */
 const memorialOrder = ["germania-gmar-cheshbon", "prida"];
 
+/** Songs, in this order, and not again under the poet. */
+const sungOrder = [
+  "o-mar",
+  "you-want-it-darker",
+  "one-more-cup-of-coffee",
+  "fire-and-rain",
+  "shir-bokrim",
+];
+
 function poetKey(poem: Poem): string {
   return poem.data.authorEn || poem.data.author;
 }
@@ -64,14 +73,21 @@ type Block =
       name: string;
       dates: string | null;
       english: string | null;
+      credit?: boolean;
       poems: Poem[];
     };
 
-const memorial = memorialOrder.flatMap((slug) => {
-  const poem = poems.find((item) => entrySlug(item.id) === slug);
-  return poem ? [poem] : [];
-});
-const rest = poems.filter((poem) => !memorialOrder.includes(entrySlug(poem.id)));
+function poemsInOrder(slugs: string[]): Poem[] {
+  return slugs.flatMap((slug) => {
+    const poem = poems.find((item) => entrySlug(item.id) === slug);
+    return poem ? [poem] : [];
+  });
+}
+
+const memorial = poemsInOrder(memorialOrder);
+const sung = poemsInOrder(sungOrder);
+const reserved = new Set([...memorialOrder, ...sungOrder]);
+const rest = poems.filter((poem) => !reserved.has(entrySlug(poem.id)));
 
 const byPoet = new Map<string, Poem[]>();
 for (const poem of rest) {
@@ -89,6 +105,16 @@ if (memorial.length > 0) {
     dates: null,
     english: null,
     poems: memorial,
+  });
+}
+if (sung.length > 0) {
+  blocks.push({
+    type: "group",
+    name: "שירים מולחנים",
+    dates: null,
+    english: null,
+    credit: true,
+    poems: sung,
   });
 }
 
@@ -132,13 +158,13 @@ flushLoose();
           block.type === "group" ? (
             <section class="story-group">
               <h2 class="section-subhead">
-                {block.name}{block.english ? (
-                  <>
-                    {" · "}
-                    <span dir="ltr" lang="en">{block.english}</span>
-                  </>
+                <span class="section-subhead__name">{block.name}</span>
+                {block.english ? (
+                  <span class="section-subhead__en" lang="en">{block.english}</span>
                 ) : (
-                  block.dates && <span dir="ltr"> ({block.dates})</span>
+                  block.dates && (
+                    <span class="section-subhead__en">{block.dates}</span>
+                  )
                 )}
               </h2>
               <ul class="section-list">
@@ -152,6 +178,23 @@ flushLoose();
                     >
                       {poem.data.title}
                     </a>
+                    {block.credit && (
+                      <span class="item-meta">
+                        {poem.data.author}
+                        {poem.data.authorEn && (
+                          <>
+                            {" · "}
+                            <span dir="ltr" lang="en">
+                              {formatPoetEnglishCredit(
+                                poem.data.authorEn,
+                                poem.data.authorBirth,
+                                poem.data.authorDeath,
+                              )}
+                            </span>
+                          </>
+                        )}
+                      </span>
+                    )}
                   </li>
                 ))}
               </ul>

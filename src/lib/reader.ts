@@ -19,9 +19,9 @@ export function pieceHref(kind: PieceKind, slug: string): string {
 }
 
 export function kindLabel(kind: PieceKind): string {
-  if (kind === "poem") return "תרגום";
+  if (kind === "poem") return "שירה";
   if (kind === "story") return "סיפור";
-  return "הערה";
+  return "הגיגים";
 }
 
 /** Stay on this site. Drop the login page so a finished sign-in does not loop. */
