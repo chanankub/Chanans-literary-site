@@ -940,6 +940,8 @@ main {
   display: inline-flex;
   gap: 0.35rem;
   align-items: center;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
 }
 
 .reader-comments {
@@ -1001,6 +1003,10 @@ main {
   font-size: 0.75rem;
   color: var(--color-muted);
   vertical-align: middle;
+}
+
+.seen-mark {
+  font-family: var(--font-sans);
 }
 
 .comment-mark {
