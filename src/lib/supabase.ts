@@ -16,7 +16,9 @@ export function getSupabase(): SupabaseClient | null {
           detectSessionInUrl: true,
           persistSession: true,
           autoRefreshToken: true,
-          flowType: "pkce",
+          // The phone mail app opens the link in its own browser, which does not
+          // have the PKCE verifier from the browser that asked for the email.
+          flowType: "implicit",
         },
       },
     );
