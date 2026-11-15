@@ -252,6 +252,13 @@ otp_expiry = 3600
 # subject = "You have been invited"
 # content_path = "./supabase/templates/invite.html"
 
+# Magic link opens the site. The one-time token is exchanged in the browser,
+# so a mail scanner that only fetches the page does not consume it.
+# The hosted project does not read this file; paste the same template in the dashboard.
+[auth.email.template.magic_link]
+subject = "קישור כניסה"
+content_path = "./supabase/templates/magic_link.html"
+
 # Uncomment to customize notification email template
 # [auth.email.notification.password_changed]
 # enabled = true

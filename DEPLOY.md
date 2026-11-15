@@ -39,10 +39,11 @@ git push -u origin main
 2. ב-**Authentication → URL Configuration** הוסיפו:
    - `http://127.0.0.1:4321/Chanans-literary-site/login/`
    - `https://chanankub.github.io/Chanans-literary-site/login/`
-3. ב-**SQL Editor** החליפו את `you@example.com` בקובץ `supabase/schema.sql` בכתובת שלכם, והריצו את כל הקובץ פעם אחת.
-4. העתיקו את כתובת הפרויקט ואת מפתח ה-**anon** אל `.env` (ראו `.env.example`). את מפתח ה-service role לא שמים באתר ולא ב-Git.
-5. אותם שני ערכים כ-secrets ב-GitHub: `PUBLIC_SUPABASE_URL` ו-`PUBLIC_SUPABASE_ANON_KEY`. הם כבר מועברים ב-`.github/workflows/deploy.yml`.
-6. הפעלה מקומית: `npm run dev`, ואז `http://127.0.0.1:4321/Chanans-literary-site/login/`.
+3. ב-**Authentication → Email Templates → Magic Link** הדביקו את הנושא ואת הגוף מ-`supabase/templates/magic_link.html` (הנושא: `קישור כניסה`). הפרויקט החי אינו קורא את `config.toml`. הקישור בתבנית הוא `{{ .RedirectTo }}?token_hash={{ .TokenHash }}&type=magiclink`, כך שההודעה נפתחת בדף הכניסה של האתר והאסימון החד-פעמי מוחלף רק כשהקורא פותח את הדף.
+4. ב-**SQL Editor** החליפו את `you@example.com` בקובץ `supabase/schema.sql` בכתובת שלכם, והריצו את כל הקובץ פעם אחת.
+5. העתיקו את כתובת הפרויקט ואת מפתח ה-**anon** אל `.env` (ראו `.env.example`). את מפתח ה-service role לא שמים באתר ולא ב-Git.
+6. אותם שני ערכים כ-secrets ב-GitHub: `PUBLIC_SUPABASE_URL` ו-`PUBLIC_SUPABASE_ANON_KEY`. הם כבר מועברים ב-`.github/workflows/deploy.yml`.
+7. הפעלה מקומית: `npm run dev`, ואז `http://127.0.0.1:4321/Chanans-literary-site/login/`.
 
 ## רשימת פרסום שוטפת
 

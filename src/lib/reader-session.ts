@@ -1,6 +1,17 @@
-import type { Session, SupabaseClient } from "@supabase/supabase-js";
+import type { AuthError, Session, SupabaseClient } from "@supabase/supabase-js";
 
 const stayKey = "reader-stay";
+
+function refreshWasRejected(error: AuthError): boolean {
+  const blob = `${error.code ?? ""} ${error.message}`.toLowerCase();
+  const invalidRefresh =
+    blob.includes("refresh_token") ||
+    blob.includes("refresh token") ||
+    blob.includes("invalid_grant") ||
+    blob.includes("session_not_found");
+  if (invalidRefresh) return true;
+  return error.status === 400 || error.status === 401;
+}
 
 type Stay = {
   access_token: string;
@@ -39,7 +50,7 @@ export async function restoreRememberedSession(
   }
   const { data, error } = await supabase.auth.setSession(stay);
   if (error || !data.session) {
-    localStorage.removeItem(stayKey);
+    if (!error || refreshWasRejected(error)) localStorage.removeItem(stayKey);
     return null;
   }
   rememberSession(data.session);
@@ -56,7 +67,7 @@ export async function lockVisit(supabase: SupabaseClient): Promise<void> {
   const keys: string[] = [];
   for (let index = 0; index < localStorage.length; index += 1) {
     const key = localStorage.key(index);
-    if (key?.startsWith("sb-") && key.includes("-auth-token")) keys.push(key);
+    if (key?.startsWith("sb-") && key.endsWith("-auth-token")) keys.push(key);
   }
   keys.forEach((key) => localStorage.removeItem(key));
 }

@@ -1,3 +1,4 @@
+import type { AuthError } from "@supabase/supabase-js";
 import { withBase } from "./content";
 import { loginRedirectUrl, safeNextPath } from "./reader";
 import {
@@ -8,7 +9,98 @@ import { getSupabase } from "./supabase";
 
 const rememberedEmailKey = "reader-email";
 
+const expiredLinkMessage =
+  "הקישור כבר לא בתוקף. בקשו קישור חדש, ופתחו אותו בדפדפן הזה.";
+const otherBrowserMessage =
+  "הקישור נפתח בדפדפן אחר. חזרו לדפדפן שבו ביקשתם אותו, או בקשו קישור חדש.";
+const genericLinkMessage = "הכניסה לא הושלמה. בקשו קישור חדש ופתחו אותו כאן.";
+
+type AuthCallback = {
+  tokenHash: string;
+  type: string;
+  error: string;
+  errorCode: string;
+  errorDescription: string;
+};
+
+function readAuthCallback(): AuthCallback {
+  const query = new URLSearchParams(location.search);
+  const hash = new URLSearchParams(location.hash.replace(/^#/, ""));
+  const pick = (key: string) => query.get(key) ?? hash.get(key) ?? "";
+  return {
+    tokenHash: pick("token_hash"),
+    type: pick("type"),
+    error: pick("error"),
+    errorCode: pick("error_code"),
+    errorDescription: pick("error_description"),
+  };
+}
+
+function stripParams(keys: readonly string[]): void {
+  const url = new URL(location.href);
+  for (const key of keys) url.searchParams.delete(key);
+  const hash = new URLSearchParams(url.hash.replace(/^#/, ""));
+  let touched = false;
+  for (const key of keys) {
+    if (!hash.has(key)) continue;
+    hash.delete(key);
+    touched = true;
+  }
+  if (touched) {
+    const rest = hash.toString();
+    url.hash = rest ? `#${rest}` : "";
+  }
+  const next = `${url.pathname}${url.search}${url.hash}`;
+  const current = `${location.pathname}${location.search}${location.hash}`;
+  if (next !== current) history.replaceState(null, "", next);
+}
+
+function linkFailureMessage(code: string, description: string): string {
+  const blob = `${code} ${description}`.toLowerCase();
+  if (
+    blob.includes("verifier") ||
+    blob.includes("pkce") ||
+    blob.includes("code challenge")
+  ) {
+    return otherBrowserMessage;
+  }
+  if (
+    blob.includes("otp_expired") ||
+    blob.includes("expired") ||
+    blob.includes("already")
+  ) {
+    return expiredLinkMessage;
+  }
+  return genericLinkMessage;
+}
+
+function isTransientAuthError(error: AuthError): boolean {
+  if (error.status != null && error.status >= 500) return true;
+  if (error.status != null && error.status !== 0) return false;
+  const blob = error.message.toLowerCase();
+  return (
+    blob.includes("fetch") ||
+    blob.includes("network") ||
+    blob.includes("timeout") ||
+    blob.includes("load failed")
+  );
+}
+
+function sendFailureMessage(error: AuthError): string {
+  if (error.code === "over_email_send_rate_limit" || error.status === 429) {
+    return "נשלחו כבר שני קישורי כניסה בשעה האחרונה. חכו כשעה, בקשו קישור אחד, ופתחו אותו באותו דפדפן.";
+  }
+  const blob = `${error.code ?? ""} ${error.message}`.toLowerCase();
+  if (blob.includes("redirect")) {
+    return "לא הצלחנו לשלוח את הקישור. כתובת החזרה אינה מורשית.";
+  }
+  return "לא הצלחנו לשלוח את הקישור. נסו שוב.";
+}
+
 export async function mountLogin(root: HTMLElement): Promise<void> {
+  const callback = readAuthCallback();
+  stripParams(["error", "error_code", "error_description"]);
+
   const supabase = getSupabase();
   if (!supabase) return;
 
@@ -105,6 +197,35 @@ export async function mountLogin(root: HTMLElement): Promise<void> {
     goNext();
   });
 
+  let callbackMessage = "";
+  if (callback.tokenHash && callback.type === "magiclink") {
+    const { data, error } = await supabase.auth.verifyOtp({
+      token_hash: callback.tokenHash,
+      type: "magiclink",
+    });
+    if (!error && data.session) {
+      stripParams(["token_hash", "type"]);
+      showStatus("נכנסים…");
+      await enter(data.session.user.id);
+      return;
+    }
+    if (!error || !isTransientAuthError(error)) {
+      stripParams(["token_hash", "type"]);
+    }
+    callbackMessage = linkFailureMessage(
+      error?.code ?? "",
+      error?.message ?? "",
+    );
+  } else if (callback.tokenHash) {
+    stripParams(["token_hash", "type"]);
+    callbackMessage = genericLinkMessage;
+  } else if (callback.error || callback.errorCode || callback.errorDescription) {
+    callbackMessage = linkFailureMessage(
+      callback.errorCode || callback.error,
+      callback.errorDescription,
+    );
+  }
+
   const { data: sessionData } = await supabase.auth.getSession();
   if (sessionData.session) {
     showStatus("נכנסים…");
@@ -121,7 +242,14 @@ export async function mountLogin(root: HTMLElement): Promise<void> {
   }
 
   showSignin();
-  showStatus(hadStay ? "הכניסה השמורה פגה. אפשר לבקש קישור אחד חדש." : "");
+  if (callbackMessage) showStatus(callbackMessage);
+  else if (hadStay && hasRememberedSession()) {
+    showStatus("לא הצלחנו לשחזר את הכניסה. נסו שוב.");
+  } else if (hadStay) {
+    showStatus("הכניסה השמורה פגה. אפשר לבקש קישור אחד חדש.");
+  } else {
+    showStatus("");
+  }
 
   const { data: authListener } = supabase.auth.onAuthStateChange(
     (event, next) => {
@@ -145,13 +273,7 @@ export async function mountLogin(root: HTMLElement): Promise<void> {
     });
     if (button) button.disabled = false;
     if (error) {
-      const limited =
-        error.code === "over_email_send_rate_limit" || error.status === 429;
-      showStatus(
-        limited
-          ? "נשלחו כבר שני קישורי כניסה בשעה האחרונה. חכו כשעה, בקשו קישור אחד, ופתחו אותו באותו דפדפן."
-          : "לא הצלחנו לשלוח את הקישור. נסו שוב.",
-      );
+      showStatus(sendFailureMessage(error));
       return;
     }
     localStorage.setItem(rememberedEmailKey, email);
