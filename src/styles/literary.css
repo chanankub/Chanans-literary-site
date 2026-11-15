@@ -334,6 +334,21 @@ main {
   height: 1.15rem;
 }
 
+.poem-print-credit {
+  display: none;
+  margin: 0;
+  text-align: center;
+  font-family: "Noto Serif Hebrew", "Times New Roman", serif;
+  font-size: 9pt;
+  line-height: 1.4;
+  color: #1a1a1a;
+}
+
+.poem-print-credit__url {
+  display: block;
+  direction: ltr;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -1167,30 +1182,12 @@ main {
 
 @page poem {
   size: A4;
-  margin: 14mm 14mm 22mm;
-
-  @bottom-center {
-    content: "תרגום: חנן קוביצקי\A\202A" var(--print-url) "\202C";
-    white-space: pre;
-    font-family: "Noto Serif Hebrew", "Times New Roman", serif;
-    font-size: 9pt;
-    line-height: 1.4;
-    color: #1a1a1a;
-  }
+  margin: 14mm 14mm 16mm;
 }
 
 @page poem-multipage {
   size: A4;
-  margin: 14mm 14mm 22mm;
-
-  @bottom-center {
-    content: "תרגום: חנן קוביצקי\A\202A" var(--print-url) "\202C";
-    white-space: pre;
-    font-family: "Noto Serif Hebrew", "Times New Roman", serif;
-    font-size: 9pt;
-    line-height: 1.4;
-    color: #1a1a1a;
-  }
+  margin: 14mm 14mm 16mm;
 
   @bottom-left {
     content: counter(page);
@@ -1222,7 +1219,10 @@ html.poem-page.poem-multipage {
     display: none !important;
   }
 
+  html,
   body {
+    height: auto;
+    min-height: 0;
     background: #fff;
     color: #000;
   }
@@ -1262,4 +1262,19 @@ html.poem-page.poem-multipage {
   .poem-epigraph {
     break-inside: avoid;
   }
+
+  .poem-print-credit {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    background: #fff;
+  }
+
+  html.poem-page body {
+    padding-bottom: 12mm;
+  }
 }
+
