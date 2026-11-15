@@ -56,7 +56,7 @@ create table if not exists public.reads (
 create table if not exists public.comments (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references public.profiles (id) on delete cascade,
-  kind text not null check (kind in ('poem', 'story', 'note')),
+  kind text not null check (kind in ('poem', 'story', 'note', 'about')),
   slug text not null,
   body text not null check (char_length(btrim(body)) between 1 and 2000),
   visibility text not null check (visibility in ('public', 'private')),

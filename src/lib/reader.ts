@@ -1,12 +1,18 @@
 import { withBase } from "./content";
 
-export type PieceKind = "poem" | "story" | "note";
+export type PieceKind = "poem" | "story" | "note" | "about";
 
 export function isPieceKind(value: string): value is PieceKind {
-  return value === "poem" || value === "story" || value === "note";
+  return (
+    value === "poem" ||
+    value === "story" ||
+    value === "note" ||
+    value === "about"
+  );
 }
 
 export function pieceHref(kind: PieceKind, slug: string): string {
+  if (kind === "about") return withBase("about/");
   const section =
     kind === "poem" ? "translations" : kind === "story" ? "stories" : "notes";
   const sectionMark = kind === "note" ? slug.indexOf("--") : -1;
@@ -21,6 +27,7 @@ export function pieceHref(kind: PieceKind, slug: string): string {
 export function kindLabel(kind: PieceKind): string {
   if (kind === "poem") return "שירה";
   if (kind === "story") return "סיפור";
+  if (kind === "about") return "אודות";
   return "הגיגים";
 }
 

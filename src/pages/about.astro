@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from "astro:content";
+import PieceEngagement from "../components/PieceEngagement.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { entrySlug, filterPublished } from "../lib/content";
 
@@ -15,4 +16,12 @@ const title = about?.data.title ?? "אודות";
     <h1 class="page-title">{title}</h1>
     {Content && <Content />}
   </article>
+  <PieceEngagement
+    kind="about"
+    slug="about"
+    title={title}
+    contained
+    skipRead
+    prompt="כדי להגיב."
+  />
 </BaseLayout>

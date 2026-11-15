@@ -46,7 +46,14 @@ export async function mountPieceEngagement(root: HTMLElement): Promise<void> {
 
   const { data: sessionData } = await supabase.auth.getSession();
   const session = sessionData.session;
-  if (!session) return;
+  if (!session) {
+    if (root.dataset.showInvite === "1") {
+      panel.hidden = false;
+      invite.hidden = false;
+      form.hidden = true;
+    }
+    return;
+  }
 
   panel.hidden = false;
 

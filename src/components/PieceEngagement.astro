@@ -11,6 +11,7 @@ interface Props {
   readSlug?: string;
   readTitle?: string;
   skipRead?: boolean;
+  prompt?: string;
 }
 
 const {
@@ -21,6 +22,7 @@ const {
   readSlug,
   readTitle,
   skipRead = false,
+  prompt,
 } = Astro.props;
 const configured = isReaderLoginConfigured();
 const loginHref = `${withBase("login/")}?next=${encodeURIComponent(pieceHref(kind, slug))}`;
@@ -38,6 +40,7 @@ const headingId = `piece-engagement-${kind}-${slug}`;
   data-read-slug={readSlug}
   data-read-title={readTitle}
   data-skip-read={skipRead ? "1" : undefined}
+  data-show-invite={prompt ? "1" : undefined}
 >
   {
     configured ? (
@@ -46,7 +49,8 @@ const headingId = `piece-engagement-${kind}-${slug}`;
           תגובה
         </h2>
         <p data-invite hidden>
-          <a href={loginHref}>היכנסו</a> כדי שהביקור יישמר ותוכלו להגיב.
+          <a href={loginHref}>היכנסו</a>{" "}
+          {prompt ?? "כדי שהביקור יישמר ותוכלו להגיב."}
         </p>
         <ul class="reader-comments" data-public />
         <div data-private-wrap hidden>
