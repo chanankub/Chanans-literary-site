@@ -8,14 +8,20 @@ interface Props {
   title: string;
   description?: string;
   current?: "home" | "about" | "translations" | "stories" | "notes";
+  printUrl?: string;
 }
 
-const { title, description = "אתר ספרותי אישי", current } = Astro.props;
+const { title, description = "אתר ספרותי אישי", current, printUrl } = Astro.props;
 const fullTitle = title === "בית" ? "בית" : `${title} | בית`;
 ---
 
 <!doctype html>
-<html lang="he" dir="rtl">
+<html
+  lang="he"
+  dir="rtl"
+  class:list={[printUrl && "poem-page"]}
+  style={printUrl ? `--print-url: '${printUrl}'` : undefined}
+>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
