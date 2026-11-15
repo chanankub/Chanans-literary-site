@@ -10,9 +10,9 @@ import { getSupabase } from "./supabase";
 const rememberedEmailKey = "reader-email";
 
 const expiredLinkMessage =
-  "הקישור כבר לא בתוקף. בקשו קישור חדש, ופתחו אותו בדפדפן הזה.";
+  "הקישור כבר לא בתוקף. בקשו קישור חדש, ופתחו את ההודעה שנשלחה לדוא״ל.";
 const otherBrowserMessage =
-  "הקישור נפתח בדפדפן אחר. חזרו לדפדפן שבו ביקשתם אותו, או בקשו קישור חדש.";
+  "הקישור לא נפתח. בקשו קישור חדש, ופתחו את ההודעה שנשלחה לדוא״ל.";
 const genericLinkMessage = "הכניסה לא הושלמה. בקשו קישור חדש ופתחו אותו כאן.";
 
 type AuthCallback = {
@@ -88,7 +88,7 @@ function isTransientAuthError(error: AuthError): boolean {
 
 function sendFailureMessage(error: AuthError): string {
   if (error.code === "over_email_send_rate_limit" || error.status === 429) {
-    return "נשלחו כבר שני קישורי כניסה בשעה האחרונה. חכו כשעה, בקשו קישור אחד, ופתחו אותו באותו דפדפן.";
+    return "נשלחו כבר שני קישורי כניסה בשעה האחרונה. חכו כשעה, ובקשו קישור אחד.";
   }
   const blob = `${error.code ?? ""} ${error.message}`.toLowerCase();
   if (blob.includes("redirect")) {
@@ -262,6 +262,11 @@ export async function mountLogin(root: HTMLElement): Promise<void> {
   if (restored) {
     await enter(restored.user.id);
     return;
+  }
+
+  if (!callbackMessage && new URLSearchParams(location.search).get("code")) {
+    callbackMessage = otherBrowserMessage;
+    stripParams(["code"]);
   }
 
   showSignin();
