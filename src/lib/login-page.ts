@@ -278,7 +278,9 @@ export async function mountLogin(root: HTMLElement): Promise<void> {
     }
     localStorage.setItem(rememberedEmailKey, email);
     signinForm.hidden = true;
-    showStatus("הקישור נשלח. פתחו אותו בדפדפן הזה, והכניסה תישמר בו.");
+    showStatus(
+      'הקישור נשלח בדוא"ל מאת \u2066Supabase\u2069. ליחצו על הקישור המסומן \u2066Sign in\u2069. תוקפו יפוג תוך זמן קצר.',
+    );
   };
 
   signinForm.addEventListener("submit", (event) => {
