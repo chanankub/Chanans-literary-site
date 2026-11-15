@@ -190,6 +190,18 @@ main {
   max-width: 32rem;
 }
 
+.login-status {
+  direction: rtl;
+  text-align: right;
+  unicode-bidi: isolate;
+}
+
+.login-status__line {
+  display: block;
+  direction: rtl;
+  text-align: right;
+}
+
 .story-group {
   margin: var(--space-lg) 0;
 }

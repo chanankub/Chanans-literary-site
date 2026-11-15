@@ -116,8 +116,31 @@ export async function mountLogin(root: HTMLElement): Promise<void> {
   if (!signinForm || !nicknameForm || !status || !emailInput) return;
 
   const showStatus = (message: string) => {
+    status.replaceChildren();
     status.hidden = message.length === 0;
-    status.textContent = message;
+    if (message) status.textContent = message;
+  };
+
+  const showSentLink = () => {
+    const line = (...parts: (string | Node)[]) => {
+      const row = document.createElement("span");
+      row.className = "login-status__line";
+      row.dir = "rtl";
+      row.append(...parts);
+      return row;
+    };
+    const latin = (text: string) => {
+      const word = document.createElement("bdi");
+      word.dir = "ltr";
+      word.textContent = text;
+      return word;
+    };
+    status.hidden = false;
+    status.replaceChildren(
+      line("הקישור נשלח בדוא״ל מאת ", latin("Supabase"), "."),
+      line("ליחצו על הקישור המסומן ", latin("Sign in"), "."),
+      line("תוקפו יפוג תוך זמן קצר."),
+    );
   };
 
   const showSignin = () => {
@@ -278,9 +301,7 @@ export async function mountLogin(root: HTMLElement): Promise<void> {
     }
     localStorage.setItem(rememberedEmailKey, email);
     signinForm.hidden = true;
-    showStatus(
-      'הקישור נשלח בדוא"ל מאת \u2066Supabase\u2069. ליחצו על הקישור המסומן \u2066Sign in\u2069. תוקפו יפוג תוך זמן קצר.',
-    );
+    showSentLink();
   };
 
   signinForm.addEventListener("submit", (event) => {
