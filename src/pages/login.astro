@@ -6,7 +6,7 @@ import { withBase } from "../lib/content";
 const configured = isReaderLoginConfigured();
 ---
 
-<BaseLayout title="כניסה" description="כניסה בקישור חד-פעמי לדוא״ל">
+<BaseLayout title="כניסה" description="כניסה בקוד או בקישור חד-פעמי לדוא״ל">
   <div
     class="container container--narrow"
     data-login-root={configured ? "1" : undefined}
@@ -30,11 +30,37 @@ const configured = isReaderLoginConfigured();
               dir="ltr"
             />
             <p class="item-meta">
-              בפעם הראשונה נשלח קישור חד-פעמי לדוא״ל. בלי סיסמה. אחר כך הכניסה
+              נשלחים לדוא״ל קוד בן 6 ספרות וקישור. בלי סיסמה. אחר כך הכניסה
               נשמרת כאן.
             </p>
             <button class="mailing-form__submit" type="submit" data-send-link>
-              שילחו לי קישור
+              שילחו לי קוד
+            </button>
+          </form>
+          <form class="reader-form" data-code-form hidden>
+            <label class="reader-label" for="reader-code">
+              קוד
+            </label>
+            <input
+              id="reader-code"
+              class="reader-input reader-input--code"
+              name="code"
+              type="text"
+              inputmode="numeric"
+              autocomplete="one-time-code"
+              maxlength="6"
+              pattern="[0-9]{6}"
+              required
+              dir="ltr"
+            />
+            <p class="item-meta">
+              שש ספרות מהדוא״ל. אפשר גם לפתוח את הקישור שבהודעה.
+            </p>
+            <button class="mailing-form__submit" type="submit">
+              כניסה
+            </button>
+            <button class="reader-text-button" type="button" data-change-email>
+              שליחה לכתובת אחרת
             </button>
           </form>
           <form class="reader-form" data-nickname-form hidden>

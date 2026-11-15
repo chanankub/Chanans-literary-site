@@ -10,7 +10,7 @@ import { getSupabase } from "./supabase";
 const rememberedEmailKey = "reader-email";
 
 const expiredLinkMessage =
-  "הקישור כבר לא בתוקף. בקשו קישור חדש, ופתחו את ההודעה שנשלחה לדוא״ל.";
+  "הקוד או הקישור כבר לא בתוקף. בקשו שליחה חדשה.";
 const otherBrowserMessage =
   "הקישור לא נפתח. בקשו קישור חדש, ופתחו את ההודעה שנשלחה לדוא״ל.";
 const genericLinkMessage = "הכניסה לא הושלמה. בקשו קישור חדש ופתחו אותו כאן.";
@@ -88,13 +88,28 @@ function isTransientAuthError(error: AuthError): boolean {
 
 function sendFailureMessage(error: AuthError): string {
   if (error.code === "over_email_send_rate_limit" || error.status === 429) {
-    return "נשלחו כבר שני קישורי כניסה בשעה האחרונה. חכו כשעה, ובקשו קישור אחד.";
+    return "נשלחו כבר שתי הודעות כניסה בשעה האחרונה. חכו כשעה, ובקשו אחת.";
   }
   const blob = `${error.code ?? ""} ${error.message}`.toLowerCase();
   if (blob.includes("redirect")) {
-    return "לא הצלחנו לשלוח את הקישור. כתובת החזרה אינה מורשית.";
+    return "לא הצלחנו לשלוח את ההודעה. כתובת החזרה אינה מורשית.";
   }
-  return "לא הצלחנו לשלוח את הקישור. נסו שוב.";
+  return "לא הצלחנו לשלוח את ההודעה. נסו שוב.";
+}
+
+function codeFailureMessage(error: AuthError | null): string {
+  if (error && isTransientAuthError(error)) {
+    return "לא הצלחנו לבדוק את הקוד. נסו שוב.";
+  }
+  const blob = `${error?.code ?? ""} ${error?.message ?? ""}`.toLowerCase();
+  if (
+    blob.includes("otp_expired") ||
+    blob.includes("expired") ||
+    blob.includes("already")
+  ) {
+    return expiredLinkMessage;
+  }
+  return "הקוד לא מתאים. בדקו את שש הספרות בדוא״ל.";
 }
 
 export async function mountLogin(root: HTMLElement): Promise<void> {
@@ -113,7 +128,24 @@ export async function mountLogin(root: HTMLElement): Promise<void> {
   const emailInput = signinForm?.querySelector<HTMLInputElement>(
     'input[name="email"]',
   );
-  if (!signinForm || !nicknameForm || !status || !emailInput) return;
+  const codeForm = root.querySelector<HTMLFormElement>("[data-code-form]");
+  const codeInput = codeForm?.querySelector<HTMLInputElement>(
+    'input[name="code"]',
+  );
+  const changeEmail = codeForm?.querySelector<HTMLButtonElement>(
+    "[data-change-email]",
+  );
+  if (
+    !signinForm ||
+    !nicknameForm ||
+    !codeForm ||
+    !status ||
+    !emailInput ||
+    !codeInput ||
+    !changeEmail
+  ) {
+    return;
+  }
 
   const showStatus = (message: string) => {
     status.replaceChildren();
@@ -137,8 +169,8 @@ export async function mountLogin(root: HTMLElement): Promise<void> {
     };
     status.hidden = false;
     status.replaceChildren(
-      line("הקישור נשלח בדוא״ל מאת ", latin("Supabase"), "."),
-      line("ליחצו על הקישור המסומן ", latin("Sign in"), "."),
+      line("נשלח קוד בן 6 ספרות בדוא״ל מאת ", latin("Supabase.")),
+      line("הקלידו את הקוד כאן, או פתחו את הקישור שבהודעה."),
       line("תוקפו יפוג תוך זמן קצר."),
     );
   };
@@ -148,13 +180,25 @@ export async function mountLogin(root: HTMLElement): Promise<void> {
     const remembered = localStorage.getItem(rememberedEmailKey);
     if (remembered && !emailInput.value) emailInput.value = remembered;
     signinForm.hidden = false;
+    codeForm.hidden = true;
     nicknameForm.hidden = true;
     emailInput.focus();
+  };
+
+  const showCode = () => {
+    if (title) title.textContent = "כניסה";
+    signinForm.hidden = true;
+    codeForm.hidden = false;
+    nicknameForm.hidden = true;
+    codeInput.value = "";
+    showSentLink();
+    codeInput.focus();
   };
 
   const showNickname = () => {
     if (title) title.textContent = "בחירת כינוי";
     signinForm.hidden = true;
+    codeForm.hidden = true;
     nicknameForm.hidden = false;
     showStatus("");
   };
@@ -179,6 +223,8 @@ export async function mountLogin(root: HTMLElement): Promise<void> {
     return profile?.nickname ?? "";
   };
 
+  let pendingEmail = "";
+  let submittingCode = false;
   let left = false;
   const enter = async (userId: string) => {
     if (left) return;
@@ -305,14 +351,53 @@ export async function mountLogin(root: HTMLElement): Promise<void> {
       return;
     }
     localStorage.setItem(rememberedEmailKey, email);
-    signinForm.hidden = true;
-    showSentLink();
+    pendingEmail = email;
+    showCode();
+  };
+
+  const submitCode = async () => {
+    if (submittingCode || !pendingEmail) return;
+    const token = codeInput.value.replace(/\D/g, "");
+    if (token.length !== 6) return;
+    submittingCode = true;
+    const button = codeForm.querySelector<HTMLButtonElement>('button[type="submit"]');
+    if (button) button.disabled = true;
+    const { data, error } = await supabase.auth.verifyOtp({
+      email: pendingEmail,
+      token,
+      type: "email",
+    });
+    if (button) button.disabled = false;
+    submittingCode = false;
+    if (error || !data.session) {
+      showStatus(codeFailureMessage(error));
+      codeInput.focus();
+      return;
+    }
+    showStatus("נכנסים…");
+    await enter(data.session.user.id);
   };
 
   signinForm.addEventListener("submit", (event) => {
     event.preventDefault();
     showStatus("");
     void sendLink();
+  });
+
+  codeInput.addEventListener("input", () => {
+    const digits = codeInput.value.replace(/\D/g, "").slice(0, 6);
+    if (digits !== codeInput.value) codeInput.value = digits;
+    if (digits.length === 6) void submitCode();
+  });
+
+  codeForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    void submitCode();
+  });
+
+  changeEmail.addEventListener("click", () => {
+    showStatus("");
+    showSignin();
   });
 
   window.addEventListener("pagehide", () => authListener.subscription.unsubscribe());

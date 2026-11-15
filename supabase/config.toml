@@ -232,7 +232,8 @@ enable_confirmations = false
 secure_password_change = false
 # Controls the minimum amount of time that must pass before sending another signup confirmation or password reset email.
 max_frequency = "1s"
-# Number of characters used in the email OTP.
+# Six digits is the shortest code Supabase will send. A length under 6 is
+# replaced with 6. The code is numeric.
 otp_length = 6
 # Number of seconds before the email OTP expires (defaults to 1 hour).
 otp_expiry = 3600
@@ -256,7 +257,7 @@ otp_expiry = 3600
 # so a mail scanner that only fetches the page does not consume it.
 # The hosted project does not read this file; paste the same template in the dashboard.
 [auth.email.template.magic_link]
-subject = "קישור כניסה"
+subject = "קוד כניסה"
 content_path = "./supabase/templates/magic_link.html"
 
 # Uncomment to customize notification email template

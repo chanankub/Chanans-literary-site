@@ -954,6 +954,13 @@ main {
   font-family: var(--font-latin);
 }
 
+.reader-input--code {
+  font-family: var(--font-latin);
+  font-size: 1.5rem;
+  letter-spacing: 0.35em;
+  text-align: center;
+}
+
 .reader-input:focus,
 .reader-form textarea:focus {
   outline: 2px solid var(--color-accent);
