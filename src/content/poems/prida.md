@@ -7,6 +7,8 @@ sourceLang: he
 date: 2017-12-01
 draft: false
 order: 61
+footnote: "לזכרה של נעה נוי"
+footnoteOn: title
 pairs:
   - translation: "זָרִים מֻכָּרִים נֶאֱסָפִים לְעֵת עֶרֶב"
   - translation: "תְּמוּנוֹת צֶבַע חֻמּוֹת מַחְלִיפוֹת יָדַיִם"
