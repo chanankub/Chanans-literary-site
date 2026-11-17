@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import {
   formatWhen,
+  isPhone,
   isPieceKind,
   nicknameFrom,
   type PieceKind,
@@ -17,6 +18,8 @@ type CommentRow = {
 };
 
 export async function mountPieceEngagement(root: HTMLElement): Promise<void> {
+  if (isPhone()) return;
+
   const kind = root.dataset.kind ?? "";
   const slug = root.dataset.slug ?? "";
   const title = root.dataset.title ?? "";
@@ -189,8 +192,10 @@ async function renderComments(args: {
       await renderComments(args);
     });
     if (row.visibility === "private") args.privateList.append(comment);
-    else args.publicList.append(comment);
+    else if (!isPhone()) args.publicList.append(comment);
   }
+
+  if (isPhone()) args.publicList.hidden = true;
 
   args.privateWrap.hidden = args.privateList.childElementCount === 0;
 }

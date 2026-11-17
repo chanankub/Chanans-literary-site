@@ -100,8 +100,12 @@ const configured = isReaderLoginConfigured();
 
 <script>
   import { isReaderLoginConfigured } from "../config/reader";
+  import { withBase } from "../lib/content";
+  import { isPhone } from "../lib/reader";
 
-  if (isReaderLoginConfigured()) {
+  if (isPhone()) {
+    location.replace(withBase());
+  } else if (isReaderLoginConfigured()) {
     void import("../lib/login-page").then(({ mountLogin }) => {
       const root = document.querySelector<HTMLElement>("[data-login-root]");
       if (root) void mountLogin(root);

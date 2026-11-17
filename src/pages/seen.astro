@@ -33,8 +33,12 @@ const configured = isReaderLoginConfigured();
 
 <script>
   import { isReaderLoginConfigured } from "../config/reader";
+  import { withBase } from "../lib/content";
+  import { isPhone } from "../lib/reader";
 
-  if (isReaderLoginConfigured()) {
+  if (isPhone()) {
+    location.replace(withBase());
+  } else if (isReaderLoginConfigured()) {
     void import("../lib/seen-page").then(({ mountSeen }) => {
       const root = document.querySelector<HTMLElement>("[data-seen-root]");
       if (root) void mountSeen(root);

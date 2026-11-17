@@ -1,5 +1,5 @@
 import { withBase } from "./content";
-import { safeNextPath } from "./reader";
+import { isPhone, safeNextPath } from "./reader";
 import { getSupabase } from "./supabase";
 
 /** Titles stay visible. The piece body opens only for a signed-in reader. */
@@ -10,6 +10,19 @@ export async function openPieceIfSignedIn(): Promise<void> {
     "[data-piece-summary]",
   );
   if (!bodies.length && !gates.length && !summaries.length) return;
+
+  if (isPhone()) {
+    bodies.forEach((body) => {
+      body.hidden = false;
+    });
+    summaries.forEach((summary) => {
+      summary.hidden = false;
+    });
+    gates.forEach((gate) => {
+      gate.hidden = true;
+    });
+    return;
+  }
 
   const supabase = getSupabase();
   const session = supabase

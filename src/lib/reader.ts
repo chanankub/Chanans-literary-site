@@ -67,3 +67,8 @@ export function nicknameFrom(profiles: unknown): string {
 export function loginRedirectUrl(): string {
   return `${location.origin}${withBase("login/")}`;
 }
+
+/** A phone or tablet. Desktop sign-in rules stay in place. */
+export function isPhone(): boolean {
+  return window.matchMedia("(pointer: coarse)").matches;
+}

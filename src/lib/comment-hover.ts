@@ -1,9 +1,11 @@
-import { isPieceKind, nicknameFrom, type PieceKind } from "./reader";
+import { isPhone, isPieceKind, nicknameFrom, type PieceKind } from "./reader";
 import { getSupabase } from "./supabase";
 
 type HoverComment = { nickname: string; body: string };
 
 export async function mountCommentHover(kind: PieceKind): Promise<void> {
+  if (isPhone()) return;
+
   const supabase = getSupabase();
   if (!supabase) return;
 

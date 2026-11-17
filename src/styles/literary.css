@@ -1141,9 +1141,19 @@ main {
   text-underline-offset: 0.15em;
 }
 
-@media (hover: none) {
+@media (hover: none) and (pointer: fine) {
   .comment-mark {
     display: inline;
+  }
+}
+
+@media (pointer: coarse) {
+  .reader-nav,
+  .piece-engagement,
+  .comment-mark,
+  .comment-popover,
+  [data-public] {
+    display: none !important;
   }
 }
 

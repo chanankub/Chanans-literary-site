@@ -1,5 +1,5 @@
 import { withBase } from "./content";
-import { safeNextPath } from "./reader";
+import { isPhone, safeNextPath } from "./reader";
 import { lockVisit } from "./reader-session";
 import { getSupabase } from "./supabase";
 
@@ -10,6 +10,8 @@ function item(...nodes: Node[]): HTMLLIElement {
 }
 
 export async function mountReaderNav(root: HTMLElement): Promise<void> {
+  if (isPhone()) return;
+
   const supabase = getSupabase();
   if (!supabase) return;
 
