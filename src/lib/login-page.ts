@@ -160,6 +160,8 @@ export async function mountLogin(root: HTMLElement): Promise<void> {
     showStatus("");
   };
 
+  showSignin();
+
   const requested = safeNextPath(
     new URLSearchParams(location.search).get("next"),
   );
@@ -270,7 +272,6 @@ export async function mountLogin(root: HTMLElement): Promise<void> {
     stripParams(["code"]);
   }
 
-  showSignin();
   if (callbackMessage) showStatus(callbackMessage);
   else if (hadStay && hasRememberedSession()) {
     showStatus("לא הצלחנו לשחזר את הכניסה. נסו שוב.");
