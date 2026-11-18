@@ -145,16 +145,20 @@ const pageUrl = Astro.site
         </ol>
       )
     }
+    {
+      author !== "חנן קוביצקי" && (
+        <p class="poem-print-credit">
+          תרגום: חנן קוביצקי
+          <span class="poem-print-credit__url" dir="ltr">{pageUrl}</span>
+        </p>
+      )
+    }
     </div>
-    <p class="poem-print-credit">
-      תרגום: חנן קוביצקי
-      <span class="poem-print-credit__url" dir="ltr">{pageUrl}</span>
-    </p>
     <PieceEngagement kind="poem" slug={slug} title={title} />
     <script>
       const sheet = document.querySelector<HTMLElement>("[data-poem-sheet]");
       const header = document.querySelector<HTMLElement>(".poem-header");
-      const pageContentPx = ((297 - 14 - 16 - 12) / 25.4) * 96;
+      const pageContentPx = ((297 - 14 - 16) / 25.4) * 96;
       const printWidthPx = ((210 - 28) / 25.4) * 96;
 
       const markMultipage = () => {
