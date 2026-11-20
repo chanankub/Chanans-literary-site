@@ -224,8 +224,21 @@ main {
   color: var(--color-text);
 }
 
+.section-subhead--plain {
+  border-top: none;
+  padding-top: 0;
+}
+
+.section-subhead--inset {
+  margin-inline-start: 1.75rem;
+}
+
 .story-group .section-list {
   padding-inline-start: 1.75rem;
+}
+
+.story-group .section-list--deeper {
+  padding-inline-start: 3.5rem;
 }
 
 .story-group .section-list li {
@@ -334,9 +347,37 @@ main {
   height: 1.15rem;
 }
 
+.poem-print-measure .poem-row--spacer {
+  min-height: var(--print-fit-spacer, var(--space-md));
+}
+
+.poem-print-measure .poem-header {
+  margin-bottom: var(--print-fit-header, var(--space-lg));
+}
+
+.poem-print-measure .poem-parallel--toggleable .poem-row,
+.poem-print-measure .poem-parallel--triple .poem-row--triple {
+  grid-template-columns: 1fr 1fr !important;
+}
+
+.poem-print-measure .poem-parallel--triple .poem-row--triple {
+  grid-template-columns: 1fr 1fr 1fr !important;
+}
+
+.poem-print-measure .poem-parallel--solo .poem-row {
+  grid-template-columns: 1fr !important;
+}
+
+.poem-print-measure .poem-parallel--toggleable .poem-cell,
+.poem-print-measure .poem-parallel--triple .poem-cell,
+.poem-print-measure .poem-parallel--toggleable .poem-alt-block,
+.poem-print-measure .poem-parallel--toggleable .poem-row--alt .poem-cell--la {
+  display: block !important;
+}
+
 .poem-print-credit {
   display: none;
-  margin: var(--space-xs) 0 0;
+  margin: var(--space-md) 0 0;
   text-align: right;
   font-family: "Noto Serif Hebrew", "Times New Roman", serif;
   font-size: 9pt;
@@ -346,6 +387,7 @@ main {
 
 .poem-print-credit__url {
   display: block;
+  margin-top: 0.7rem;
   direction: ltr;
 }
 
@@ -1266,10 +1308,23 @@ html.poem-page.poem-multipage {
     break-inside: avoid;
   }
 
+  html.poem-tight {
+    --poem-line-height-he: var(--print-fit-line);
+    --poem-line-height-la: var(--print-fit-line);
+  }
+
+  html.poem-tight .poem-row--spacer {
+    min-height: var(--print-fit-spacer);
+  }
+
+  html.poem-tight .poem-header {
+    margin-bottom: var(--print-fit-header);
+  }
+
   .poem-print-credit {
     display: block;
     position: static;
-    margin-top: var(--space-xs);
+    margin-top: var(--space-md);
     text-align: right;
   }
 

@@ -28,6 +28,16 @@ const sungOrder = [
   "shir-bokrim",
 ];
 
+/** Beat poets, in this order, and not again under the poet. */
+const beatOrder = [
+  "kaddish",
+  "i-am-waiting",
+  "constantly-risking-absurdity",
+  "jail-poems",
+  "arbaa-shirim",
+  "death",
+];
+
 function poetKey(poem: Poem): string {
   return poem.data.authorEn || poem.data.author;
 }
@@ -74,8 +84,10 @@ type Block =
       dates: string | null;
       english: string | null;
       credit?: boolean;
+      plain?: boolean;
       poems: Poem[];
-    };
+    }
+  | { type: "nest"; name: string; blocks: Block[] };
 
 function poemsInOrder(slugs: string[]): Poem[] {
   return slugs.flatMap((slug) => {
@@ -84,9 +96,49 @@ function poemsInOrder(slugs: string[]): Poem[] {
   });
 }
 
+function blocksFor(list: Poem[], plain = false): Block[] {
+  const byPoet = new Map<string, Poem[]>();
+  for (const poem of list) {
+    const key = poetKey(poem);
+    const group = byPoet.get(key) ?? [];
+    group.push(poem);
+    byPoet.set(key, group);
+  }
+  const out: Block[] = [];
+  const emitted = new Set<string>();
+  let loose: Poem[] = [];
+  const flush = () => {
+    if (loose.length === 0) return;
+    out.push({ type: "poems", poems: loose });
+    loose = [];
+  };
+  for (const poem of list) {
+    const key = poetKey(poem);
+    const group = byPoet.get(key) ?? [];
+    if (group.length >= 2) {
+      if (emitted.has(key)) continue;
+      flush();
+      emitted.add(key);
+      out.push({
+        type: "group",
+        name: majorityAuthor(group),
+        dates: yearSpan(group),
+        english: englishCredit(group),
+        plain,
+        poems: group,
+      });
+    } else {
+      loose.push(poem);
+    }
+  }
+  flush();
+  return out;
+}
+
 const memorial = poemsInOrder(memorialOrder);
 const sung = poemsInOrder(sungOrder);
-const reserved = new Set([...memorialOrder, ...sungOrder]);
+const beat = poemsInOrder(beatOrder);
+const reserved = new Set([...memorialOrder, ...sungOrder, ...beatOrder]);
 const rest = poems.filter((poem) => !reserved.has(entrySlug(poem.id)));
 
 const byPoet = new Map<string, Poem[]>();
@@ -115,6 +167,13 @@ if (sung.length > 0) {
     english: null,
     credit: true,
     poems: sung,
+  });
+}
+if (beat.length > 0) {
+  blocks.push({
+    type: "nest",
+    name: "דור הביט",
+    blocks: blocksFor(beat, true),
   });
 }
 
@@ -147,15 +206,89 @@ for (const poem of rest) {
 flushLoose();
 ---
 
-<BaseLayout title="שירה עם תרגומים" current="translations">
+<BaseLayout title="שירה ותרגומים" current="translations">
   <div class="container">
-    <h1 class="page-title">שירה עם תרגומים</h1>
+    <h1 class="page-title">שירה ותרגומים</h1>
     {
       poems.length === 0 ? (
         <p class="item-meta">עדיין לא פורסמו תרגומים.</p>
       ) : (
         blocks.map((block) =>
-          block.type === "group" ? (
+          block.type === "nest" ? (
+            <section class="story-group">
+              <h2 class="section-subhead">
+                <span class="section-subhead__name">{block.name}</span>
+              </h2>
+              {block.blocks.map((inner) =>
+                inner.type === "group" ? (
+                  <>
+                    <h3
+                      class:list={[
+                        "section-subhead",
+                        "section-subhead--inset",
+                        inner.plain && "section-subhead--plain",
+                      ]}
+                    >
+                      <span class="section-subhead__name">{inner.name}</span>
+                      {inner.english ? (
+                        <span class="section-subhead__en" lang="en">
+                          {inner.english}
+                        </span>
+                      ) : (
+                        inner.dates && (
+                          <span class="section-subhead__en">{inner.dates}</span>
+                        )
+                      )}
+                    </h3>
+                    <ul class="section-list section-list--deeper">
+                      {inner.poems.map((poem) => (
+                        <li>
+                          <a
+                            href={withBase(`translations/${entrySlug(poem.id)}/`)}
+                            data-comment-title
+                            data-kind="poem"
+                            data-slug={entrySlug(poem.id)}
+                          >
+                            {poem.data.title}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                ) : inner.type === "poems" ? (
+                  <ul class="section-list">
+                    {inner.poems.map((poem) => (
+                      <li>
+                        <a
+                          href={withBase(`translations/${entrySlug(poem.id)}/`)}
+                          data-comment-title
+                          data-kind="poem"
+                          data-slug={entrySlug(poem.id)}
+                        >
+                          {poem.data.title}
+                        </a>
+                        <span class="item-meta">
+                          {poem.data.author}
+                          {poem.data.authorEn && (
+                            <>
+                              {" · "}
+                              <span dir="ltr" lang="en">
+                                {formatPoetEnglishCredit(
+                                  poem.data.authorEn,
+                                  poem.data.authorBirth,
+                                  poem.data.authorDeath,
+                                )}
+                              </span>
+                            </>
+                          )}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null,
+              )}
+            </section>
+          ) : block.type === "group" ? (
             <section class="story-group">
               <h2 class="section-subhead">
                 <span class="section-subhead__name">{block.name}</span>

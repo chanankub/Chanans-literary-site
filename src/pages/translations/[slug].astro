@@ -161,13 +161,37 @@ const pageUrl = Astro.site
       const pageContentPx = ((297 - 14 - 16) / 25.4) * 96;
       const printWidthPx = ((210 - 28) / 25.4) * 96;
 
-      const markMultipage = () => {
-        if (!sheet || sheet.hidden) {
-          document.documentElement.classList.remove("poem-multipage");
+      const fitSteps = [
+        { line: "1.5", spacer: "1.5rem", header: "2.5rem" },
+        { line: "1.4", spacer: "1.15rem", header: "2rem" },
+        { line: "1.32", spacer: "0.85rem", header: "1.6rem" },
+        { line: "1.24", spacer: "0.6rem", header: "1.25rem" },
+        { line: "1.16", spacer: "0.4rem", header: "1rem" },
+      ];
+
+      const applyFit = (step: (typeof fitSteps)[number] | null) => {
+        const root = document.documentElement;
+        if (!step) {
+          root.classList.remove("poem-tight");
+          root.style.removeProperty("--print-fit-line");
+          root.style.removeProperty("--print-fit-spacer");
+          root.style.removeProperty("--print-fit-header");
           return;
         }
+        root.classList.add("poem-tight");
+        root.style.setProperty("--print-fit-line", step.line);
+        root.style.setProperty("--print-fit-spacer", step.spacer);
+        root.style.setProperty("--print-fit-header", step.header);
+      };
+
+      const measureProbe = (step: (typeof fitSteps)[number]) => {
         const probe = document.createElement("div");
+        probe.className = "poem-print-measure";
         probe.style.cssText = `position:absolute;left:-10000px;top:0;width:${printWidthPx}px;visibility:hidden;pointer-events:none;`;
+        probe.style.setProperty("--poem-line-height-he", step.line);
+        probe.style.setProperty("--poem-line-height-la", step.line);
+        probe.style.setProperty("--print-fit-spacer", step.spacer);
+        probe.style.setProperty("--print-fit-header", step.header);
         if (header) {
           const headerClone = header.cloneNode(true);
           if (headerClone instanceof HTMLElement) {
@@ -175,14 +199,70 @@ const pageUrl = Astro.site
             probe.append(headerClone);
           }
         }
-        const sheetClone = sheet.cloneNode(true);
+        const sheetClone = sheet?.cloneNode(true);
         if (sheetClone instanceof HTMLElement) {
           sheetClone.hidden = false;
           probe.append(sheetClone);
         }
         document.body.append(probe);
+        const blocks = [
+          ...probe.querySelectorAll<HTMLElement>(
+            ".poem-header, .poem-row, .poem-footnote, .poem-footnotes, .poem-epigraph, .poem-print-credit",
+          ),
+        ].filter((block) => !block.closest(".poem-header") || block.classList.contains("poem-header"));
+        const pages: number[] = [];
+        let used = 0;
+        let lines = 0;
+        const closePage = () => {
+          pages.push(lines);
+          used = 0;
+          lines = 0;
+        };
+        for (const block of blocks) {
+          const height = block.offsetHeight;
+          if (used > 0 && used + height > pageContentPx) closePage();
+          used += height;
+          if (
+            block.classList.contains("poem-row") &&
+            !block.classList.contains("poem-row--spacer")
+          ) {
+            lines += 1;
+          }
+        }
+        if (used > 0) pages.push(lines);
         const height = probe.scrollHeight;
         probe.remove();
+        return {
+          height,
+          loneLine: pages.some((count, index) => index > 0 && count === 1),
+        };
+      };
+
+      const fitLoneLines = () => {
+        if (!sheet || sheet.hidden) {
+          applyFit(null);
+          return;
+        }
+        applyFit(null);
+        for (const step of fitSteps) {
+          const { loneLine } = measureProbe(step);
+          if (!loneLine) {
+            applyFit(step.line === "1.5" ? null : step);
+            return;
+          }
+        }
+        applyFit(fitSteps[fitSteps.length - 1]);
+      };
+
+      const markMultipage = () => {
+        if (!sheet || sheet.hidden) {
+          document.documentElement.classList.remove("poem-multipage");
+          return;
+        }
+        const { height } = measureProbe(
+          fitSteps.find((step) => step.line === document.documentElement.style.getPropertyValue("--print-fit-line")) ??
+            fitSteps[0],
+        );
         document.documentElement.classList.toggle(
           "poem-multipage",
           height > pageContentPx,
@@ -192,9 +272,14 @@ const pageUrl = Astro.site
       document
         .querySelector("[data-poem-print]")
         ?.addEventListener("click", () => {
+          fitLoneLines();
           markMultipage();
           window.print();
         });
+      window.addEventListener("beforeprint", () => {
+        fitLoneLines();
+        markMultipage();
+      });
       if (sheet) {
         new MutationObserver(markMultipage).observe(sheet, {
           attributes: true,
