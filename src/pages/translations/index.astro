@@ -76,6 +76,8 @@ function englishCredit(group: Poem[]): string | null {
   );
 }
 
+type Credit = { poem: Poem; author: string; authorEn: string | null };
+
 type Block =
   | { type: "poems"; poems: Poem[] }
   | {
@@ -84,10 +86,9 @@ type Block =
       dates: string | null;
       english: string | null;
       credit?: boolean;
-      plain?: boolean;
       poems: Poem[];
-    }
-  | { type: "nest"; name: string; blocks: Block[] };
+      credits?: Credit[];
+    };
 
 function poemsInOrder(slugs: string[]): Poem[] {
   return slugs.flatMap((slug) => {
@@ -96,43 +97,24 @@ function poemsInOrder(slugs: string[]): Poem[] {
   });
 }
 
-function blocksFor(list: Poem[], plain = false): Block[] {
-  const byPoet = new Map<string, Poem[]>();
-  for (const poem of list) {
+/** First poem by a poet keeps the dates; later ones keep both names only. */
+function creditsFor(list: Poem[]): Credit[] {
+  const seen = new Set<string>();
+  return list.map((poem) => {
     const key = poetKey(poem);
-    const group = byPoet.get(key) ?? [];
-    group.push(poem);
-    byPoet.set(key, group);
-  }
-  const out: Block[] = [];
-  const emitted = new Set<string>();
-  let loose: Poem[] = [];
-  const flush = () => {
-    if (loose.length === 0) return;
-    out.push({ type: "poems", poems: loose });
-    loose = [];
-  };
-  for (const poem of list) {
-    const key = poetKey(poem);
-    const group = byPoet.get(key) ?? [];
-    if (group.length >= 2) {
-      if (emitted.has(key)) continue;
-      flush();
-      emitted.add(key);
-      out.push({
-        type: "group",
-        name: majorityAuthor(group),
-        dates: yearSpan(group),
-        english: englishCredit(group),
-        plain,
-        poems: group,
-      });
-    } else {
-      loose.push(poem);
-    }
-  }
-  flush();
-  return out;
+    const first = !seen.has(key);
+    seen.add(key);
+    const authorEn = poem.data.authorEn
+      ? first
+        ? formatPoetEnglishCredit(
+            poem.data.authorEn,
+            poem.data.authorBirth,
+            poem.data.authorDeath,
+          )
+        : poem.data.authorEn
+      : null;
+    return { poem, author: poem.data.author, authorEn };
+  });
 }
 
 const memorial = poemsInOrder(memorialOrder);
@@ -167,13 +149,18 @@ if (sung.length > 0) {
     english: null,
     credit: true,
     poems: sung,
+    credits: creditsFor(sung),
   });
 }
 if (beat.length > 0) {
   blocks.push({
-    type: "nest",
+    type: "group",
     name: "דור הביט",
-    blocks: blocksFor(beat, true),
+    dates: null,
+    english: null,
+    credit: true,
+    poems: beat,
+    credits: creditsFor(beat),
   });
 }
 
@@ -214,81 +201,7 @@ flushLoose();
         <p class="item-meta">עדיין לא פורסמו תרגומים.</p>
       ) : (
         blocks.map((block) =>
-          block.type === "nest" ? (
-            <section class="story-group">
-              <h2 class="section-subhead">
-                <span class="section-subhead__name">{block.name}</span>
-              </h2>
-              {block.blocks.map((inner) =>
-                inner.type === "group" ? (
-                  <>
-                    <h3
-                      class:list={[
-                        "section-subhead",
-                        "section-subhead--inset",
-                        inner.plain && "section-subhead--plain",
-                      ]}
-                    >
-                      <span class="section-subhead__name">{inner.name}</span>
-                      {inner.english ? (
-                        <span class="section-subhead__en" lang="en">
-                          {inner.english}
-                        </span>
-                      ) : (
-                        inner.dates && (
-                          <span class="section-subhead__en">{inner.dates}</span>
-                        )
-                      )}
-                    </h3>
-                    <ul class="section-list section-list--deeper">
-                      {inner.poems.map((poem) => (
-                        <li>
-                          <a
-                            href={withBase(`translations/${entrySlug(poem.id)}/`)}
-                            data-comment-title
-                            data-kind="poem"
-                            data-slug={entrySlug(poem.id)}
-                          >
-                            {poem.data.title}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </>
-                ) : inner.type === "poems" ? (
-                  <ul class="section-list">
-                    {inner.poems.map((poem) => (
-                      <li>
-                        <a
-                          href={withBase(`translations/${entrySlug(poem.id)}/`)}
-                          data-comment-title
-                          data-kind="poem"
-                          data-slug={entrySlug(poem.id)}
-                        >
-                          {poem.data.title}
-                        </a>
-                        <span class="item-meta">
-                          {poem.data.author}
-                          {poem.data.authorEn && (
-                            <>
-                              {" · "}
-                              <span dir="ltr" lang="en">
-                                {formatPoetEnglishCredit(
-                                  poem.data.authorEn,
-                                  poem.data.authorBirth,
-                                  poem.data.authorDeath,
-                                )}
-                              </span>
-                            </>
-                          )}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : null,
-              )}
-            </section>
-          ) : block.type === "group" ? (
+          block.type === "group" ? (
             <section class="story-group">
               <h2 class="section-subhead">
                 <span class="section-subhead__name">{block.name}</span>
@@ -301,35 +214,31 @@ flushLoose();
                 )}
               </h2>
               <ul class="section-list">
-                {block.poems.map((poem) => (
-                  <li>
-                    <a
-                      href={withBase(`translations/${entrySlug(poem.id)}/`)}
-                      data-comment-title
-                      data-kind="poem"
-                      data-slug={entrySlug(poem.id)}
-                    >
-                      {poem.data.title}
-                    </a>
-                    {block.credit && (
-                      <span class="item-meta">
-                        {poem.data.author}
-                        {poem.data.authorEn && (
-                          <>
-                            {" · "}
-                            <span dir="ltr" lang="en">
-                              {formatPoetEnglishCredit(
-                                poem.data.authorEn,
-                                poem.data.authorBirth,
-                                poem.data.authorDeath,
-                              )}
-                            </span>
-                          </>
-                        )}
-                      </span>
-                    )}
-                  </li>
-                ))}
+                {(block.credits ?? block.poems.map((poem) => ({ poem, author: "", authorEn: null }))).map(
+                  ({ poem, author, authorEn }) => (
+                    <li>
+                      <a
+                        href={withBase(`translations/${entrySlug(poem.id)}/`)}
+                        data-comment-title
+                        data-kind="poem"
+                        data-slug={entrySlug(poem.id)}
+                      >
+                        {poem.data.title}
+                      </a>
+                      {block.credit && (
+                        <span class="item-meta">
+                          {author}
+                          {authorEn && (
+                            <>
+                              {" · "}
+                              <span dir="ltr" lang="en">{authorEn}</span>
+                            </>
+                          )}
+                        </span>
+                      )}
+                    </li>
+                  ),
+                )}
               </ul>
             </section>
           ) : (

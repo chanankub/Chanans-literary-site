@@ -224,21 +224,8 @@ main {
   color: var(--color-text);
 }
 
-.section-subhead--plain {
-  border-top: none;
-  padding-top: 0;
-}
-
-.section-subhead--inset {
-  margin-inline-start: 1.75rem;
-}
-
 .story-group .section-list {
   padding-inline-start: 1.75rem;
-}
-
-.story-group .section-list--deeper {
-  padding-inline-start: 3.5rem;
 }
 
 .story-group .section-list li {
