@@ -38,6 +38,23 @@ const beatOrder = [
   "death",
 ];
 
+/** Poems from languages other than English, in this order, and not again under the poet. */
+const otherLanguagesOrder = [
+  "agalat-hachayim",
+  "tam-o-shanter",
+  "when-i-go-alone-at-night",
+  "clouds-and-waves",
+  "mein-blaues-klavier",
+  "krokodil",
+  "weltende",
+  "avnei-negaf",
+  "cancion-de-cuna",
+  "optimistic-man",
+  "the-strangest-creature-on-earth",
+  "oda-al-gato",
+  "hi-bat-hamesh-esreh",
+];
+
 function poetKey(poem: Poem): string {
   return poem.data.authorEn || poem.data.author;
 }
@@ -120,7 +137,19 @@ function creditsFor(list: Poem[]): Credit[] {
 const memorial = poemsInOrder(memorialOrder);
 const sung = poemsInOrder(sungOrder);
 const beat = poemsInOrder(beatOrder);
-const reserved = new Set([...memorialOrder, ...sungOrder, ...beatOrder]);
+const otherLanguages = poemsInOrder(otherLanguagesOrder);
+const chanan = poems.filter(
+  (poem) =>
+    poetKey(poem) === "Chanan Kubitsky" &&
+    !memorialOrder.includes(entrySlug(poem.id)),
+);
+const reserved = new Set([
+  ...memorialOrder,
+  ...sungOrder,
+  ...beatOrder,
+  ...otherLanguagesOrder,
+  ...chanan.map((poem) => entrySlug(poem.id)),
+]);
 const rest = poems.filter((poem) => !reserved.has(entrySlug(poem.id)));
 
 const byPoet = new Map<string, Poem[]>();
@@ -141,26 +170,26 @@ if (memorial.length > 0) {
     poems: memorial,
   });
 }
-if (sung.length > 0) {
+if (chanan.length > 0) {
   blocks.push({
     type: "group",
-    name: "שירים מולחנים",
-    dates: null,
-    english: null,
-    credit: true,
-    poems: sung,
-    credits: creditsFor(sung),
+    name: majorityAuthor(chanan),
+    dates: yearSpan(chanan),
+    english: englishCredit(chanan),
+    poems: chanan,
   });
 }
-if (beat.length > 0) {
+
+function pushCreditGroup(name: string, list: Poem[]) {
+  if (list.length === 0) return;
   blocks.push({
     type: "group",
-    name: "דור הביט",
+    name,
     dates: null,
     english: null,
     credit: true,
-    poems: beat,
-    credits: creditsFor(beat),
+    poems: list,
+    credits: creditsFor(list),
   });
 }
 
@@ -186,11 +215,14 @@ for (const poem of rest) {
       english: englishCredit(group),
       poems: group,
     });
+    if (key === "E. E. Cummings") pushCreditGroup("דור הביט", beat);
   } else {
     loose.push(poem);
   }
 }
 flushLoose();
+pushCreditGroup("שפות אחרות", otherLanguages);
+pushCreditGroup("שירים מולחנים", sung);
 ---
 
 <BaseLayout title="שירה ותרגומים" current="translations">
