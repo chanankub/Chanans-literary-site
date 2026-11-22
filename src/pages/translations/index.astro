@@ -38,6 +38,27 @@ const beatOrder = [
   "death",
 ];
 
+/** High modernists, in birth order, and not again under the poet. */
+const modernistPoets = [
+  "Gertrude Stein",
+  "Wallace Stevens",
+  "Mina Loy",
+  "William Carlos Williams",
+  "Marianne Moore",
+  "E. E. Cummings",
+];
+
+/** Objectivists, in birth order, and not again under the poet. */
+const objectivistPoets = ["Lorine Niedecker", "Cid Corman"];
+
+/** Confessional poets, in birth order, and not again under the poet. */
+const confessionalPoets = [
+  "John Berryman",
+  "Robert Lowell",
+  "Anne Sexton",
+  "Sylvia Plath",
+];
+
 /** Poems from languages other than English, in this order, and not again under the poet. */
 const otherLanguagesOrder = [
   "agalat-hachayim",
@@ -134,10 +155,18 @@ function creditsFor(list: Poem[]): Credit[] {
   });
 }
 
+function poemsByPoets(names: string[]): Poem[] {
+  const keys = new Set(names);
+  return poems.filter((poem) => keys.has(poetKey(poem)));
+}
+
 const memorial = poemsInOrder(memorialOrder);
 const sung = poemsInOrder(sungOrder);
 const beat = poemsInOrder(beatOrder);
 const otherLanguages = poemsInOrder(otherLanguagesOrder);
+const modernists = poemsByPoets(modernistPoets);
+const objectivists = poemsByPoets(objectivistPoets);
+const confessionals = poemsByPoets(confessionalPoets);
 const chanan = poems.filter(
   (poem) =>
     poetKey(poem) === "Chanan Kubitsky" &&
@@ -148,17 +177,12 @@ const reserved = new Set([
   ...sungOrder,
   ...beatOrder,
   ...otherLanguagesOrder,
+  ...modernists.map((poem) => entrySlug(poem.id)),
+  ...objectivists.map((poem) => entrySlug(poem.id)),
+  ...confessionals.map((poem) => entrySlug(poem.id)),
   ...chanan.map((poem) => entrySlug(poem.id)),
 ]);
 const rest = poems.filter((poem) => !reserved.has(entrySlug(poem.id)));
-
-const byPoet = new Map<string, Poem[]>();
-for (const poem of rest) {
-  const key = poetKey(poem);
-  const list = byPoet.get(key) ?? [];
-  list.push(poem);
-  byPoet.set(key, list);
-}
 
 const blocks: Block[] = [];
 if (memorial.length > 0) {
@@ -193,34 +217,54 @@ function pushCreditGroup(name: string, list: Poem[]) {
   });
 }
 
-const emitted = new Set<string>();
-let loose: Poem[] = [];
-function flushLoose() {
-  if (loose.length === 0) return;
-  blocks.push({ type: "poems", poems: loose });
-  loose = [];
+function appendPoetGroups(list: Poem[]) {
+  const byPoet = new Map<string, Poem[]>();
+  for (const poem of list) {
+    const key = poetKey(poem);
+    const group = byPoet.get(key) ?? [];
+    group.push(poem);
+    byPoet.set(key, group);
+  }
+  const emitted = new Set<string>();
+  let loose: Poem[] = [];
+  const flushLoose = () => {
+    if (loose.length === 0) return;
+    blocks.push({ type: "poems", poems: loose });
+    loose = [];
+  };
+  for (const poem of list) {
+    const key = poetKey(poem);
+    const group = byPoet.get(key) ?? [];
+    if (group.length >= 2) {
+      if (emitted.has(key)) continue;
+      flushLoose();
+      emitted.add(key);
+      blocks.push({
+        type: "group",
+        name: majorityAuthor(group),
+        dates: yearSpan(group),
+        english: englishCredit(group),
+        poems: group,
+      });
+    } else {
+      loose.push(poem);
+    }
+  }
+  flushLoose();
 }
 
-for (const poem of rest) {
-  const key = poetKey(poem);
-  const group = byPoet.get(key) ?? [];
-  if (group.length >= 2) {
-    if (emitted.has(key)) continue;
-    flushLoose();
-    emitted.add(key);
-    blocks.push({
-      type: "group",
-      name: majorityAuthor(group),
-      dates: yearSpan(group),
-      english: englishCredit(group),
-      poems: group,
-    });
-    if (key === "E. E. Cummings") pushCreditGroup("דור הביט", beat);
-  } else {
-    loose.push(poem);
-  }
-}
-flushLoose();
+const early = rest.filter(
+  (poem) => (poem.data.authorBirth ?? Number.MAX_SAFE_INTEGER) < 1874,
+);
+const later = rest.filter(
+  (poem) => (poem.data.authorBirth ?? Number.MAX_SAFE_INTEGER) >= 1874,
+);
+appendPoetGroups(early);
+pushCreditGroup("מודרניסטים", modernists);
+pushCreditGroup("אובייקטיביסטים", objectivists);
+pushCreditGroup("דור הביט", beat);
+pushCreditGroup("שירה וידויית", confessionals);
+appendPoetGroups(later);
 pushCreditGroup("שפות אחרות", otherLanguages);
 pushCreditGroup("שירים מולחנים", sung);
 ---

@@ -43,7 +43,7 @@ pairs:
   - original: "How bridge the chasm in a casual tone,"
     translation: "כֵּיצַד לְגַשֵּׁר עַל פְּנֵי הַתְּהוֹם בְּנִימַת אַגָּב,"
   - original: "Saying, \"The house, the stucco one you built,"
-    translation: "בְּאָמְרִי, \"הַבַּיִת, בֵּית הַטִּיחַ שֶׁבָּנִית,"
+    translation: "בְּאָמְרִי, \"הַבַּיִת, בֵּית הַטִּיחַ שֶׁבָּנִיתָ,"
   - original: "We lost. Sister married and went from home,"
     translation: "נִלְקַח מֵאִתָּנוּ. אָחוֹת נִשְׂאָה וְהָלְכָה מִן הַבַּיִת,"
   - original: "And nothing comes back, it's strange, from where she goes."
