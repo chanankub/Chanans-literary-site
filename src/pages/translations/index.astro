@@ -135,22 +135,21 @@ function poemsInOrder(slugs: string[]): Poem[] {
   });
 }
 
-/** First poem by a poet keeps the dates; later ones keep both names only. */
+/** First poem by a poet keeps both names and the dates; later ones keep the Hebrew name only. */
 function creditsFor(list: Poem[]): Credit[] {
   const seen = new Set<string>();
   return list.map((poem) => {
     const key = poetKey(poem);
     const first = !seen.has(key);
     seen.add(key);
-    const authorEn = poem.data.authorEn
-      ? first
+    const authorEn =
+      first && poem.data.authorEn
         ? formatPoetEnglishCredit(
             poem.data.authorEn,
             poem.data.authorBirth,
             poem.data.authorDeath,
           )
-        : poem.data.authorEn
-      : null;
+        : null;
     return { poem, author: poem.data.author, authorEn };
   });
 }
