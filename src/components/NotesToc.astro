@@ -16,7 +16,14 @@ const base = withBase(`notes/${noteSlug}/`);
     {
       entries.map((entry) => (
         <li class="notes-toc__item">
-          <a href={`${base}#${entry.id}`}>{entry.title}</a>
+          <a
+            href={`${base}#${entry.id}`}
+            data-comment-title
+            data-kind="note"
+            data-slug={`${noteSlug}--${entry.id}`}
+          >
+            {entry.title}
+          </a>
         </li>
       ))
     }

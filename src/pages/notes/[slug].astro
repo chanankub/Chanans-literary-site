@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import BackToTop from "../../components/BackToTop.astro";
+import CommentHover from "../../components/CommentHover.astro";
 import PieceEngagement from "../../components/PieceEngagement.astro";
 import NotesToc from "../../components/NotesToc.astro";
 import ProseLayout from "../../layouts/ProseLayout.astro";
@@ -24,6 +25,7 @@ const showToc = slug === HAKDAMA_SLUG;
 
 <ProseLayout title={title} summary={summary} section="notes" wide={showToc}>
   {showToc && <NotesToc noteSlug={slug} entries={hakdamaToc} />}
+  {showToc && <CommentHover kind="note" />}
   <Content />
   {
     showToc && (

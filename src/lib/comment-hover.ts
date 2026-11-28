@@ -1,7 +1,11 @@
 import { isPhone, isPieceKind, nicknameFrom, type PieceKind } from "./reader";
 import { getSupabase } from "./supabase";
 
-type HoverComment = { nickname: string; body: string };
+type HoverComment = {
+  nickname: string;
+  body: string;
+  visibility: "public" | "private";
+};
 
 export async function mountCommentHover(kind: PieceKind): Promise<void> {
   if (isPhone()) return;
@@ -21,9 +25,8 @@ export async function mountCommentHover(kind: PieceKind): Promise<void> {
   const [commentsResult, readsResult] = await Promise.all([
     supabase
       .from("comments")
-      .select("slug, body, profiles(nickname)")
+      .select("slug, body, visibility, profiles(nickname)")
       .eq("kind", kind)
-      .eq("visibility", "public")
       .order("created_at", { ascending: true }),
     supabase
       .from("reads")
@@ -31,13 +34,17 @@ export async function mountCommentHover(kind: PieceKind): Promise<void> {
       .eq("user_id", session.user.id)
       .eq("kind", kind),
   ]);
-  if (commentsResult.error || readsResult.error) return;
+  if (commentsResult.error) return;
 
   const bySlug = new Map<string, HoverComment[]>();
   for (const row of commentsResult.data ?? []) {
     if (typeof row.slug !== "string" || typeof row.body !== "string") continue;
     const list = bySlug.get(row.slug) ?? [];
-    list.push({ nickname: nicknameFrom(row.profiles), body: row.body });
+    list.push({
+      nickname: nicknameFrom(row.profiles),
+      body: row.body,
+      visibility: row.visibility === "private" ? "private" : "public",
+    });
     bySlug.set(row.slug, list);
   }
   const seen = new Set(
@@ -81,7 +88,10 @@ export async function mountCommentHover(kind: PieceKind): Promise<void> {
       block.className = "comment-popover__item";
       const nick = document.createElement("p");
       nick.className = "comment-popover__nick";
-      nick.textContent = comment.nickname;
+      nick.textContent =
+        comment.visibility === "private"
+          ? `${comment.nickname} · הערה פרטית`
+          : comment.nickname;
       const body = document.createElement("p");
       body.className = "comment-popover__body";
       body.textContent = comment.body;
@@ -89,15 +99,23 @@ export async function mountCommentHover(kind: PieceKind): Promise<void> {
       popover.append(block);
     }
     popover.hidden = false;
-    const rect = anchor.getBoundingClientRect();
+    const row = anchor.closest("li") ?? anchor;
+    const rect = row.getBoundingClientRect();
     const width = Math.min(352, window.innerWidth - 24);
     const left = Math.min(
       Math.max(12, rect.left),
       window.innerWidth - width - 12,
     );
+    const gap = 8;
+    const height = popover.offsetHeight;
+    const below = rect.bottom + gap;
+    const top =
+      below + height > window.innerHeight - 8
+        ? Math.max(8, rect.top - gap - height)
+        : below;
     popover.style.width = `${width}px`;
     popover.style.left = `${left}px`;
-    popover.style.top = `${Math.max(8, rect.bottom + 6)}px`;
+    popover.style.top = `${top}px`;
   };
 
   for (const anchor of titles) {
@@ -127,14 +145,15 @@ export async function mountCommentHover(kind: PieceKind): Promise<void> {
       });
       anchor.after(button);
     }
+    const hoverRoot = anchor.closest("li") ?? anchor;
     if (canHover) {
-      anchor.addEventListener("mouseenter", () => show(anchor));
-      anchor.addEventListener("mouseleave", () => {
-        hideTimer = window.setTimeout(hide, 160);
+      hoverRoot.addEventListener("mouseenter", () => show(anchor));
+      hoverRoot.addEventListener("mouseleave", () => {
+        hideTimer = window.setTimeout(hide, 280);
       });
       anchor.addEventListener("focus", () => show(anchor));
       anchor.addEventListener("blur", () => {
-        hideTimer = window.setTimeout(hide, 160);
+        hideTimer = window.setTimeout(hide, 280);
       });
     }
   }
