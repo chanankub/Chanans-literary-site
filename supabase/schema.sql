@@ -37,8 +37,7 @@ create table if not exists public.profiles (
   nickname text not null,
   created_at timestamptz not null default now(),
   constraint profiles_nickname_len check (
-    char_length(btrim(nickname)) between 1 and 40
-    and char_length(nickname) <= 40
+    char_length(btrim(nickname)) between 1 and 254
   )
 );
 

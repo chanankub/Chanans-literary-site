@@ -173,19 +173,39 @@ export async function mountLogin(root: HTMLElement): Promise<void> {
     location.assign(stored ?? withBase());
   };
 
-  const nicknameFor = async (userId: string) => {
+  const hasProfile = async (userId: string) => {
     const { data: profile } = await supabase
       .from("profiles")
-      .select("nickname")
+      .select("id")
       .eq("id", userId)
       .maybeSingle();
-    return profile?.nickname ?? "";
+    return Boolean(profile);
+  };
+
+  const saveProfile = async (nickname: string) => {
+    const { data: currentData } = await supabase.auth.getSession();
+    const current = currentData.session;
+    if (!current) {
+      showStatus("הכניסה פגה. בקשו קישור חדש.");
+      showSignin();
+      return;
+    }
+    const { error } = await supabase.from("profiles").insert({
+      id: current.user.id,
+      nickname,
+    });
+    if (error && error.code !== "23505") {
+      showStatus("לא הצלחנו לשמור את הכינוי. נסו שוב.");
+      return;
+    }
+    left = true;
+    goNext();
   };
 
   let left = false;
   const enter = async (userId: string) => {
     if (left) return;
-    if (await nicknameFor(userId)) {
+    if (await hasProfile(userId)) {
       left = true;
       goNext();
       return;
@@ -195,33 +215,36 @@ export async function mountLogin(root: HTMLElement): Promise<void> {
 
   nicknameForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const { data: currentData } = await supabase.auth.getSession();
-    const current = currentData.session;
-    if (!current) {
-      showStatus("הכניסה פגה. בקשו קישור חדש.");
-      showSignin();
-      return;
-    }
     const raw = new FormData(nicknameForm).get("nickname");
     const nickname = typeof raw === "string" ? raw.trim() : "";
     if (!nickname || nickname.length > 40) {
       showStatus("הכינוי צריך להיות עד 40 תווים.");
       return;
     }
-    const button = nicknameForm.querySelector("button");
+    const button = nicknameForm.querySelector<HTMLButtonElement>(
+      "button[type='submit']",
+    );
     if (button) button.disabled = true;
-    const { error } = await supabase.from("profiles").insert({
-      id: current.user.id,
-      nickname,
-    });
+    await saveProfile(nickname);
     if (button) button.disabled = false;
-    if (error) {
-      showStatus("לא הצלחנו לשמור את הכינוי. נסו שוב.");
-      return;
-    }
-    left = true;
-    goNext();
   });
+
+  nicknameForm
+    .querySelector<HTMLButtonElement>("[data-skip-nickname]")
+    ?.addEventListener("click", async () => {
+      const { data: currentData } = await supabase.auth.getSession();
+      const email = currentData.session?.user.email?.trim() ?? "";
+      if (!email || email.length > 254) {
+        showStatus("לא מצאנו כתובת דוא״ל לחשבון הזה.");
+        return;
+      }
+      const button = nicknameForm.querySelector<HTMLButtonElement>(
+        "[data-skip-nickname]",
+      );
+      if (button) button.disabled = true;
+      await saveProfile(email);
+      if (button) button.disabled = false;
+    });
 
   let callbackMessage = "";
   if (callback.tokenHash && callback.type === "magiclink") {

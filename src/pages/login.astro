@@ -51,11 +51,17 @@ const configured = isReaderLoginConfigured();
               required
             />
             <p class="item-meta">
-              הכינוי הוא מה שקוראים אחרים יראו על תגובה לכולם. כתובת הדוא״ל לא
-              מוצגת.
+              הכינוי הוא מה שקוראים אחרים יראו. בלי כינוי, תוצג כתובת הדוא״ל.
             </p>
             <button class="mailing-form__submit" type="submit">
               שמירה
+            </button>
+            <button
+              class="reader-text-button"
+              type="button"
+              data-skip-nickname
+            >
+              המשך בלי כינוי
             </button>
           </form>
         </>
