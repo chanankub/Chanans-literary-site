@@ -1,3 +1,5 @@
+<div dir="rtl">
+
 # הוספת יצירה
 
 האתר והכתיבה משתמשים באותם קבצי Markdown. שמירה תמיד ב־UTF-8. ב־Windows מחליפים לעברית ב־`Win + Space`.
@@ -123,3 +125,5 @@ order: 10
 יוצרים קובץ בתיקייה הנכונה תחת `src/content/`, מפעילים את התבנית (`Ctrl+T`), וממלאים. כשמוכן: `draft: false`.
 
 תוסף Obsidian Git יכול לדחוף מתוך Obsidian. אותן פקודות `git add`, `commit`, `push`.
+
+</div>

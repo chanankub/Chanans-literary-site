@@ -1,3 +1,5 @@
+<div dir="rtl">
+
 # חשבונות ותגובות
 
 האתר נשאר סטטי. החשבונות, הביקורים והתגובות יושבים ב־Supabase. בלי כתובת הפרויקט ומפתח ה־anon האתר עדיין נבנה, ובמקום הכניסה מופיעה הערת הגדרה.
@@ -54,3 +56,5 @@ Supabase שומר את סשן הכניסה בדפדפן. בנוסף, `src/lib/re
 | `src/pages/seen.astro`, `src/lib/seen-page.ts` | מה ראיתי |
 | `src/pages/inbox.astro`, `src/lib/inbox-page.ts` | הערות פרטיות |
 | `src/lib/reader-nav.ts` | כינוי, מה ראיתי, יציאה, והקישור של הבעלים |
+
+</div>
